@@ -1,0 +1,105 @@
+import React from 'react';
+import { Home, MessageSquare, Folder, GitBranch, LogOut, HelpCircle, User, Lightbulb, Settings, Package } from 'lucide-react';
+import { SidebarItem, View } from '@/shared/types';
+import { useChatStore } from '@/features/chat/state';
+import { useNavigationStore } from '@/features/navigation/state';
+
+const Sidebar: React.FC = () => {
+  // Get state and actions from Zustand stores
+  const currentView = useNavigationStore(state => state.currentView);
+  const setCurrentView = useNavigationStore(state => state.setCurrentView);
+  const navigateTo = useChatStore(state => state.navigateTo);
+  
+  const sidebarItems: SidebarItem[] = [
+    { icon: 'Home', label: 'Home', view: 'home' },
+    { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
+    { icon: 'GitBranch', label: 'Repos', view: 'repos' },
+    { icon: 'Package', label: 'Napps', view: 'napps' },
+    { icon: 'Folder', label: 'Files', view: 'files' },
+    { icon: 'Lightbulb', label: 'Innovations', view: 'solutions' },
+    { icon: 'Settings', label: 'Settings', view: 'settings' },
+    { icon: 'User', label: 'Account', view: 'account' },
+    { icon: 'LogOut', label: 'Sign Out', view: 'home', action: () => console.log('Sign out clicked') },
+    { icon: 'HelpCircle', label: 'Help', view: 'help' },
+  ];
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Home': return <Home size={20} />;
+      case 'MessageSquare': return <MessageSquare size={20} />;
+      case 'Folder': return <Folder size={20} />;
+      case 'GitBranch': return <GitBranch size={20} />;
+      case 'Lightbulb': return <Lightbulb size={20} />;
+      case 'Settings': return <Settings size={20} />;
+      case 'Package': return <Package size={20} />;
+      case 'LogOut': return <LogOut size={20} />;
+      case 'HelpCircle': return <HelpCircle size={20} />;
+      case 'User': return <User size={20} />;
+      default: return <MessageSquare size={20} />;
+    }
+  };
+
+  const handleNavigation = (item: SidebarItem) => {
+    if (item.action) {
+      item.action();
+    } else {
+      setCurrentView(item.view);
+      navigateTo({
+        title: item.label,
+        icon: item.icon,
+        view: item.view,
+      });
+    }
+  };
+
+  const isActive = (item: SidebarItem) => {
+    return currentView === item.view && !item.action;
+  };
+
+  return (
+    <nav className="w-16 bg-gray-900 text-white flex flex-col items-center py-6">
+      <div className="flex-1 flex flex-col space-y-3">
+        {sidebarItems.slice(0, 7).map((item) => (
+          <div key={item.label} className="relative group">
+            <button
+              className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                isActive(item) 
+                  ? 'bg-blue-600 text-white' 
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`}
+              onClick={() => handleNavigation(item)}
+              aria-label={item.label}
+            >
+              {getIcon(item.icon)}
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50">
+              {item.label}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-col space-y-3">
+        {sidebarItems.slice(7).map((item) => (
+          <div key={item.label} className="relative group">
+            <button
+              className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                isActive(item) 
+                  ? 'bg-blue-600 text-white' 
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
+              }`}
+              onClick={() => handleNavigation(item)}
+              aria-label={item.label}
+            >
+              {getIcon(item.icon)}
+            </button>
+            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50">
+              {item.label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </nav>
+  );
+};
+
+export default Sidebar;
