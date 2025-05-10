@@ -50,7 +50,7 @@ const AccountView: React.FC = () => {
     <div className="animate-fadeIn">
       <h1 className="text-2xl font-bold mb-6 flex items-center">
         <User className="mr-2" size={24} />
-        My Account
+        Account
       </h1>
 
       <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
