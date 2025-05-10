@@ -160,10 +160,11 @@ const ReposView: React.FC = () => {
         
         <div className="mt-4">
           <RepositoryTree 
-            parentId={null} 
+            parentId="home-repo" 
             level={0} 
             openNodes={openNodes} 
             toggleNode={toggleNode} 
+            isRoot={true}
           />
         </div>
       </div>

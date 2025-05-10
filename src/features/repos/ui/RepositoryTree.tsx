@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ChevronRight, ChevronDown, GitBranch, Link, Code, Home, FolderOpen } from 'lucide-react';
 import { Repository } from '@/shared/types';
 import { useRepoStore } from '../state';
@@ -10,30 +10,56 @@ interface RepositoryTreeProps {
   level: number;
   openNodes: Set<string>;
   toggleNode: (id: string) => void;
+  isRoot?: boolean;
 }
 
 const RepositoryTree: React.FC<RepositoryTreeProps> = ({ 
   parentId, 
   level = 0, 
   openNodes, 
-  toggleNode 
+  toggleNode,
+  isRoot = false
 }) => {
   const { 
     getRepositoryChildren, 
     selectRepository, 
     currentRepoId, 
-    isHomeRepository 
+    isHomeRepository,
+    getRepositoryById,
+    repositories
   } = useRepoStore();
   
-  const repositories = getRepositoryChildren(parentId);
+  // For the root level, we show the Home repository itself
+  // For subsequent levels, we show children of the provided parentId
+  let reposToShow: Repository[] = [];
   
-  if (repositories.length === 0) {
+  if (isRoot && parentId === 'home-repo') {
+    // Get the home repository and show it at root level
+    const homeRepo = getRepositoryById('home-repo');
+    reposToShow = homeRepo ? [homeRepo] : [];
+    
+    // Get direct children of home repo
+    const homeChildren = getRepositoryChildren('home-repo');
+    
+    // Get repositories without a parent (except home) for the "root" level
+    const rootRepos = repositories.filter(repo => 
+      repo.id !== 'home-repo' && !repo.parentId
+    );
+    
+    // Combine home children with root repos
+    reposToShow = [...reposToShow, ...homeChildren, ...rootRepos];
+  } else {
+    // For non-root cases, just get direct children
+    reposToShow = getRepositoryChildren(parentId);
+  }
+  
+  if (reposToShow.length === 0) {
     return null;
   }
   
   return (
     <div className={`${level > 0 ? 'pl-6 border-l border-gray-200 ml-3' : ''}`}>
-      {repositories.map(repo => {
+      {reposToShow.map(repo => {
         const children = getRepositoryChildren(repo.id);
         const hasChildren = children.length > 0;
         const isOpen = openNodes.has(repo.id);
