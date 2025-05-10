@@ -26,7 +26,13 @@ const ReposView: React.FC = () => {
   const [showNewRepoModal, setShowNewRepoModal] = useState(false);
   const [showCloneRepoModal, setShowCloneRepoModal] = useState(false);
   const [showLinkRepoModal, setShowLinkRepoModal] = useState(false);
-  const [openNodes, setOpenNodes] = useState<Set<string>>(new Set(['home-repo']));
+  
+  // Initialize with all repo IDs to fully expand the tree by default
+  const [openNodes, setOpenNodes] = useState<Set<string>>(() => {
+    const allRepoIds = new Set<string>();
+    repositories.forEach(repo => allRepoIds.add(repo.id));
+    return allRepoIds;
+  });
 
   // Always ensure we have a repository selected, defaulting to home
   useEffect(() => {
