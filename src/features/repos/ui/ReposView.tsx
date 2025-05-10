@@ -161,6 +161,10 @@ const ReposView: React.FC = () => {
           />
         </div>
       </div>
+
+      <div>
+        Hurro
+      </div>
       
       {/* Modals */}
       {showNewRepoModal && (
