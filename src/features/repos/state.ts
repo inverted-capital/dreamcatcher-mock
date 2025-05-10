@@ -35,18 +35,26 @@ interface RepositoryState {
 
 // Extend mock repositories to include parent-child relationships
 const extendedMockRepositories = [
-  ...mockRepositories.slice(0, 2), // First two repos stay at root level
+  // Make all repositories children of home-repo to ensure proper nesting
   {
-    ...mockRepositories[2],
-    parentId: 'home-repo' // Documentation repo is under home
+    ...mockRepositories[0], // frontend-app
+    parentId: 'home-repo'
   },
   {
-    ...mockRepositories[3],
-    parentId: 'repo-1' // Design-system is under frontend-app
+    ...mockRepositories[1], // api-server
+    parentId: 'home-repo'
   },
   {
-    ...mockRepositories[4],
-    parentId: 'repo-2', // Mobile-app is under api-server
+    ...mockRepositories[2], // documentation
+    parentId: 'home-repo'
+  },
+  {
+    ...mockRepositories[3], // design-system
+    parentId: mockRepositories[0].id // Under frontend-app
+  },
+  {
+    ...mockRepositories[4], // mobile-app
+    parentId: mockRepositories[1].id, // Under api-server
     isLinked: true
   },
   // Additional nested repositories for deeper hierarchy
@@ -57,7 +65,7 @@ const extendedMockRepositories = [
     stars: 7,
     lastUpdated: '2023-06-01',
     language: 'JavaScript',
-    parentId: 'repo-1'
+    parentId: mockRepositories[0].id // Under frontend-app
   },
   {
     id: 'repo-7',
@@ -66,7 +74,7 @@ const extendedMockRepositories = [
     stars: 3,
     lastUpdated: '2023-05-28',
     language: 'SQL',
-    parentId: 'repo-2'
+    parentId: mockRepositories[1].id // Under api-server
   },
   {
     id: 'repo-8',
@@ -75,7 +83,7 @@ const extendedMockRepositories = [
     stars: 14,
     lastUpdated: '2023-06-10',
     language: 'TypeScript',
-    parentId: 'repo-3'
+    parentId: mockRepositories[2].id // Under documentation
   }
 ];
 
@@ -99,11 +107,12 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
     const newRepo: Repository = {
       ...repo,
       id: newRepoId,
-      isLinked: false
+      isLinked: false,
+      parentId: 'home-repo' // All new repositories are under home by default
     };
     
     set(state => ({
-      repositories: [newRepo, ...state.repositories.filter(r => r.id !== 'home-repo')]
+      repositories: [...state.repositories, newRepo]
     }));
     
     return newRepoId;
@@ -178,11 +187,12 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
     const newRepo: Repository = {
       ...repo,
       id: newRepoId,
-      isLinked: true
+      isLinked: true,
+      parentId: 'home-repo' // All linked repositories are under home by default
     };
     
     set(state => ({
-      repositories: [newRepo, ...state.repositories.filter(r => r.id !== 'home-repo')]
+      repositories: [...state.repositories, newRepo]
     }));
     
     return newRepoId;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GitBranch, Plus, GitFork, LinkIcon, Code, Home, FileText, ChevronRight, Link as LinkIcon2 } from 'lucide-react';
+import { GitBranch, Plus, GitFork, LinkIcon, Home, FileText, ChevronRight, Link as LinkIcon2 } from 'lucide-react';
 import { useRepoStore } from '../state';
 import RepositoryTree from './RepositoryTree';
 import HomeRepositoryCard from './HomeRepositoryCard';
@@ -121,11 +121,6 @@ const ReposView: React.FC = () => {
                   className="flex items-center text-blue-600 hover:text-blue-800"
                   onClick={() => selectRepository(repo.id)}
                 >
-                  {index === 0 && isHomeRepository(repo.id) ? (
-                    <Home size={14} className="mr-1" />
-                  ) : (
-                    <Code size={14} className="mr-1" />
-                  )}
                   <span className="text-sm font-medium">{repo.name}</span>
                   {repo.isLinked && (
                     <LinkIcon2 size={12} className="ml-1 text-purple-500" />

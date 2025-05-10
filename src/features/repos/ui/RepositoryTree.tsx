@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronRight, ChevronDown, GitBranch, Link, Code, Home, FolderOpen } from 'lucide-react';
+import { ChevronRight, ChevronDown, GitBranch, Link, Home, FolderOpen } from 'lucide-react';
 import { Repository } from '@/shared/types';
 import { useRepoStore } from '../state';
 import { useNavigationStore } from '@/features/navigation/state';
@@ -29,27 +29,22 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
     repositories
   } = useRepoStore();
   
-  // For the root level, we show the Home repository itself
-  // For subsequent levels, we show children of the provided parentId
+  // For the root level, we only show the Home repository
   let reposToShow: Repository[] = [];
   
-  if (isRoot && parentId === 'home-repo') {
+  if (isRoot) {
     // Get the home repository and show it at root level
     const homeRepo = getRepositoryById('home-repo');
     reposToShow = homeRepo ? [homeRepo] : [];
-    
-    // Get direct children of home repo
-    const homeChildren = getRepositoryChildren('home-repo');
-    
-    // Get repositories without a parent (except home) for the "root" level
-    const rootRepos = repositories.filter(repo => 
-      repo.id !== 'home-repo' && !repo.parentId
+  } else if (parentId === 'home-repo') {
+    // For home repo, show ALL non-nested repositories as its children
+    // This includes repos that previously had no parent
+    reposToShow = repositories.filter(repo => 
+      repo.id !== 'home-repo' && 
+      (repo.parentId === 'home-repo' || !repo.parentId)
     );
-    
-    // Combine home children with root repos
-    reposToShow = [...reposToShow, ...homeChildren, ...rootRepos];
   } else {
-    // For non-root cases, just get direct children
+    // For non-root, non-home cases, just get direct children
     reposToShow = getRepositoryChildren(parentId);
   }
   
@@ -60,7 +55,10 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
   return (
     <div className={`${level > 0 ? 'pl-6 border-l border-gray-200 ml-3' : ''}`}>
       {reposToShow.map(repo => {
-        const children = getRepositoryChildren(repo.id);
+        const children = parentId === 'home-repo' 
+          ? repositories.filter(r => r.parentId === repo.id)
+          : getRepositoryChildren(repo.id);
+          
         const hasChildren = children.length > 0;
         const isOpen = openNodes.has(repo.id);
         const isSelected = currentRepoId === repo.id;
@@ -98,7 +96,7 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
                   {isHomeRepository(repo.id) ? (
                     <Home size={16} />
                   ) : (
-                    <Code size={16} />
+                    <GitBranch size={16} />
                   )}
                 </div>
                 <div className="truncate font-medium text-sm">
