@@ -7,14 +7,11 @@ interface NewRepositoryModalProps {
 }
 
 const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
-  const { addRepository, selectRepository, getRepositoryById, currentRepoId } = useRepoStore();
+  const { addRepository, selectRepository } = useRepoStore();
   
   const [newRepoName, setNewRepoName] = useState('');
   const [newRepoDesc, setNewRepoDesc] = useState('');
   const [newRepoLang, setNewRepoLang] = useState('JavaScript');
-  const [parentRepoId, setParentRepoId] = useState(currentRepoId || 'home-repo');
-  
-  const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null;
   
   const handleCreateRepo = () => {
     if (!newRepoName.trim()) return;
@@ -27,7 +24,7 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
       language: newRepoLang,
     };
     
-    const newRepoId = addRepository(newRepo, parentRepoId);
+    const newRepoId = addRepository(newRepo);
     selectRepository(newRepoId);
     onClose();
   };
@@ -66,25 +63,6 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="my-awesome-project"
             />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Parent Repository
-            </label>
-            <select
-              value={parentRepoId}
-              onChange={(e) => setParentRepoId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="home-repo">Home (Root)</option>
-              {currentRepo && currentRepo.id !== 'home-repo' && (
-                <option value={currentRepo.id}>{currentRepo.name} (Current)</option>
-              )}
-            </select>
-            <p className="mt-1 text-xs text-gray-500">
-              This determines where in the repository tree your new repository will be placed.
-            </p>
           </div>
           
           <div>

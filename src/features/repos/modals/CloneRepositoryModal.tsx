@@ -7,12 +7,8 @@ interface CloneRepositoryModalProps {
 }
 
 const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({ onClose }) => {
-  const { addRepository, selectRepository, getRepositoryById, currentRepoId } = useRepoStore();
-  
+  const { addRepository, selectRepository } = useRepoStore();
   const [repoUrl, setRepoUrl] = useState('');
-  const [parentRepoId, setParentRepoId] = useState(currentRepoId || 'home-repo');
-  
-  const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null;
   
   const handleCloneRepo = () => {
     if (!repoUrl.trim()) return;
@@ -29,7 +25,7 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({ onClose }) 
       language: 'Unknown',
     };
     
-    const newRepoId = addRepository(newRepo, parentRepoId);
+    const newRepoId = addRepository(newRepo);
     selectRepository(newRepoId);
     onClose();
   };
@@ -56,46 +52,25 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({ onClose }) 
           </button>
         </div>
         
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Repository URL*
-            </label>
-            <div className="flex items-center">
-              <div className="mr-2">
-                <Globe size={16} className="text-gray-500" />
-              </div>
-              <input
-                type="text"
-                value={repoUrl}
-                onChange={(e) => setRepoUrl(e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="https://github.com/username/repo.git"
-              />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Repository URL*
+          </label>
+          <div className="flex items-center">
+            <div className="mr-2">
+              <Globe size={16} className="text-gray-500" />
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              Enter the URL of the repository you want to clone
-            </p>
+            <input
+              type="text"
+              value={repoUrl}
+              onChange={(e) => setRepoUrl(e.target.value)}
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="https://github.com/username/repo.git"
+            />
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Clone To
-            </label>
-            <select
-              value={parentRepoId}
-              onChange={(e) => setParentRepoId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="home-repo">Home (Root)</option>
-              {currentRepo && currentRepo.id !== 'home-repo' && (
-                <option value={currentRepo.id}>{currentRepo.name} (Current)</option>
-              )}
-            </select>
-            <p className="mt-1 text-xs text-gray-500">
-              This determines where in the repository tree your cloned repository will be placed.
-            </p>
-          </div>
+          <p className="mt-1 text-xs text-gray-500">
+            Enter the URL of the repository you want to clone
+          </p>
         </div>
         
         <div className="mt-6 flex justify-end space-x-3">
