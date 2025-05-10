@@ -131,51 +131,31 @@ const FilesView: React.FC = () => {
                 <ChevronDown size={16} className="text-gray-500" />
               </button>
               
-             
+              {showBranchDropdown && (
+                <div className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-md border border-gray-200">
+                  <ul className="py-1 max-h-60 overflow-auto">
+                    {availableBranches.map(branch => (
+                      <li 
+                        key={branch.name}
+                        className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 flex items-center ${
+                          branch.name === currentBranch ? 'bg-blue-50 text-blue-700' : ''
+                        }`}
+                        onClick={() => handleBranchChange(branch.name)}
+                      >
+                        {branch.name}
+                        {branch.isDefault && (
+                          <span className="ml-2 px-1.5 py-0.5 text-xs bg-gray-100 text-gray-800 rounded">
+                            default
+                          </span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
-        
-        {currentRepo && (
-          <div className="mt-4 flex items-center text-sm text-gray-600">
-            <div 
-              onClick={handleRepoClick} 
-              className="flex items-center hover:text-blue-600 cursor-pointer"
-            >
-              {isHomeRepository(currentRepoId) ? (
-                <Home size={16} className="mr-1" />
-              ) : (
-                <Code size={16} className="mr-1" />
-              )}
-              <span className="font-medium hover:underline">
-                {isHomeRepository(currentRepoId) ? 'Home' : currentRepo.name}
-              </span>
-            </div>
-            
-            <ArrowRight size={14} className="mx-2 text-gray-400" />
-            
-            <div 
-              onClick={handleBranchClick}
-              className="flex items-center hover:text-blue-600 cursor-pointer"
-            >
-              <GitBranch size={16} className="mr-1" />
-              <span className="font-medium hover:underline">{currentBranch}</span>
-            </div>
-            
-            {selectedFile && (
-              <>
-                <ArrowRight size={14} className="mx-2 text-gray-400" />
-                <div 
-                  onClick={() => handleFileClick(selectedFile.id)}
-                  className="flex items-center hover:text-blue-600 cursor-pointer"
-                >
-                  <FileText size={16} className="mr-1" />
-                  <span className="font-medium hover:underline">{selectedFile.name}</span>
-                </div>
-              </>
-            )}
-          </div>
-        )}
       </div>
       
       <div className="flex flex-1 overflow-hidden">
