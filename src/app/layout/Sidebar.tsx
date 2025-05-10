@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
     { icon: 'Folder', label: 'Files', view: 'files' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
-    { icon: 'Lightbulb', label: 'Innovations', view: 'solutions' },
+    { icon: 'Lightbulb', label: 'Innovations', view: 'innovations' },
     { icon: 'User', label: 'Account', view: 'account' },
     { icon: 'LogOut', label: 'Sign Out', view: 'home', action: () => console.log('Sign out clicked') },
     { icon: 'HelpCircle', label: 'Help', view: 'help' },

@@ -34,7 +34,7 @@ const CanvasContainer: React.FC = () => {
         return <CustomersView />;
       case 'weather':
         return <WeatherView />;
-      case 'solutions':
+      case 'innovations':
         return <InnovationsView />;
       case 'settings':
         return <SettingsView />;
