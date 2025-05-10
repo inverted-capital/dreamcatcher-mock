@@ -108,7 +108,7 @@ function Boot() {
   return (
     <PrivyProvider
       appId="cma4m3v6400dkl10ld7792jm2"
-      walletConnectProjectId={undefined}
+      walletConnectProjectId={false}
     >
       <AuthenticatedApp />
     </PrivyProvider>
