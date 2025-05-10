@@ -61,6 +61,8 @@ export interface FileItem {
   size: number;
   modified: string;
   path: string;
+  isFolder?: boolean;
+  parentId?: string;
 }
 
 export interface Repository {

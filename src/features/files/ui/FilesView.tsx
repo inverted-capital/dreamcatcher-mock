@@ -1,16 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { File, Upload, Code, GitBranch, FolderOpen, ArrowRight, ChevronDown, FileText, Edit, Download, Home } from 'lucide-react';
+import { File, Upload, Code, GitBranch, FolderOpen, ArrowRight, ChevronDown, FileText, Edit, Download, Home, ArrowUp, Folder, ChevronRight } from 'lucide-react';
 import { useFilesStore } from '../state';
 import { useRepoStore } from '@/features/repos/state';
 import { useNavigationStore } from '@/features/navigation/state';
 import { useChatStore } from '@/features/chat/state';
+import { FileItem } from '@/shared/types';
 
 const FilesView: React.FC = () => {
   const { 
     selectFile,
+    selectFolder,
+    navigateToFolder,
+    navigateUp,
     currentFileId,
+    currentFolderId,
     getCurrentFile,
-    getRepositoryFiles
+    getRepositoryFiles,
+    getCurrentFolderContents,
+    getCurrentPath
   } = useFilesStore();
   
   const {
@@ -52,28 +59,36 @@ const FilesView: React.FC = () => {
   }, [showBranchDropdown]);
   
   const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '-';
     if (bytes < 1024) return bytes + ' B';
     else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
     else return (bytes / 1048576).toFixed(1) + ' MB';
   };
   
-  const files = getRepositoryFiles();
+  const folderContents = getCurrentFolderContents();
+  const allFiles = getRepositoryFiles();
   const currentRepo = repositories.find(repo => repo.id === currentRepoId);
-  const selectedFile = files.find(file => file.id === currentFileId);
+  const selectedFile = allFiles.find(file => file.id === currentFileId);
+  const currentPath = getCurrentPath();
   
   const handleBranchChange = (branchName: string) => {
     switchBranch(branchName);
     setShowBranchDropdown(false);
   };
   
-  const handleFileClick = (fileId: string) => {
-    // Toggle file selection if clicking the same file
-    if (currentFileId === fileId) {
-      selectFile(null);
+  const handleItemClick = (item: FileItem) => {
+    if (item.isFolder) {
+      navigateToFolder(item.id);
       setShowFileDetails(false);
     } else {
-      selectFile(fileId);
-      setShowFileDetails(true);
+      // Toggle file selection if clicking the same file
+      if (currentFileId === item.id) {
+        selectFile(null);
+        setShowFileDetails(false);
+      } else {
+        selectFile(item.id);
+        setShowFileDetails(true);
+      }
     }
     setShowBranchDropdown(false);
   };
@@ -97,6 +112,12 @@ const FilesView: React.FC = () => {
   const handleBranchClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering the repo click
     setShowBranchDropdown(!showBranchDropdown);
+  };
+
+  const handleNavigateUp = () => {
+    navigateUp();
+    selectFile(null);
+    setShowFileDetails(false);
   };
   
   return (
@@ -158,6 +179,41 @@ const FilesView: React.FC = () => {
         </div>
       </div>
       
+      {/* Current path display and navigation */}
+      {currentRepoId && (
+        <div className="bg-white rounded-lg border border-gray-200 p-3 mb-4 flex items-center">
+          <div className="flex items-center">
+            <span className="text-gray-500 mr-2">Path:</span>
+            <button 
+              onClick={handleRepoClick}
+              className="flex items-center text-blue-600 hover:text-blue-800 mr-1"
+            >
+              {isHomeRepository(currentRepoId) ? (
+                <Home size={16} className="mr-1" />
+              ) : (
+                <Code size={16} className="mr-1" />
+              )}
+              <span className="font-medium">{currentRepo?.name}</span>
+            </button>
+            <span className="text-gray-400 mx-1">/</span>
+          </div>
+          
+          {currentFolderId && (
+            <div className="flex items-center">
+              <button 
+                onClick={handleNavigateUp}
+                className="flex items-center text-blue-600 hover:text-blue-800 mr-1"
+              >
+                <ArrowUp size={16} className="mr-1" />
+                <span>Up</span>
+              </button>
+              <span className="text-gray-400 mx-1">•</span>
+              <span className="text-gray-600">{currentPath}</span>
+            </div>
+          )}
+        </div>
+      )}
+      
       <div className="flex flex-1 overflow-hidden">
         {/* File list */}
         <div className={`${showFileDetails && selectedFile ? 'w-1/2' : 'w-full'} overflow-auto`}>
@@ -171,14 +227,19 @@ const FilesView: React.FC = () => {
                 Please select a repository to view its files
               </p>
             </div>
-          ) : files.length === 0 ? (
+          ) : folderContents.length === 0 ? (
             <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
               <div className="text-gray-400 mb-2">
                 <File size={40} className="mx-auto" />
               </div>
-              <h3 className="text-lg font-medium text-gray-700 mb-2">No Files Found</h3>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">
+                {currentFolderId ? 'Empty Folder' : 'No Files Found'}
+              </h3>
               <p className="text-gray-500 mb-4">
-                This repository doesn't have any files in the {currentBranch} branch
+                {currentFolderId 
+                  ? 'This folder is empty' 
+                  : `This repository doesn't have any files in the ${currentBranch} branch`
+                }
               </p>
             </div>
           ) : (
@@ -191,31 +252,48 @@ const FilesView: React.FC = () => {
               </div>
               
               <div className="overflow-auto">
-                {files.map((file) => (
-                  <div 
-                    key={file.id}
-                    className={`grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
-                      file.id === currentFileId ? 'bg-blue-50 border-l-4 border-blue-500' : ''
-                    }`}
-                    onClick={() => handleFileClick(file.id)}
-                  >
-                    <div className="col-span-5 flex items-center">
-                      <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center mr-3">
-                        <File size={16} className="text-gray-500" />
+                {/* Show folders first, then files, both alphabetically */}
+                {[...folderContents]
+                  .sort((a, b) => {
+                    // Sort folders first, then by name
+                    if (a.isFolder && !b.isFolder) return -1;
+                    if (!a.isFolder && b.isFolder) return 1;
+                    return a.name.localeCompare(b.name);
+                  })
+                  .map((item) => (
+                    <div 
+                      key={item.id}
+                      className={`grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
+                        item.id === currentFileId ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                      }`}
+                      onClick={() => handleItemClick(item)}
+                    >
+                      <div className="col-span-5 flex items-center">
+                        <div className="w-8 h-8 bg-gray-100 rounded flex items-center justify-center mr-3">
+                          {item.isFolder ? (
+                            <Folder size={16} className="text-blue-500" />
+                          ) : (
+                            <File size={16} className="text-gray-500" />
+                          )}
+                        </div>
+                        <span className="truncate flex items-center">
+                          {item.name}
+                          {item.isFolder && (
+                            <ChevronRight size={16} className="ml-1 text-gray-400" />
+                          )}
+                        </span>
                       </div>
-                      <span className="truncate">{file.name}</span>
+                      <div className="col-span-3 text-gray-500 flex items-center text-sm">
+                        {item.modified}
+                      </div>
+                      <div className="col-span-2 text-gray-500 flex items-center text-sm uppercase">
+                        {item.isFolder ? 'folder' : item.type}
+                      </div>
+                      <div className="col-span-2 text-gray-500 flex items-center text-sm">
+                        {formatFileSize(item.size)}
+                      </div>
                     </div>
-                    <div className="col-span-3 text-gray-500 flex items-center text-sm">
-                      {file.modified}
-                    </div>
-                    <div className="col-span-2 text-gray-500 flex items-center text-sm uppercase">
-                      {file.type}
-                    </div>
-                    <div className="col-span-2 text-gray-500 flex items-center text-sm">
-                      {formatFileSize(file.size)}
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}
