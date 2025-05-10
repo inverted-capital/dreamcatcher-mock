@@ -93,10 +93,10 @@ const Sidebar: React.FC = () => {
         {/* Visual separator */}
         <div className="w-8 border-t border-gray-700 mx-auto mb-6"></div>
         
-        {/* Context selector group with background indicator */}
+        {/* Context selector group with enhanced background indicator */}
         <div className="relative mb-6">
-          {/* Background indicator for the context selector group */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-full rounded-xl bg-gray-800 -z-10"></div>
+          {/* Enhanced background indicator for the context selector group */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-full rounded-xl bg-gray-700 border border-gray-600 -z-10"></div>
           
           <div className="space-y-3 relative z-0 py-3">
             {contextSelectorGroup.map((item) => (
@@ -119,6 +119,9 @@ const Sidebar: React.FC = () => {
             ))}
           </div>
         </div>
+        
+        {/* Second visual separator after context group */}
+        <div className="w-8 border-t border-gray-700 mx-auto mb-6"></div>
       </div>
       
       {/* Account and help items */}
