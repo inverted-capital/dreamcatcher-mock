@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "up": "npx -y npm-check-updates@latest -u && npm i"
   },
   "dependencies": {
     "@artifact/client": "npm:@jsr/artifact__client@^0.0.45",
