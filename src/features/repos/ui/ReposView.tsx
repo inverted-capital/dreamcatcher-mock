@@ -1,33 +1,62 @@
-import React, { useState } from 'react';
-import { GitBranch, Plus, GitFork, LinkIcon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { GitBranch, Plus, GitFork, LinkIcon, Code, Home, FileText, ChevronRight, Link as LinkIcon2 } from 'lucide-react';
 import { useRepoStore } from '../state';
-import RepositorySearch from './RepositorySearch';
+import RepositoryTree from './RepositoryTree';
 import HomeRepositoryCard from './HomeRepositoryCard';
 import RepositoryCard from './RepositoryCard';
 import NewRepositoryModal from '../modals/NewRepositoryModal';
 import CloneRepositoryModal from '../modals/CloneRepositoryModal';
 import LinkRepositoryModal from '../modals/LinkRepositoryModal';
+import { useNavigationStore } from '@/features/navigation/state';
+import { useChatStore } from '@/features/chat/state';
 
 const ReposView: React.FC = () => {
   const { 
     repositories, 
     currentRepoId,
-    filterRepositories
+    getRepositoryById,
+    isHomeRepository,
+    getRepositoryPath,
+    selectRepository
   } = useRepoStore();
+  
+  const setCurrentView = useNavigationStore(state => state.setCurrentView);
+  const navigateTo = useChatStore(state => state.navigateTo);
   
   const [showNewRepoModal, setShowNewRepoModal] = useState(false);
   const [showCloneRepoModal, setShowCloneRepoModal] = useState(false);
   const [showLinkRepoModal, setShowLinkRepoModal] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [openNodes, setOpenNodes] = useState<Set<string>>(new Set(['home-repo']));
 
-  const filteredRepositories = searchQuery ? filterRepositories(searchQuery) : repositories;
-  
-  // Place home repository first
-  const sortedRepositories = [...filteredRepositories].sort((a, b) => {
-    if (a.id === 'home-repo') return -1;
-    if (b.id === 'home-repo') return 1;
-    return 0;
-  });
+  // Always ensure we have a repository selected, defaulting to home
+  useEffect(() => {
+    if (!currentRepoId) {
+      selectRepository('home-repo');
+    }
+  }, [currentRepoId, selectRepository]);
+
+  const toggleNode = (id: string) => {
+    const newOpenNodes = new Set(openNodes);
+    if (newOpenNodes.has(id)) {
+      newOpenNodes.delete(id);
+    } else {
+      newOpenNodes.add(id);
+    }
+    setOpenNodes(newOpenNodes);
+  };
+
+  const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null;
+  const repoPath = currentRepoId ? getRepositoryPath(currentRepoId) : [];
+
+  const viewRepositoryFiles = (repoId: string) => {
+    selectRepository(repoId);
+    setCurrentView('files');
+    navigateTo({
+      title: 'Files',
+      icon: 'Folder',
+      view: 'files',
+    });
+  };
 
   return (
     <div className="animate-fadeIn">
@@ -64,55 +93,79 @@ const ReposView: React.FC = () => {
         </div>
       </div>
       
-      <RepositorySearch 
-        searchQuery={searchQuery} 
-        setSearchQuery={setSearchQuery} 
-      />
+      {/* Current Repository Card */}
+      {currentRepo && (
+        <div className="mb-6">
+          {isHomeRepository(currentRepoId!) ? (
+            <HomeRepositoryCard 
+              repo={currentRepo}
+              isSelected={true}
+            />
+          ) : (
+            <RepositoryCard 
+              repo={currentRepo}
+              isSelected={true}
+            />
+          )}
+        </div>
+      )}
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Home Repository - Special handling */}
-        {sortedRepositories.filter(repo => repo.id === 'home-repo').map((repo) => (
-          <HomeRepositoryCard 
-            key={repo.id} 
-            repo={repo}
-            isSelected={repo.id === currentRepoId} 
-          />
-        ))}
-        
-        {/* Regular Repositories */}
-        {sortedRepositories.filter(repo => repo.id !== 'home-repo').map((repo) => (
-          <RepositoryCard 
-            key={repo.id} 
-            repo={repo}
-            isSelected={repo.id === currentRepoId} 
-          />
-        ))}
-        
-        {sortedRepositories.length === 0 && (
-          <div className="col-span-2 bg-white rounded-lg border border-gray-200 p-8 text-center">
-            <div className="text-gray-400 mb-2">
-              <GitBranch size={40} className="mx-auto" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-700 mb-2">No Repositories Found</h3>
-            <p className="text-gray-500 mb-4">
-              {searchQuery ? `No repositories match "${searchQuery}"` : "You don't have any repositories yet"}
-            </p>
-            <div className="flex justify-center space-x-3">
-              <button
-                onClick={() => setShowNewRepoModal(true)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
-                Create New Repository
-              </button>
-              <button
-                onClick={() => setShowLinkRepoModal(true)}
-                className="px-4 py-2 border border-gray-300 bg-white rounded-md hover:bg-gray-50"
-              >
-                Connect Existing Repository
-              </button>
-            </div>
+      {/* Repository Path Breadcrumbs */}
+      {repoPath.length > 0 && (
+        <div className="flex items-center mb-4 bg-gray-50 rounded-lg p-3 border border-gray-200">
+          <div className="text-sm text-gray-500 mr-2">Repository Path:</div>
+          <div className="flex items-center flex-wrap">
+            {repoPath.map((repo, index) => (
+              <React.Fragment key={repo.id}>
+                <button 
+                  className="flex items-center text-blue-600 hover:text-blue-800"
+                  onClick={() => selectRepository(repo.id)}
+                >
+                  {index === 0 && isHomeRepository(repo.id) ? (
+                    <Home size={14} className="mr-1" />
+                  ) : (
+                    <Code size={14} className="mr-1" />
+                  )}
+                  <span className="text-sm font-medium">{repo.name}</span>
+                  {repo.isLinked && (
+                    <LinkIcon2 size={12} className="ml-1 text-purple-500" />
+                  )}
+                </button>
+                {index < repoPath.length - 1 && (
+                  <ChevronRight size={16} className="mx-1 text-gray-400" />
+                )}
+              </React.Fragment>
+            ))}
           </div>
-        )}
+          
+          {currentRepo && (
+            <button 
+              onClick={() => viewRepositoryFiles(currentRepo.id)}
+              className="ml-auto flex items-center text-sm text-blue-600 hover:text-blue-800"
+            >
+              <FileText size={14} className="mr-1" />
+              View Files
+            </button>
+          )}
+        </div>
+      )}
+      
+      {/* Repository Tree */}
+      <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <h2 className="text-lg font-medium mb-4">Repository Structure</h2>
+        
+        <div className="mb-2 text-sm text-gray-500">
+          Click on a repository to select it. Expand and collapse to navigate the hierarchy.
+        </div>
+        
+        <div className="mt-4">
+          <RepositoryTree 
+            parentId={null} 
+            level={0} 
+            openNodes={openNodes} 
+            toggleNode={toggleNode} 
+          />
+        </div>
       </div>
       
       {/* Modals */}

@@ -29,12 +29,60 @@ interface RepositoryState {
   filterRepositories: (query: string) => Repository[];
   viewRepositoryFiles: (repoId: string) => void;
   switchBranch: (branchName: string) => void;
+  getRepositoryPath: (repoId: string) => Repository[];
+  getRepositoryChildren: (parentId: string | null) => Repository[];
 }
+
+// Extend mock repositories to include parent-child relationships
+const extendedMockRepositories = [
+  ...mockRepositories.slice(0, 2), // First two repos stay at root level
+  {
+    ...mockRepositories[2],
+    parentId: 'home-repo' // Documentation repo is under home
+  },
+  {
+    ...mockRepositories[3],
+    parentId: 'repo-1' // Design-system is under frontend-app
+  },
+  {
+    ...mockRepositories[4],
+    parentId: 'repo-2', // Mobile-app is under api-server
+    isLinked: true
+  },
+  // Additional nested repositories for deeper hierarchy
+  {
+    id: 'repo-6',
+    name: 'analytics-tools',
+    description: 'Analytics and reporting tools',
+    stars: 7,
+    lastUpdated: '2023-06-01',
+    language: 'JavaScript',
+    parentId: 'repo-1'
+  },
+  {
+    id: 'repo-7',
+    name: 'database-migrations',
+    description: 'Database migration scripts',
+    stars: 3,
+    lastUpdated: '2023-05-28',
+    language: 'SQL',
+    parentId: 'repo-2'
+  },
+  {
+    id: 'repo-8',
+    name: 'shared-components',
+    description: 'Common UI components shared across projects',
+    stars: 14,
+    lastUpdated: '2023-06-10',
+    language: 'TypeScript',
+    parentId: 'repo-3'
+  }
+];
 
 export const useRepoStore = create<RepositoryState>((set, get) => ({
   repositories: [
     homeRepo,
-    ...mockRepositories
+    ...extendedMockRepositories
   ],
   currentRepoId: 'home-repo',
   currentBranch: 'main',
@@ -65,14 +113,31 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
     // Cannot delete home repository
     if (repoId === 'home-repo') return;
     
-    const { getRepositoryById } = get();
+    const { getRepositoryById, getRepositoryChildren } = get();
     const repo = getRepositoryById(repoId);
     if (repo?.isLinked) return;
     
+    // Get all child repos recursively to delete them as well
+    const childrenToDelete = new Set<string>();
+    
+    const collectChildren = (parentId: string) => {
+      const children = getRepositoryChildren(parentId);
+      children.forEach(child => {
+        childrenToDelete.add(child.id);
+        collectChildren(child.id);
+      });
+    };
+    
+    collectChildren(repoId);
+    
     set(state => ({
-      repositories: state.repositories.filter(repo => repo.id !== repoId),
+      repositories: state.repositories.filter(repo => 
+        repo.id !== repoId && !childrenToDelete.has(repo.id)
+      ),
       // If we deleted the current repo, select the home repo
-      currentRepoId: state.currentRepoId === repoId ? 'home-repo' : state.currentRepoId
+      currentRepoId: state.currentRepoId === repoId || childrenToDelete.has(state.currentRepoId as string) 
+        ? 'home-repo' 
+        : state.currentRepoId
     }));
   },
   
@@ -80,14 +145,31 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
     // Cannot unlink home repository
     if (repoId === 'home-repo') return;
     
-    const { getRepositoryById } = get();
+    const { getRepositoryById, getRepositoryChildren } = get();
     const repo = getRepositoryById(repoId);
     if (!repo?.isLinked) return;
     
+    // Get all child repos recursively to unlink them as well
+    const childrenToUnlink = new Set<string>();
+    
+    const collectChildren = (parentId: string) => {
+      const children = getRepositoryChildren(parentId);
+      children.forEach(child => {
+        childrenToUnlink.add(child.id);
+        collectChildren(child.id);
+      });
+    };
+    
+    collectChildren(repoId);
+    
     set(state => ({
-      repositories: state.repositories.filter(repo => repo.id !== repoId),
+      repositories: state.repositories.filter(repo => 
+        repo.id !== repoId && !childrenToUnlink.has(repo.id)
+      ),
       // If we unlinked the current repo, select the home repo
-      currentRepoId: state.currentRepoId === repoId ? 'home-repo' : state.currentRepoId
+      currentRepoId: state.currentRepoId === repoId || childrenToUnlink.has(state.currentRepoId as string) 
+        ? 'home-repo' 
+        : state.currentRepoId
     }));
   },
   
@@ -156,5 +238,31 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
   
   switchBranch: (branchName: string) => {
     set({ currentBranch: branchName });
+  },
+  
+  // Get full path of repositories from root to the current repository
+  getRepositoryPath: (repoId: string): Repository[] => {
+    const { repositories, getRepositoryById } = get();
+    
+    const path: Repository[] = [];
+    let currentRepo = getRepositoryById(repoId);
+    
+    while (currentRepo) {
+      path.unshift(currentRepo);
+      if (currentRepo.parentId) {
+        currentRepo = getRepositoryById(currentRepo.parentId);
+      } else {
+        break;
+      }
+    }
+    
+    return path;
+  },
+  
+  // Get direct children of a repository
+  getRepositoryChildren: (parentId: string | null): Repository[] => {
+    const { repositories } = get();
+    
+    return repositories.filter(repo => repo.parentId === parentId);
   }
 }));

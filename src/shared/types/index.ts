@@ -22,6 +22,14 @@ interface Attachment {
   size?: number;
 }
 
+export interface AppSnapshot {
+  id: string;
+  imageUrl: string;
+  title: string;
+  timestamp: string;
+  description?: string;
+}
+
 export interface ContextPart {
   type: string;
   value: string;
@@ -37,14 +45,6 @@ export interface NavigationItem {
   parentId?: string;
   children: NavigationItem[];
   context?: ContextPart[]; // Context information
-}
-
-export interface AppSnapshot {
-  id: string;
-  imageUrl: string;
-  title: string;
-  timestamp: string;
-  description?: string;
 }
 
 export interface SidebarItem {
@@ -82,6 +82,7 @@ export interface Repository {
   language: string;
   isHome?: boolean;
   isLinked?: boolean; // Whether this repo is linked but not owned
+  parentId?: string; // ID of parent repository for hierarchical structure
 }
 
 export interface Branch {
