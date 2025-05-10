@@ -30,7 +30,7 @@ export interface AppSnapshot {
   description?: string;
 }
 
-export interface ContextPart {
+interface ContextPart {
   type: string;
   value: string;
 }
