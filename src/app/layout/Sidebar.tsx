@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, MessageSquare, Folder, GitBranch, LogOut, HelpCircle, User, Lightbulb, Settings, Package } from 'lucide-react';
+import { Home, MessageSquare, Folder, GitBranch, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard } from 'lucide-react';
 import { SidebarItem, View } from '@/shared/types';
 import { useChatStore } from '@/features/chat/state';
 import { useNavigationStore } from '@/features/navigation/state';
@@ -16,6 +16,7 @@ const Sidebar: React.FC = () => {
     { icon: 'GitBranch', label: 'Repos', view: 'repos' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Folder', label: 'Files', view: 'files' },
+    { icon: 'Clipboard', label: 'Context', view: 'context' },
     { icon: 'Lightbulb', label: 'Innovations', view: 'solutions' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
     { icon: 'User', label: 'Account', view: 'account' },
@@ -35,6 +36,7 @@ const Sidebar: React.FC = () => {
       case 'LogOut': return <LogOut size={20} />;
       case 'HelpCircle': return <HelpCircle size={20} />;
       case 'User': return <User size={20} />;
+      case 'Clipboard': return <Clipboard size={20} />;
       default: return <MessageSquare size={20} />;
     }
   };
@@ -59,7 +61,7 @@ const Sidebar: React.FC = () => {
   return (
     <nav className="w-16 bg-gray-900 text-white flex flex-col items-center py-6">
       <div className="flex-1 flex flex-col space-y-3">
-        {sidebarItems.slice(0, 7).map((item) => (
+        {sidebarItems.slice(0, 8).map((item) => (
           <div key={item.label} className="relative group">
             <button
               className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
@@ -79,7 +81,7 @@ const Sidebar: React.FC = () => {
         ))}
       </div>
       <div className="flex flex-col space-y-3">
-        {sidebarItems.slice(7).map((item) => (
+        {sidebarItems.slice(8).map((item) => (
           <div key={item.label} className="relative group">
             <button
               className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${

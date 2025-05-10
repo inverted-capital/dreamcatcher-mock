@@ -2,7 +2,7 @@ import { DivideIcon as LucideIcon } from 'lucide-react';
 
 type Role = 'user' | 'assistant' | 'system';
 type MessageType = 'text' | 'navigation' | 'file' | 'code';
-export type View = 'chats' | 'files' | 'repos' | 'help' | 'weather' | 'customers' | 'home' | 'solutions' | 'settings' | 'account' | 'napps';
+export type View = 'chats' | 'files' | 'repos' | 'help' | 'weather' | 'customers' | 'home' | 'solutions' | 'settings' | 'account' | 'napps' | 'context';
 
 export interface ChatMessage {
   id: string;
