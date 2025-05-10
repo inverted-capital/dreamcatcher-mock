@@ -3,12 +3,16 @@ import { Home, MessageSquare, Folder, GitBranch, LogOut, HelpCircle, User, Light
 import { SidebarItem, View } from '@/shared/types';
 import { useChatStore } from '@/features/chat/state';
 import { useNavigationStore } from '@/features/navigation/state';
+import { usePrivy } from '@privy-io/react-auth';
 
 const Sidebar: React.FC = () => {
   // Get state and actions from Zustand stores
   const currentView = useNavigationStore(state => state.currentView);
   const setCurrentView = useNavigationStore(state => state.setCurrentView);
   const navigateTo = useChatStore(state => state.navigateTo);
+  
+  // Get the logout function from Privy
+  const { logout } = usePrivy();
   
   const sidebarItems: SidebarItem[] = [
     { icon: 'Home', label: 'Home', view: 'home' },
@@ -20,7 +24,7 @@ const Sidebar: React.FC = () => {
     { icon: 'Settings', label: 'Settings', view: 'settings' },
     { icon: 'Lightbulb', label: 'Innovations', view: 'innovations' },
     { icon: 'User', label: 'Account', view: 'account' },
-    { icon: 'LogOut', label: 'Sign Out', view: 'home', action: () => console.log('Sign out clicked') },
+    { icon: 'LogOut', label: 'Sign Out', view: 'home', action: () => logout() },
     { icon: 'HelpCircle', label: 'Help', view: 'help' },
   ];
 
