@@ -12,6 +12,7 @@ const AccountView: React.FC = () => {
   const [userProfile, setUserProfile] = useState(mockUserProfile);
   const [editingName, setEditingName] = useState(false);
   const [tempName, setTempName] = useState(userProfile.name);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleProfilePictureChange = () => {
     // In a real app, this would open a file picker
@@ -35,6 +36,14 @@ const AccountView: React.FC = () => {
 
   const cancelNameEdit = () => {
     setEditingName(false);
+  };
+
+  const showDeleteAccountConfirm = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const dismissDeleteConfirm = () => {
+    setShowDeleteConfirm(false);
   };
 
   return (
@@ -131,12 +140,34 @@ const AccountView: React.FC = () => {
           </div>
           
           <div>
-            <button className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-md hover:bg-red-100 flex items-center">
+            <button 
+              className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 rounded-md hover:bg-red-100 flex items-center"
+              onClick={showDeleteAccountConfirm}
+            >
               Delete Account
             </button>
           </div>
         </div>
       </div>
+
+      {/* Delete Account Confirmation Dialog */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-medium mb-4">Delete Account</h3>
+            <p className="mb-6 text-gray-700">You can check out anytime you like, but you can never leave.</p>
+            
+            <div className="flex justify-end">
+              <button
+                onClick={dismissDeleteConfirm}
+                className="px-4 py-2 text-gray-700 hover:text-gray-900"
+              >
+                Okay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
