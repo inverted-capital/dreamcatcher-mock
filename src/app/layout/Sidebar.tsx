@@ -58,30 +58,72 @@ const Sidebar: React.FC = () => {
     return currentView === item.view && !item.action;
   };
 
+  // Group 1: User-specific items (Home, Chats, Context)
+  const userGroup = sidebarItems.slice(0, 3);
+  // Group 2: Context/scope selection items (Repos, Napps, Files, Innovations, Settings)
+  const contextSelectorGroup = sidebarItems.slice(3, 8);
+  // Group 3: Account and help items
+  const accountGroup = sidebarItems.slice(8);
+
   return (
     <nav className="w-16 bg-gray-900 text-white flex flex-col items-center py-6">
-      <div className="flex-1 flex flex-col space-y-3">
-        {sidebarItems.slice(0, 8).map((item) => (
-          <div key={item.label} className="relative group">
-            <button
-              className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
-                isActive(item) 
-                  ? 'bg-blue-600 text-white' 
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700'
-              }`}
-              onClick={() => handleNavigation(item)}
-              aria-label={item.label}
-            >
-              {getIcon(item.icon)}
-            </button>
-            <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50">
-              {item.label}
+      <div className="flex-1 flex flex-col">
+        {/* User-specific group */}
+        <div className="space-y-3 mb-6">
+          {userGroup.map((item) => (
+            <div key={item.label} className="relative group">
+              <button
+                className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                  isActive(item) 
+                    ? 'bg-blue-600 text-white' 
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                }`}
+                onClick={() => handleNavigation(item)}
+                aria-label={item.label}
+              >
+                {getIcon(item.icon)}
+              </button>
+              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50">
+                {item.label}
+              </div>
             </div>
+          ))}
+        </div>
+        
+        {/* Visual separator */}
+        <div className="w-8 border-t border-gray-700 mx-auto mb-6"></div>
+        
+        {/* Context selector group with background indicator */}
+        <div className="relative mb-6">
+          {/* Background indicator for the context selector group */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-full rounded-xl bg-gray-800 -z-10"></div>
+          
+          <div className="space-y-3 relative z-0 py-3">
+            {contextSelectorGroup.map((item) => (
+              <div key={item.label} className="relative group">
+                <button
+                  className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
+                    isActive(item) 
+                      ? 'bg-blue-600 text-white' 
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  }`}
+                  onClick={() => handleNavigation(item)}
+                  aria-label={item.label}
+                >
+                  {getIcon(item.icon)}
+                </button>
+                <div className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50">
+                  {item.label}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
+      
+      {/* Account and help items */}
       <div className="flex flex-col space-y-3">
-        {sidebarItems.slice(8).map((item) => (
+        {accountGroup.map((item) => (
           <div key={item.label} className="relative group">
             <button
               className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
