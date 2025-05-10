@@ -13,10 +13,10 @@ const Sidebar: React.FC = () => {
   const sidebarItems: SidebarItem[] = [
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
+    { icon: 'Clipboard', label: 'Context', view: 'context' },
     { icon: 'GitBranch', label: 'Repos', view: 'repos' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Folder', label: 'Files', view: 'files' },
-    { icon: 'Clipboard', label: 'Context', view: 'context' },
     { icon: 'Lightbulb', label: 'Innovations', view: 'solutions' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
     { icon: 'User', label: 'Account', view: 'account' },
