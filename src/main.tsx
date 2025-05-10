@@ -108,7 +108,7 @@ function Boot() {
   return (
     <PrivyProvider
       appId="cma4m3v6400dkl10ld7792jm2"
-      config={{ walletConnectCloudProjectId: undefined}}
+      config={{ externalWallets: { walletConnect: { enabled: false } } }}
     >
       <AuthenticatedApp />
     </PrivyProvider>
