@@ -59,7 +59,7 @@ const ReposView: React.FC = () => {
             className="border border-gray-200 bg-white hover:bg-gray-50 px-3 py-2 rounded-md flex items-center transition-colors"
           >
             <LinkIcon size={16} className="mr-2" />
-            Connect
+            Link
           </button>
         </div>
       </div>
