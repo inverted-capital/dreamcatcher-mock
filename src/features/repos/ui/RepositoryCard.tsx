@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Star, Code, LinkIcon, Trash2, ArrowDownToLine, ArrowUpToLine, FolderOpen, ExternalLink } from 'lucide-react';
+import { Star, GitBranch, LinkIcon, Trash2, ArrowDownToLine, ArrowUpToLine, FolderOpen, ExternalLink, Home } from 'lucide-react';
 import { Repository } from '@/shared/types';
 import { useRepoStore } from '../state';
 import { useNavigationStore } from '@/features/navigation/state';
@@ -15,7 +15,8 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
   const { 
     selectRepository, 
     deleteRepository, 
-    unlinkRepository 
+    unlinkRepository,
+    isHomeRepository 
   } = useRepoStore();
   
   const setCurrentView = useNavigationStore(state => state.setCurrentView);
@@ -23,6 +24,8 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
   
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showUnlinkConfirm, setShowUnlinkConfirm] = useState(false);
+  
+  const isHome = isHomeRepository(repo.id);
   
   const viewRepositoryFiles = (repoId: string) => {
     selectRepository(repoId);
@@ -32,6 +35,10 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
       icon: 'Folder',
       view: 'files',
     });
+  };
+
+  const handleRepoClick = () => {
+    selectRepository(repo.id);
   };
 
   const handlePullRepo = () => {
@@ -52,21 +59,35 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
   return (
     <div 
       className={`bg-white border ${isSelected ? 'border-blue-300 ring-2 ring-blue-100' : 'border-gray-200'} rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer`}
-      onClick={() => selectRepository(repo.id)}
+      onClick={handleRepoClick}
     >
       <div className="flex justify-between items-start mb-2">
-        <h3 className="font-medium text-blue-600">{repo.name}</h3>
+        <h3 className="font-medium text-blue-600 flex items-center">
+          {isHome ? (
+            <Home size={18} className="mr-2" />
+          ) : (
+            <GitBranch size={18} className="mr-2" />
+          )}
+          {repo.name}
+        </h3>
         <div className="flex items-center space-x-2">
+          {isHome && (
+            <div className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+              Personal
+            </div>
+          )}
           {repo.isLinked && (
             <div className="flex items-center bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
               <LinkIcon size={10} className="mr-1" />
               Linked
             </div>
           )}
-          <div className="flex items-center text-gray-500 text-sm">
-            <Star size={14} className="text-yellow-500 mr-1" />
-            {repo.stars}
-          </div>
+          {!isHome && (
+            <div className="flex items-center text-gray-500 text-sm">
+              <Star size={14} className="text-yellow-500 mr-1" />
+              {repo.stars}
+            </div>
+          )}
         </div>
       </div>
       
@@ -76,13 +97,13 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
       
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center">
-          <Code size={14} className="mr-1" />
+          <GitBranch size={14} className="mr-1" />
           <span className="bg-gray-100 px-2 py-1 rounded">
-            {repo.language}
+            {isHome ? 'Settings & Configuration' : repo.language}
           </span>
         </div>
         <div className="text-gray-500">
-          Updated on {repo.lastUpdated}
+          {isHome ? 'Your main workspace' : `Updated on ${repo.lastUpdated}`}
         </div>
       </div>
       
@@ -109,7 +130,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           Pull
         </button>
         
-        {!repo.isLinked && (
+        {!repo.isLinked && !isHome && (
           <button 
             onClick={(e) => {
               e.stopPropagation();
@@ -122,28 +143,31 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           </button>
         )}
         
-        {repo.isLinked ? (
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowUnlinkConfirm(true);
-            }}
-            className="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded flex items-center hover:bg-purple-100 transition-colors ml-auto"
-          >
-            <LinkIcon size={12} className="mr-1" />
-            Unlink
-          </button>
-        ) : (
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDeleteConfirm(true);
-            }}
-            className="text-xs px-2 py-1 bg-red-50 text-red-600 rounded flex items-center hover:bg-red-100 transition-colors ml-auto"
-          >
-            <Trash2 size={12} className="mr-1" />
-            Delete
-          </button>
+        {/* Only show delete/unlink buttons for non-home repositories */}
+        {!isHome && (
+          repo.isLinked ? (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowUnlinkConfirm(true);
+              }}
+              className="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded flex items-center hover:bg-purple-100 transition-colors ml-auto"
+            >
+              <LinkIcon size={12} className="mr-1" />
+              Unlink
+            </button>
+          ) : (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDeleteConfirm(true);
+              }}
+              className="text-xs px-2 py-1 bg-red-50 text-red-600 rounded flex items-center hover:bg-red-100 transition-colors ml-auto"
+            >
+              <Trash2 size={12} className="mr-1" />
+              Delete
+            </button>
+          )
         )}
         
         {/* External link for linked repositories */}

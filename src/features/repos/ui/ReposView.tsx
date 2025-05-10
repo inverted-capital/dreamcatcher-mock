@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { GitBranch, Plus, GitFork, LinkIcon, Home, FileText, ChevronRight, Link as LinkIcon2 } from 'lucide-react';
 import { useRepoStore } from '../state';
 import RepositoryTree from './RepositoryTree';
-import HomeRepositoryCard from './HomeRepositoryCard';
 import RepositoryCard from './RepositoryCard';
 import NewRepositoryModal from '../modals/NewRepositoryModal';
 import CloneRepositoryModal from '../modals/CloneRepositoryModal';
@@ -102,17 +101,10 @@ const ReposView: React.FC = () => {
       {/* Current Repository Card */}
       {currentRepo && (
         <div className="mb-6">
-          {isHomeRepository(currentRepoId!) ? (
-            <HomeRepositoryCard 
-              repo={currentRepo}
-              isSelected={true}
-            />
-          ) : (
-            <RepositoryCard 
-              repo={currentRepo}
-              isSelected={true}
-            />
-          )}
+          <RepositoryCard 
+            repo={currentRepo}
+            isSelected={true}
+          />
         </div>
       )}
       
