@@ -39,6 +39,14 @@ export interface NavigationItem {
   context?: ContextPart[]; // Context information
 }
 
+export interface AppSnapshot {
+  id: string;
+  imageUrl: string;
+  title: string;
+  timestamp: string;
+  description?: string;
+}
+
 export interface SidebarItem {
   icon: string;
   label: string;
