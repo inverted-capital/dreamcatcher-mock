@@ -7,12 +7,15 @@ interface LinkRepositoryModalProps {
 }
 
 const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({ onClose }) => {
-  const { linkRepository, selectRepository } = useRepoStore();
+  const { linkRepository, selectRepository, getRepositoryById, currentRepoId } = useRepoStore();
   
   const [linkRepoName, setLinkRepoName] = useState('');
   const [linkRepoDesc, setLinkRepoDesc] = useState('');
   const [linkRepoUrl, setLinkRepoUrl] = useState('');
   const [linkRepoLang, setLinkRepoLang] = useState('JavaScript');
+  const [parentRepoId, setParentRepoId] = useState(currentRepoId || 'home-repo');
+  
+  const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null;
   
   const handleLinkRepo = () => {
     if (!linkRepoName.trim()) return;
@@ -25,7 +28,7 @@ const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({ onClose }) =>
       language: linkRepoLang,
     };
     
-    const newRepoId = linkRepository(newRepo);
+    const newRepoId = linkRepository(newRepo, parentRepoId);
     selectRepository(newRepoId);
     onClose();
   };
@@ -64,6 +67,25 @@ const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({ onClose }) =>
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="company-project"
             />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Parent Repository
+            </label>
+            <select
+              value={parentRepoId}
+              onChange={(e) => setParentRepoId(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="home-repo">Home (Root)</option>
+              {currentRepo && currentRepo.id !== 'home-repo' && (
+                <option value={currentRepo.id}>{currentRepo.name} (Current)</option>
+              )}
+            </select>
+            <p className="mt-1 text-xs text-gray-500">
+              This determines where in the repository tree your linked repository will be placed.
+            </p>
           </div>
           
           <div>
