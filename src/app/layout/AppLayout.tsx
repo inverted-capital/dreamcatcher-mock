@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from './Sidebar'
 import ChatContainer from '@/features/chat/ui/ChatContainer'
-import { Home, GitBranch, FileText, ChevronDown, Code } from 'lucide-react'
+import { Home, FolderGit2, FileText, ChevronDown, Code } from 'lucide-react'
 import { useRepoStore } from '@/features/repos/state'
 import { useFilesStore } from '@/features/files/state'
 import { useNavigationStore } from '@/features/navigation/state'
@@ -104,7 +104,7 @@ const AppLayout: React.FC = () => {
         switch (currentView) {
           case 'repos':
             viewTitle = 'Repositories'
-            viewIcon = 'GitBranch'
+            viewIcon = 'FolderGit2'
             break
           case 'files':
             viewTitle = 'Files'
@@ -166,7 +166,7 @@ const AppLayout: React.FC = () => {
       // For other repos, navigate to repos view
       navigateTo({
         title: 'Repos',
-        icon: 'GitBranch',
+        icon: 'FolderGit2',
         view: 'repos'
       })
     }
@@ -229,7 +229,7 @@ const AppLayout: React.FC = () => {
                       onClick={handleBranchClick}
                       className="text-purple-600 font-medium flex items-center hover:text-purple-700 cursor-pointer"
                     >
-                      <GitBranch size={14} className="mr-1" />
+                      <FolderGit2 size={14} className="mr-1" />
                       <span className="hover:underline">{currentBranch}</span>
                     </div>
 

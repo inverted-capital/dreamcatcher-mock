@@ -3,7 +3,7 @@ import {
   Home,
   MessageSquare,
   Folder,
-  GitBranch,
+  FolderGit2,
   LogOut,
   HelpCircle,
   User,
@@ -30,7 +30,7 @@ const Sidebar: React.FC = () => {
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
     { icon: 'Clipboard', label: 'Context', view: 'context' },
-    { icon: 'GitBranch', label: 'Repos', view: 'repos' },
+    { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
     { icon: 'Folder', label: 'Files', view: 'files' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
@@ -48,8 +48,8 @@ const Sidebar: React.FC = () => {
         return <MessageSquare size={20} />
       case 'Folder':
         return <Folder size={20} />
-      case 'GitBranch':
-        return <GitBranch size={20} />
+      case 'FolderGit2':
+        return <FolderGit2 size={20} />
       case 'Lightbulb':
         return <Lightbulb size={20} />
       case 'Settings':

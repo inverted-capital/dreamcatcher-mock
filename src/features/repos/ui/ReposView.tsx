@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ChevronRight,
   FileText,
-  GitBranch,
+  FolderGit2,
   GitFork,
   Home,
   Link as LinkIcon2,
@@ -76,7 +76,7 @@ const ReposView: React.FC = () => {
     <div className="animate-fadeIn">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold flex items-center">
-          <GitBranch className="mr-2" size={24} />
+          <FolderGit2 className="mr-2" size={24} />
           Repositories
         </h1>
 

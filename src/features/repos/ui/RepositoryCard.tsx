@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   Star,
-  GitBranch,
+  FolderGit2,
   LinkIcon,
   Trash2,
   ArrowDownToLine,
@@ -79,7 +79,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
           {isHome ? (
             <Home size={18} className="mr-2" />
           ) : (
-            <GitBranch size={18} className="mr-2" />
+            <FolderGit2 size={18} className="mr-2" />
           )}
           {repo.name}
         </h3>
@@ -108,7 +108,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
 
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center">
-          <GitBranch size={14} className="mr-1" />
+          <FolderGit2 size={14} className="mr-1" />
           <span className="bg-gray-100 px-2 py-1 rounded">
             {isHome ? 'Settings & Configuration' : repo.language}
           </span>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChevronDown, ChevronRight, GitBranch, Home, Link } from 'lucide-react'
+import { ChevronDown, ChevronRight, FolderGit2, Home, Link } from 'lucide-react'
 import { Repository } from '@/shared/types'
 import { useRepoStore } from '../state'
 
@@ -94,7 +94,7 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
                   {isHomeRepository(repo.id) ? (
                     <Home size={16} />
                   ) : (
-                    <GitBranch size={16} />
+                    <FolderGit2 size={16} />
                   )}
                 </div>
                 <div className="truncate font-medium text-sm">{repo.name}</div>

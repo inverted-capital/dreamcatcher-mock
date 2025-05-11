@@ -4,7 +4,7 @@ import {
   ChevronRight,
   Code,
   FileText,
-  GitBranch,
+  FolderGit2,
   Home
 } from 'lucide-react'
 import { NavigationItem } from '@/shared/types'
@@ -47,7 +47,7 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
         return <span className="text-sm">💬</span>
       case 'Folder':
         return <span className="text-sm">📁</span>
-      case 'GitBranch':
+      case 'FolderGit2':
         return <span className="text-sm">⑂</span>
       case 'HelpCircle':
         return <span className="text-sm">❓</span>
@@ -153,7 +153,7 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
                 {part.type === 'home' && <Home size={10} className="mr-1" />}
                 {part.type === 'repo' && <Code size={10} className="mr-1" />}
                 {part.type === 'branch' && (
-                  <GitBranch size={10} className="mr-1" />
+                  <FolderGit2 size={10} className="mr-1" />
                 )}
                 {part.type === 'file' && (
                   <FileText size={10} className="mr-1" />
