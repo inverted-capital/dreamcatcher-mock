@@ -1,18 +1,5 @@
 import React from 'react'
-import {
-  Home,
-  MessageSquare,
-  Folder,
-  FolderGit2,
-  LogOut,
-  HelpCircle,
-  User,
-  Lightbulb,
-  Settings,
-  Package,
-  Clipboard,
-  Git
-} from 'lucide-react'
+import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, Github as Git } from 'lucide-react'
 import { SidebarItem, View } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
 import { useNavigationStore } from '@/features/navigation/state'
