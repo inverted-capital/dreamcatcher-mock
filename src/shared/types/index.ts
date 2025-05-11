@@ -6,6 +6,7 @@ export type View =
   | 'chats'
   | 'files'
   | 'repos'
+  | 'branches'
   | 'help'
   | 'weather'
   | 'customers'
@@ -100,6 +101,17 @@ export interface Repository {
 export interface Branch {
   name: string
   isDefault: boolean
+}
+
+export interface Commit {
+  id: string
+  hash: string
+  shortHash: string
+  message: string
+  author: string
+  date: string
+  branch: string
+  tags?: string[]
 }
 
 export interface WeatherData {

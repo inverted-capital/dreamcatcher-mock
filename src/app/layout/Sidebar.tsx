@@ -10,7 +10,8 @@ import {
   Lightbulb,
   Settings,
   Package,
-  Clipboard
+  Clipboard,
+  Git
 } from 'lucide-react'
 import { SidebarItem, View } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
@@ -31,6 +32,7 @@ const Sidebar: React.FC = () => {
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
     { icon: 'Clipboard', label: 'Context', view: 'context' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
+    { icon: 'Git', label: 'Branches', view: 'branches' },
     { icon: 'Folder', label: 'Files', view: 'files' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
@@ -50,6 +52,8 @@ const Sidebar: React.FC = () => {
         return <Folder size={20} />
       case 'FolderGit2':
         return <FolderGit2 size={20} />
+      case 'Git':
+        return <Git size={20} />
       case 'Lightbulb':
         return <Lightbulb size={20} />
       case 'Settings':
@@ -88,10 +92,10 @@ const Sidebar: React.FC = () => {
 
   // Group 1: User-specific items (Home, Chats, Context)
   const userGroup = sidebarItems.slice(0, 3)
-  // Group 2: Context/scope selection items (Repos, Napps, Files, Innovations, Settings)
-  const contextSelectorGroup = sidebarItems.slice(3, 8)
+  // Group 2: Context/scope selection items (Repos, Branches, Files, Napps, Innovations, Settings)
+  const contextSelectorGroup = sidebarItems.slice(3, 9)
   // Group 3: Account and help items
-  const accountGroup = sidebarItems.slice(8)
+  const accountGroup = sidebarItems.slice(9)
 
   return (
     <nav className="w-16 bg-gray-900 text-white flex flex-col items-center py-6">

@@ -3,6 +3,7 @@ import { useNavigationStore } from '@/features/navigation/state'
 import ChatsView from '@/features/chat/ui/ChatsView'
 import FilesView from '@/features/files/ui/FilesView'
 import ReposView from '@/features/repos/ui/ReposView'
+import BranchesView from '@/features/branches/ui/BranchesView'
 import HelpView from '@/features/help/HelpView'
 import CustomersView from '@/features/customers/CustomersView'
 import WeatherView from '@/features/weather/WeatherView'
@@ -24,6 +25,8 @@ const CanvasContainer: React.FC = () => {
         return <FilesView />
       case 'repos':
         return <ReposView />
+      case 'branches':
+        return <BranchesView />
       case 'napps':
         return <NappsView />
       case 'context':
