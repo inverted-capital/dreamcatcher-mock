@@ -12,7 +12,7 @@ interface NavigationActions {
 export const useNavigationStore = create<NavigationState & NavigationActions>()(
   (set) => ({
     // State
-    currentView: 'chats', // Default view
+    currentView: 'repos', // Default view
 
     // Actions
     setCurrentView: (view) => {

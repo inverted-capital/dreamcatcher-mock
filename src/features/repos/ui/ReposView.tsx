@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-  GitBranch,
-  Plus,
-  GitFork,
-  LinkIcon,
-  Home,
-  FileText,
   ChevronRight,
-  Link as LinkIcon2
+  FileText,
+  GitBranch,
+  GitFork,
+  Home,
+  Link as LinkIcon2,
+  LinkIcon,
+  Plus
 } from 'lucide-react'
 import { useRepoStore } from '../state'
 import RepositoryTree from './RepositoryTree'
@@ -168,8 +168,6 @@ const ReposView: React.FC = () => {
           />
         </div>
       </div>
-
-      <div>Hurro</div>
 
       {/* Modals */}
       {showNewRepoModal && (

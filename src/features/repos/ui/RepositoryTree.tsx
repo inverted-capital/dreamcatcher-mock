@@ -1,16 +1,7 @@
 import React from 'react'
-import {
-  ChevronRight,
-  ChevronDown,
-  GitBranch,
-  Link,
-  Home,
-  FolderOpen
-} from 'lucide-react'
+import { ChevronDown, ChevronRight, GitBranch, Home, Link } from 'lucide-react'
 import { Repository } from '@/shared/types'
 import { useRepoStore } from '../state'
-import { useNavigationStore } from '@/features/navigation/state'
-import { useChatStore } from '@/features/chat/state'
 
 interface RepositoryTreeProps {
   parentId: string | null

@@ -6,8 +6,6 @@ import './index.css'
 import {
   type Artifact,
   ArtifactBase,
-  ArtifactScope,
-  useArtifact,
   useIsArtifactReady
 } from '@artifact/client'
 import Debug from 'debug'
@@ -82,6 +80,7 @@ function AuthenticatedApp() {
       server={url}
       secureToken={identityToken}
       onError={onError}
+      global
     >
       <LoadingArtifact />
       <App />
@@ -91,10 +90,6 @@ function AuthenticatedApp() {
 
 function LoadingArtifact() {
   const ready = useIsArtifactReady()
-  const artifact = useArtifact()
-  if (!globalThis.artifact && artifact) {
-    globalThis.artifact = artifact
-  }
   if (!ready) {
     return <div>Loading Artifact...</div>
   }

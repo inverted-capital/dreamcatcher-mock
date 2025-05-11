@@ -10,10 +10,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "up": "npx -y npm-check-updates@latest -u && npm i",
-    "knip": "knip --production --fix --allow-remove-files"
+    "knip": "knip --production --fix --allow-remove-files --format --exports"
   },
   "dependencies": {
-    "@artifact/client": "npm:@jsr/artifact__client@^0.0.45",
+    "@artifact/client": "npm:@jsr/artifact__client@^0.0.46",
     "@privy-io/react-auth": "^2.13.1",
     "debug": "^4.4.0",
     "lucide-react": "^0.509.0",
