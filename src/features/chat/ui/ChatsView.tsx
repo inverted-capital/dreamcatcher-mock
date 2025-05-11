@@ -1,35 +1,35 @@
-import React from 'react';
-import { MessageSquare, Plus, Search, Clock, X } from 'lucide-react';
-import { useChatStore } from '../state';
-import { formatDistanceToNow } from '@/shared/utils/dateUtils';
+import React from 'react'
+import { MessageSquare, Plus, Search, Clock, X } from 'lucide-react'
+import { useChatStore } from '../state'
+import { formatDistanceToNow } from '@/shared/utils/dateUtils'
 
 const ChatsView: React.FC = () => {
-  const { 
-    createNewChat, 
-    selectChat, 
-    getFilteredChats, 
-    currentChatId, 
-    setSearchQuery, 
-    searchQuery 
-  } = useChatStore();
+  const {
+    createNewChat,
+    selectChat,
+    getFilteredChats,
+    currentChatId,
+    setSearchQuery,
+    searchQuery
+  } = useChatStore()
 
   const handleNewChat = () => {
-    createNewChat();
-  };
+    createNewChat()
+  }
 
   const handleSelectChat = (chatId: string) => {
-    selectChat(chatId);
-  };
+    selectChat(chatId)
+  }
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+    setSearchQuery(e.target.value)
+  }
 
   const clearSearch = () => {
-    setSearchQuery('');
-  };
+    setSearchQuery('')
+  }
 
-  const chats = getFilteredChats();
+  const chats = getFilteredChats()
 
   return (
     <div className="animate-fadeIn h-full flex flex-col">
@@ -38,8 +38,8 @@ const ChatsView: React.FC = () => {
           <MessageSquare className="mr-2" size={24} />
           Recent Chats
         </h1>
-        
-        <button 
+
+        <button
           onClick={handleNewChat}
           className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center transition-colors"
         >
@@ -47,9 +47,12 @@ const ChatsView: React.FC = () => {
           New Chat
         </button>
       </div>
-      
+
       <div className="relative mb-4">
-        <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <Search
+          size={16}
+          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+        />
         <input
           type="text"
           placeholder="Search chats..."
@@ -58,7 +61,7 @@ const ChatsView: React.FC = () => {
           className="pl-9 pr-9 py-2 w-full border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         {searchQuery && (
-          <button 
+          <button
             onClick={clearSearch}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
@@ -66,16 +69,16 @@ const ChatsView: React.FC = () => {
           </button>
         )}
       </div>
-      
+
       <div className="overflow-y-auto flex-1">
         <div className="grid grid-cols-1 gap-3">
           {chats.length > 0 ? (
             chats.map((chat) => (
-              <div 
+              <div
                 key={chat.id}
                 className={`bg-white border ${
-                  currentChatId === chat.id 
-                    ? 'border-blue-500 ring-2 ring-blue-100' 
+                  currentChatId === chat.id
+                    ? 'border-blue-500 ring-2 ring-blue-100'
                     : 'border-gray-200'
                 } rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer`}
                 onClick={() => handleSelectChat(chat.id)}
@@ -102,7 +105,7 @@ const ChatsView: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChatsView;
+export default ChatsView

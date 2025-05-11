@@ -1,169 +1,187 @@
-import { DivideIcon as LucideIcon } from 'lucide-react';
+import { DivideIcon as LucideIcon } from 'lucide-react'
 
-type Role = 'user' | 'assistant' | 'system';
-type MessageType = 'text' | 'navigation' | 'file' | 'code';
-export type View = 'chats' | 'files' | 'repos' | 'help' | 'weather' | 'customers' | 'home' | 'innovations' | 'settings' | 'account' | 'napps' | 'context';
+type Role = 'user' | 'assistant' | 'system'
+type MessageType = 'text' | 'navigation' | 'file' | 'code'
+export type View =
+  | 'chats'
+  | 'files'
+  | 'repos'
+  | 'help'
+  | 'weather'
+  | 'customers'
+  | 'home'
+  | 'innovations'
+  | 'settings'
+  | 'account'
+  | 'napps'
+  | 'context'
 
 export interface ChatMessage {
-  id: string;
-  content: string;
-  role: Role;
-  type: MessageType;
-  timestamp: string;
-  attachments?: Attachment[];
-  chatId?: string; // Reference to the chat this message belongs to
+  id: string
+  content: string
+  role: Role
+  type: MessageType
+  timestamp: string
+  attachments?: Attachment[]
+  chatId?: string // Reference to the chat this message belongs to
 }
 
 interface Attachment {
-  id: string;
-  name: string;
-  type: string;
-  url: string;
-  size?: number;
+  id: string
+  name: string
+  type: string
+  url: string
+  size?: number
 }
 
 export interface AppSnapshot {
-  id: string;
-  imageUrl: string;
-  title: string;
-  timestamp: string;
-  description?: string;
+  id: string
+  imageUrl: string
+  title: string
+  timestamp: string
+  description?: string
 }
 
 interface ContextPart {
-  type: string;
-  value: string;
+  type: string
+  value: string
 }
 
 export interface NavigationItem {
-  id: string;
-  title: string;
-  icon: string;
-  view: View;
-  timestamp: string;
-  collapsed: boolean;
-  parentId?: string;
-  children: NavigationItem[];
-  context?: ContextPart[]; // Context information
+  id: string
+  title: string
+  icon: string
+  view: View
+  timestamp: string
+  collapsed?: boolean
+  parentId?: string
+  children: NavigationItem[]
+  context?: ContextPart[] // Context information
 }
 
 export interface SidebarItem {
-  icon: string;
-  label: string;
-  view: View;
-  action?: () => void;
+  icon: string
+  label: string
+  view: View
+  action?: () => void
 }
 
 export interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  lastContact: string;
-  status: 'active' | 'inactive' | 'pending';
+  id: string
+  name: string
+  email: string
+  lastContact: string
+  status: 'active' | 'inactive' | 'pending'
 }
 
 export interface FileItem {
-  id: string;
-  name: string;
-  type: string;
-  size: number;
-  modified: string;
-  path: string;
-  isFolder?: boolean;
-  parentId?: string;
+  id: string
+  name: string
+  type: string
+  size: number
+  modified: string
+  path: string
+  isFolder?: boolean
+  parentId?: string
 }
 
 export interface Repository {
-  id: string;
-  name: string;
-  description: string;
-  stars: number;
-  lastUpdated: string;
-  language: string;
-  isHome?: boolean;
-  isLinked?: boolean; // Whether this repo is linked but not owned
-  parentId?: string; // ID of parent repository for hierarchical structure
+  id: string
+  name: string
+  description: string
+  stars: number
+  lastUpdated: string
+  language: string
+  isHome?: boolean
+  isLinked?: boolean // Whether this repo is linked but not owned
+  parentId?: string // ID of parent repository for hierarchical structure
 }
 
 export interface Branch {
-  name: string;
-  isDefault: boolean;
+  name: string
+  isDefault: boolean
 }
 
 export interface WeatherData {
-  location: string;
-  temperature: number;
-  condition: string;
-  high: number;
-  low: number;
-  precipitation: number;
+  location: string
+  temperature: number
+  condition: string
+  high: number
+  low: number
+  precipitation: number
 }
 
 export interface Innovation {
-  id: string;
-  title: string;
-  description: string;
-  repository: string;
-  status: 'open' | 'in-progress' | 'resolved' | 'proposed' | 'approved' | 'implemented';
-  priority?: 'low' | 'medium' | 'high' | 'critical';
-  type: 'problem' | 'solution';
-  relatedItems?: string[];
-  createdAt: string;
-  updatedAt?: string;
+  id: string
+  title: string
+  description: string
+  repository: string
+  status:
+    | 'open'
+    | 'in-progress'
+    | 'resolved'
+    | 'proposed'
+    | 'approved'
+    | 'implemented'
+  priority?: 'low' | 'medium' | 'high' | 'critical'
+  type: 'problem' | 'solution'
+  relatedItems?: string[]
+  createdAt: string
+  updatedAt?: string
 }
 
 export interface Chat {
-  id: string;
-  title: string;
-  lastMessage?: string;
-  timestamp: string;
-  messageIds: string[];
+  id: string
+  title: string
+  lastMessage?: string
+  timestamp: string
+  messageIds: string[]
 }
 
 interface ConnectedMachine {
-  id: string;
-  name: string;
-  lastActive: string;
-  isActive: boolean;
+  id: string
+  name: string
+  lastActive: string
+  isActive: boolean
 }
 
 interface UserProfile {
-  name: string;
-  email: string;
-  profilePicture?: string;
+  name: string
+  email: string
+  profilePicture?: string
 }
 
 interface Remote {
-  id: string;
-  name: string;
-  url: string;
-  type: 'fetch' | 'push' | 'both';
-  isDefault: boolean;
+  id: string
+  name: string
+  url: string
+  type: 'fetch' | 'push' | 'both'
+  isDefault: boolean
 }
 
 interface Permission {
-  id: string;
-  name: string;
-  type: 'read' | 'write' | 'admin';
-  scope: 'file' | 'branch' | 'repo';
-  entityId?: string;
-  entityName?: string;
+  id: string
+  name: string
+  type: 'read' | 'write' | 'admin'
+  scope: 'file' | 'branch' | 'repo'
+  entityId?: string
+  entityName?: string
 }
 
 interface Role {
-  id: string;
-  name: string;
-  description: string;
-  permissions: string[];
-  isInherited: boolean;
-  inheritedFrom?: string;
+  id: string
+  name: string
+  description: string
+  permissions: string[]
+  isInherited: boolean
+  inheritedFrom?: string
 }
 
 export interface Napp {
-  id: string;
-  name: string;
-  description: string;
-  version: string;
-  isEnabled: boolean;
-  installDate: string;
+  id: string
+  name: string
+  description: string
+  version: string
+  isEnabled: boolean
+  installDate: string
 }

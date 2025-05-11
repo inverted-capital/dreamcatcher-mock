@@ -1,63 +1,76 @@
-import React, { useState } from 'react';
-import { Star, GitBranch, LinkIcon, Trash2, ArrowDownToLine, ArrowUpToLine, FolderOpen, ExternalLink, Home } from 'lucide-react';
-import { Repository } from '@/shared/types';
-import { useRepoStore } from '../state';
-import { useNavigationStore } from '@/features/navigation/state';
-import { useChatStore } from '@/features/chat/state';
-import ConfirmationModal from '../modals/ConfirmationModal';
+import React, { useState } from 'react'
+import {
+  Star,
+  GitBranch,
+  LinkIcon,
+  Trash2,
+  ArrowDownToLine,
+  ArrowUpToLine,
+  FolderOpen,
+  ExternalLink,
+  Home
+} from 'lucide-react'
+import { Repository } from '@/shared/types'
+import { useRepoStore } from '../state'
+import { useNavigationStore } from '@/features/navigation/state'
+import { useChatStore } from '@/features/chat/state'
+import ConfirmationModal from '../modals/ConfirmationModal'
 
 interface RepositoryCardProps {
-  repo: Repository;
-  isSelected: boolean;
+  repo: Repository
+  isSelected: boolean
 }
 
-const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => {
-  const { 
-    selectRepository, 
-    deleteRepository, 
+const RepositoryCard: React.FC<RepositoryCardProps> = ({
+  repo,
+  isSelected
+}) => {
+  const {
+    selectRepository,
+    deleteRepository,
     unlinkRepository,
-    isHomeRepository 
-  } = useRepoStore();
-  
-  const setCurrentView = useNavigationStore(state => state.setCurrentView);
-  const navigateTo = useChatStore(state => state.navigateTo);
-  
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [showUnlinkConfirm, setShowUnlinkConfirm] = useState(false);
-  
-  const isHome = isHomeRepository(repo.id);
-  
+    isHomeRepository
+  } = useRepoStore()
+
+  const setCurrentView = useNavigationStore((state) => state.setCurrentView)
+  const navigateTo = useChatStore((state) => state.navigateTo)
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showUnlinkConfirm, setShowUnlinkConfirm] = useState(false)
+
+  const isHome = isHomeRepository(repo.id)
+
   const viewRepositoryFiles = (repoId: string) => {
-    selectRepository(repoId);
-    setCurrentView('files');
+    selectRepository(repoId)
+    setCurrentView('files')
     navigateTo({
       title: 'Files',
       icon: 'Folder',
-      view: 'files',
-    });
-  };
+      view: 'files'
+    })
+  }
 
   const handleRepoClick = () => {
-    selectRepository(repo.id);
-  };
+    selectRepository(repo.id)
+  }
 
   const handlePullRepo = () => {
     // Simulate pull operation
-    alert(`Pulling latest changes for repository ${repo.name}`);
-  };
+    alert(`Pulling latest changes for repository ${repo.name}`)
+  }
 
   const handlePushRepo = () => {
     // Simulate push operation
-    alert(`Pushing changes to repository ${repo.name}`);
-  };
-  
+    alert(`Pushing changes to repository ${repo.name}`)
+  }
+
   const handleExternalLink = () => {
     // In a real app, this would navigate to the actual repo URL
-    alert(`Navigate to external repository URL`);
-  };
+    alert(`Navigate to external repository URL`)
+  }
 
   return (
-    <div 
+    <div
       className={`bg-white border ${isSelected ? 'border-blue-300 ring-2 ring-blue-100' : 'border-gray-200'} rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer`}
       onClick={handleRepoClick}
     >
@@ -90,11 +103,9 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           )}
         </div>
       </div>
-      
-      <p className="text-sm text-gray-600 mb-3">
-        {repo.description}
-      </p>
-      
+
+      <p className="text-sm text-gray-600 mb-3">{repo.description}</p>
+
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center">
           <GitBranch size={14} className="mr-1" />
@@ -106,35 +117,35 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           {isHome ? 'Your main workspace' : `Updated on ${repo.lastUpdated}`}
         </div>
       </div>
-      
+
       <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-2">
-        <button 
+        <button
           onClick={(e) => {
-            e.stopPropagation();
-            viewRepositoryFiles(repo.id);
+            e.stopPropagation()
+            viewRepositoryFiles(repo.id)
           }}
           className={`text-xs px-2 py-1 ${isSelected ? 'bg-blue-100 text-blue-700' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'} rounded flex items-center transition-colors`}
         >
           <FolderOpen size={12} className="mr-1" />
           View Files
         </button>
-        
-        <button 
+
+        <button
           onClick={(e) => {
-            e.stopPropagation();
-            handlePullRepo();
+            e.stopPropagation()
+            handlePullRepo()
           }}
           className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded flex items-center hover:bg-blue-100 transition-colors"
         >
           <ArrowDownToLine size={12} className="mr-1" />
           Pull
         </button>
-        
+
         {!repo.isLinked && !isHome && (
-          <button 
+          <button
             onClick={(e) => {
-              e.stopPropagation();
-              handlePushRepo();
+              e.stopPropagation()
+              handlePushRepo()
             }}
             className="text-xs px-2 py-1 bg-green-50 text-green-600 rounded flex items-center hover:bg-green-100 transition-colors"
           >
@@ -142,14 +153,14 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
             Push
           </button>
         )}
-        
+
         {/* Only show delete/unlink buttons for non-home repositories */}
-        {!isHome && (
-          repo.isLinked ? (
-            <button 
+        {!isHome &&
+          (repo.isLinked ? (
+            <button
               onClick={(e) => {
-                e.stopPropagation();
-                setShowUnlinkConfirm(true);
+                e.stopPropagation()
+                setShowUnlinkConfirm(true)
               }}
               className="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded flex items-center hover:bg-purple-100 transition-colors ml-auto"
             >
@@ -157,25 +168,24 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
               Unlink
             </button>
           ) : (
-            <button 
+            <button
               onClick={(e) => {
-                e.stopPropagation();
-                setShowDeleteConfirm(true);
+                e.stopPropagation()
+                setShowDeleteConfirm(true)
               }}
               className="text-xs px-2 py-1 bg-red-50 text-red-600 rounded flex items-center hover:bg-red-100 transition-colors ml-auto"
             >
               <Trash2 size={12} className="mr-1" />
               Delete
             </button>
-          )
-        )}
-        
+          ))}
+
         {/* External link for linked repositories */}
         {repo.isLinked && (
-          <button 
+          <button
             onClick={(e) => {
-              e.stopPropagation();
-              handleExternalLink();
+              e.stopPropagation()
+              handleExternalLink()
             }}
             className="text-xs px-2 py-1 bg-gray-50 text-gray-600 rounded flex items-center hover:bg-gray-100 transition-colors"
           >
@@ -184,7 +194,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           </button>
         )}
       </div>
-      
+
       {/* Confirmation Modals */}
       {showDeleteConfirm && (
         <ConfirmationModal
@@ -193,13 +203,13 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           confirmText="Delete"
           confirmButtonClass="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
           onConfirm={() => {
-            deleteRepository(repo.id);
-            setShowDeleteConfirm(false);
+            deleteRepository(repo.id)
+            setShowDeleteConfirm(false)
           }}
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
-      
+
       {showUnlinkConfirm && (
         <ConfirmationModal
           title="Unlink Repository"
@@ -207,14 +217,14 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({ repo, isSelected }) => 
           confirmText="Unlink"
           confirmButtonClass="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
           onConfirm={() => {
-            unlinkRepository(repo.id);
-            setShowUnlinkConfirm(false);
+            unlinkRepository(repo.id)
+            setShowUnlinkConfirm(false)
           }}
           onCancel={() => setShowUnlinkConfirm(false)}
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default RepositoryCard;
+export default RepositoryCard

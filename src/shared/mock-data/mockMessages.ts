@@ -1,4 +1,4 @@
-import { ChatMessage } from '@/shared/types';
+import { ChatMessage } from '@/shared/types'
 
 export const mockMessages: ChatMessage[] = [
   {
@@ -40,5 +40,5 @@ export const mockMessages: ChatMessage[] = [
     type: 'text',
     timestamp: new Date(Date.now() - 1700000).toISOString(),
     chatId: 'chat-2'
-  },
-];
+  }
+]

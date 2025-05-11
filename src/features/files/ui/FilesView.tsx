@@ -1,13 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { File, Upload, Code, GitBranch, FolderOpen, ArrowRight, ChevronDown, FileText, Edit, Download, Home, ArrowUp, Folder, ChevronRight } from 'lucide-react';
-import { useFilesStore } from '../state';
-import { useRepoStore } from '@/features/repos/state';
-import { useNavigationStore } from '@/features/navigation/state';
-import { useChatStore } from '@/features/chat/state';
-import { FileItem } from '@/shared/types';
+import React, { useState, useEffect, useRef } from 'react'
+import {
+  File,
+  Upload,
+  Code,
+  GitBranch,
+  FolderOpen,
+  ArrowRight,
+  ChevronDown,
+  FileText,
+  Edit,
+  Download,
+  Home,
+  ArrowUp,
+  Folder,
+  ChevronRight
+} from 'lucide-react'
+import { useFilesStore } from '../state'
+import { useRepoStore } from '@/features/repos/state'
+import { useNavigationStore } from '@/features/navigation/state'
+import { useChatStore } from '@/features/chat/state'
+import { FileItem } from '@/shared/types'
 
 const FilesView: React.FC = () => {
-  const { 
+  const {
     selectFile,
     selectFolder,
     navigateToFolder,
@@ -18,11 +33,11 @@ const FilesView: React.FC = () => {
     getRepositoryFiles,
     getCurrentFolderContents,
     getCurrentPath
-  } = useFilesStore();
-  
+  } = useFilesStore()
+
   const {
-    repositories, 
-    currentRepoId, 
+    repositories,
+    currentRepoId,
     currentBranch,
     availableBranches,
     switchBranch,
@@ -30,96 +45,99 @@ const FilesView: React.FC = () => {
     isHomeRepository,
     selectHomeRepository,
     selectRepository
-  } = useRepoStore();
-  
-  const setCurrentView = useNavigationStore(state => state.setCurrentView);
-  const navigateTo = useChatStore(state => state.navigateTo);
-  
-  const [showBranchDropdown, setShowBranchDropdown] = useState(false);
-  const [showFileDetails, setShowFileDetails] = useState(false);
-  const branchDropdownRef = useRef<HTMLDivElement>(null);
-  
+  } = useRepoStore()
+
+  const setCurrentView = useNavigationStore((state) => state.setCurrentView)
+  const navigateTo = useChatStore((state) => state.navigateTo)
+
+  const [showBranchDropdown, setShowBranchDropdown] = useState(false)
+  const [showFileDetails, setShowFileDetails] = useState(false)
+  const branchDropdownRef = useRef<HTMLDivElement>(null)
+
   // Handle click outside to close dropdown
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (branchDropdownRef.current && !branchDropdownRef.current.contains(event.target as Node)) {
-        setShowBranchDropdown(false);
+      if (
+        branchDropdownRef.current &&
+        !branchDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowBranchDropdown(false)
       }
     }
-    
+
     // Add event listener when dropdown is shown
     if (showBranchDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside)
     }
-    
+
     // Cleanup function
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showBranchDropdown]);
-  
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showBranchDropdown])
+
   const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '-';
-    if (bytes < 1024) return bytes + ' B';
-    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-    else return (bytes / 1048576).toFixed(1) + ' MB';
-  };
-  
-  const folderContents = getCurrentFolderContents();
-  const allFiles = getRepositoryFiles();
-  const currentRepo = repositories.find(repo => repo.id === currentRepoId);
-  const selectedFile = allFiles.find(file => file.id === currentFileId);
-  const currentPath = getCurrentPath();
-  
+    if (bytes === 0) return '-'
+    if (bytes < 1024) return bytes + ' B'
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
+    else return (bytes / 1048576).toFixed(1) + ' MB'
+  }
+
+  const folderContents = getCurrentFolderContents()
+  const allFiles = getRepositoryFiles()
+  const currentRepo = repositories.find((repo) => repo.id === currentRepoId)
+  const selectedFile = allFiles.find((file) => file.id === currentFileId)
+  const currentPath = getCurrentPath()
+
   const handleBranchChange = (branchName: string) => {
-    switchBranch(branchName);
-    setShowBranchDropdown(false);
-  };
-  
+    switchBranch(branchName)
+    setShowBranchDropdown(false)
+  }
+
   const handleItemClick = (item: FileItem) => {
     if (item.isFolder) {
-      navigateToFolder(item.id);
-      setShowFileDetails(false);
+      navigateToFolder(item.id)
+      setShowFileDetails(false)
     } else {
       // Toggle file selection if clicking the same file
       if (currentFileId === item.id) {
-        selectFile(null);
-        setShowFileDetails(false);
+        selectFile(null)
+        setShowFileDetails(false)
       } else {
-        selectFile(item.id);
-        setShowFileDetails(true);
+        selectFile(item.id)
+        setShowFileDetails(true)
       }
     }
-    setShowBranchDropdown(false);
-  };
+    setShowBranchDropdown(false)
+  }
 
   const handleRepoClick = () => {
     if (isHomeRepository(currentRepoId)) {
       // For home repo, directly select it
-      selectHomeRepository();
+      selectHomeRepository()
     } else {
       // For other repos, navigate to repos view
-      setCurrentView('repos');
+      setCurrentView('repos')
       navigateTo({
         title: 'Repos',
         icon: 'GitBranch',
         view: 'repos'
-      });
+      })
     }
-    setShowBranchDropdown(false);
-  };
+    setShowBranchDropdown(false)
+  }
 
   const handleBranchClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering the repo click
-    setShowBranchDropdown(!showBranchDropdown);
-  };
+    e.stopPropagation() // Prevent triggering the repo click
+    setShowBranchDropdown(!showBranchDropdown)
+  }
 
   const handleNavigateUp = () => {
-    navigateUp();
-    selectFile(null);
-    setShowFileDetails(false);
-  };
-  
+    navigateUp()
+    selectFile(null)
+    setShowFileDetails(false)
+  }
+
   return (
     <div className="animate-fadeIn h-full flex flex-col">
       <div className="flex justify-between items-center mb-6">
@@ -132,7 +150,7 @@ const FilesView: React.FC = () => {
           Upload
         </button>
       </div>
-      
+
       <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
         <div className="flex items-center gap-4">
           <div className="flex-1">
@@ -151,15 +169,17 @@ const FilesView: React.FC = () => {
                 </div>
                 <ChevronDown size={16} className="text-gray-500" />
               </button>
-              
+
               {showBranchDropdown && (
                 <div className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-md border border-gray-200">
                   <ul className="py-1 max-h-60 overflow-auto">
-                    {availableBranches.map(branch => (
-                      <li 
+                    {availableBranches.map((branch) => (
+                      <li
                         key={branch.name}
                         className={`px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 flex items-center ${
-                          branch.name === currentBranch ? 'bg-blue-50 text-blue-700' : ''
+                          branch.name === currentBranch
+                            ? 'bg-blue-50 text-blue-700'
+                            : ''
                         }`}
                         onClick={() => handleBranchChange(branch.name)}
                       >
@@ -178,13 +198,13 @@ const FilesView: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Current path display and navigation */}
       {currentRepoId && (
         <div className="bg-white rounded-lg border border-gray-200 p-3 mb-4 flex items-center">
           <div className="flex items-center">
             <span className="text-gray-500 mr-2">Path:</span>
-            <button 
+            <button
               onClick={handleRepoClick}
               className="flex items-center text-blue-600 hover:text-blue-800 mr-1"
             >
@@ -197,10 +217,10 @@ const FilesView: React.FC = () => {
             </button>
             <span className="text-gray-400 mx-1">/</span>
           </div>
-          
+
           {currentFolderId && (
             <div className="flex items-center">
-              <button 
+              <button
                 onClick={handleNavigateUp}
                 className="flex items-center text-blue-600 hover:text-blue-800 mr-1"
               >
@@ -213,16 +233,20 @@ const FilesView: React.FC = () => {
           )}
         </div>
       )}
-      
+
       <div className="flex flex-1 overflow-hidden">
         {/* File list */}
-        <div className={`${showFileDetails && selectedFile ? 'w-1/2' : 'w-full'} overflow-auto`}>
+        <div
+          className={`${showFileDetails && selectedFile ? 'w-1/2' : 'w-full'} overflow-auto`}
+        >
           {!currentRepoId ? (
             <div className="bg-white rounded-lg border border-gray-200 p-8 text-center">
               <div className="text-gray-400 mb-2">
                 <Code size={40} className="mx-auto" />
               </div>
-              <h3 className="text-lg font-medium text-gray-700 mb-2">No Repository Selected</h3>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">
+                No Repository Selected
+              </h3>
               <p className="text-gray-500 mb-4">
                 Please select a repository to view its files
               </p>
@@ -236,10 +260,9 @@ const FilesView: React.FC = () => {
                 {currentFolderId ? 'Empty Folder' : 'No Files Found'}
               </h3>
               <p className="text-gray-500 mb-4">
-                {currentFolderId 
-                  ? 'This folder is empty' 
-                  : `This repository doesn't have any files in the ${currentBranch} branch`
-                }
+                {currentFolderId
+                  ? 'This folder is empty'
+                  : `This repository doesn't have any files in the ${currentBranch} branch`}
               </p>
             </div>
           ) : (
@@ -250,21 +273,23 @@ const FilesView: React.FC = () => {
                 <div className="col-span-2">Type</div>
                 <div className="col-span-2">Size</div>
               </div>
-              
+
               <div className="overflow-auto">
                 {/* Show folders first, then files, both alphabetically */}
                 {[...folderContents]
                   .sort((a, b) => {
                     // Sort folders first, then by name
-                    if (a.isFolder && !b.isFolder) return -1;
-                    if (!a.isFolder && b.isFolder) return 1;
-                    return a.name.localeCompare(b.name);
+                    if (a.isFolder && !b.isFolder) return -1
+                    if (!a.isFolder && b.isFolder) return 1
+                    return a.name.localeCompare(b.name)
                   })
                   .map((item) => (
-                    <div 
+                    <div
                       key={item.id}
                       className={`grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
-                        item.id === currentFileId ? 'bg-blue-50 border-l-4 border-blue-500' : ''
+                        item.id === currentFileId
+                          ? 'bg-blue-50 border-l-4 border-blue-500'
+                          : ''
                       }`}
                       onClick={() => handleItemClick(item)}
                     >
@@ -279,7 +304,10 @@ const FilesView: React.FC = () => {
                         <span className="truncate flex items-center">
                           {item.name}
                           {item.isFolder && (
-                            <ChevronRight size={16} className="ml-1 text-gray-400" />
+                            <ChevronRight
+                              size={16}
+                              className="ml-1 text-gray-400"
+                            />
                           )}
                         </span>
                       </div>
@@ -298,7 +326,7 @@ const FilesView: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         {/* File details panel */}
         {showFileDetails && selectedFile && (
           <div className="w-1/2 pl-4 overflow-auto">
@@ -310,40 +338,42 @@ const FilesView: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="font-medium text-lg">{selectedFile.name}</h3>
-                    <div className="text-sm text-gray-500">{selectedFile.path}</div>
+                    <div className="text-sm text-gray-500">
+                      {selectedFile.path}
+                    </div>
                   </div>
                 </div>
-                <button 
-                  onClick={() => setShowFileDetails(false)} 
+                <button
+                  onClick={() => setShowFileDetails(false)}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <ChevronDown size={20} />
                 </button>
               </div>
-              
+
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <h4 className="font-medium mb-2">File Details</h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div className="text-gray-500">Type</div>
                   <div className="uppercase">{selectedFile.type}</div>
-                  
+
                   <div className="text-gray-500">Size</div>
                   <div>{formatFileSize(selectedFile.size)}</div>
-                  
+
                   <div className="text-gray-500">Modified</div>
                   <div>{selectedFile.modified}</div>
-                  
+
                   <div className="text-gray-500">Path</div>
                   <div>{selectedFile.path}</div>
-                  
+
                   <div className="text-gray-500">Repository</div>
                   <div>{currentRepo?.name}</div>
-                  
+
                   <div className="text-gray-500">Branch</div>
                   <div>{currentBranch}</div>
                 </div>
               </div>
-              
+
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <h4 className="font-medium mb-2">Actions</h4>
                 <div className="flex flex-wrap gap-2">
@@ -361,7 +391,7 @@ const FilesView: React.FC = () => {
                   </button>
                 </div>
               </div>
-              
+
               {/* Placeholder for file preview/content */}
               <div className="border-t border-gray-200 pt-4 mt-4">
                 <h4 className="font-medium mb-2">Preview</h4>
@@ -369,7 +399,9 @@ const FilesView: React.FC = () => {
                   <div className="text-gray-400 text-center flex flex-col items-center justify-center h-full">
                     <FileText size={24} className="mb-2" />
                     <span>Preview not available</span>
-                    <span className="text-xs mt-1">Click "View Content" to see the file</span>
+                    <span className="text-xs mt-1">
+                      Click "View Content" to see the file
+                    </span>
                   </div>
                 </div>
               </div>
@@ -378,7 +410,7 @@ const FilesView: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FilesView;
+export default FilesView

@@ -1,56 +1,56 @@
-import React, { useState } from 'react';
-import { X } from 'lucide-react';
-import { useRepoStore } from '../state';
+import React, { useState } from 'react'
+import { X } from 'lucide-react'
+import { useRepoStore } from '../state'
 
 interface NewRepositoryModalProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
-  const { addRepository, selectRepository } = useRepoStore();
-  
-  const [newRepoName, setNewRepoName] = useState('');
-  const [newRepoDesc, setNewRepoDesc] = useState('');
-  const [newRepoLang, setNewRepoLang] = useState('JavaScript');
-  
+  const { addRepository, selectRepository } = useRepoStore()
+
+  const [newRepoName, setNewRepoName] = useState('')
+  const [newRepoDesc, setNewRepoDesc] = useState('')
+  const [newRepoLang, setNewRepoLang] = useState('JavaScript')
+
   const handleCreateRepo = () => {
-    if (!newRepoName.trim()) return;
-    
+    if (!newRepoName.trim()) return
+
     const newRepo = {
       name: newRepoName.trim(),
       description: newRepoDesc.trim() || 'No description provided',
       stars: 0,
       lastUpdated: new Date().toISOString().split('T')[0],
-      language: newRepoLang,
-    };
-    
-    const newRepoId = addRepository(newRepo);
-    selectRepository(newRepoId);
-    onClose();
-  };
-  
+      language: newRepoLang
+    }
+
+    const newRepoId = addRepository(newRepo)
+    selectRepository(newRepoId)
+    onClose()
+  }
+
   return (
-    <div 
-      className="fixed inset-0 bg-black/20 flex items-center justify-center z-50" 
+    <div
+      className="fixed inset-0 bg-black/20 flex items-center justify-center z-50"
       onClick={(e) => {
-        e.stopPropagation();
-        onClose();
+        e.stopPropagation()
+        onClose()
       }}
     >
-      <div 
+      <div
         className="bg-white rounded-lg p-6 shadow-xl max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-medium">Create New Repository</h3>
-          <button 
+          <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
           >
             <X size={20} />
           </button>
         </div>
-        
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -64,7 +64,7 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
               placeholder="my-awesome-project"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Description
@@ -77,7 +77,7 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
               rows={3}
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Primary Language
@@ -97,15 +97,15 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
             </select>
           </div>
         </div>
-        
+
         <div className="mt-6 flex justify-end space-x-3">
-          <button 
+          <button
             onClick={onClose}
             className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
           >
             Cancel
           </button>
-          <button 
+          <button
             onClick={handleCreateRepo}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
             disabled={!newRepoName.trim()}
@@ -115,7 +115,7 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NewRepositoryModal;
+export default NewRepositoryModal

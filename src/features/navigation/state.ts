@@ -1,20 +1,22 @@
-import { create } from 'zustand';
-import { View } from '@/shared/types';
+import { create } from 'zustand'
+import { View } from '@/shared/types'
 
 interface NavigationState {
-  currentView: View;
+  currentView: View
 }
 
 interface NavigationActions {
-  setCurrentView: (view: View) => void;
+  setCurrentView: (view: View) => void
 }
 
-export const useNavigationStore = create<NavigationState & NavigationActions>()((set) => ({
-  // State
-  currentView: 'chats', // Default view
-  
-  // Actions
-  setCurrentView: (view) => {
-    set({ currentView: view });
-  }
-}));
+export const useNavigationStore = create<NavigationState & NavigationActions>()(
+  (set) => ({
+    // State
+    currentView: 'chats', // Default view
+
+    // Actions
+    setCurrentView: (view) => {
+      set({ currentView: view })
+    }
+  })
+)

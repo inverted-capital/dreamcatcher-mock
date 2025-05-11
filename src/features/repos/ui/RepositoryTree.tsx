@@ -1,75 +1,82 @@
-import React from 'react';
-import { ChevronRight, ChevronDown, GitBranch, Link, Home, FolderOpen } from 'lucide-react';
-import { Repository } from '@/shared/types';
-import { useRepoStore } from '../state';
-import { useNavigationStore } from '@/features/navigation/state';
-import { useChatStore } from '@/features/chat/state';
+import React from 'react'
+import {
+  ChevronRight,
+  ChevronDown,
+  GitBranch,
+  Link,
+  Home,
+  FolderOpen
+} from 'lucide-react'
+import { Repository } from '@/shared/types'
+import { useRepoStore } from '../state'
+import { useNavigationStore } from '@/features/navigation/state'
+import { useChatStore } from '@/features/chat/state'
 
 interface RepositoryTreeProps {
-  parentId: string | null;
-  level: number;
-  openNodes: Set<string>;
-  toggleNode: (id: string) => void;
-  isRoot?: boolean;
+  parentId: string | null
+  level: number
+  openNodes: Set<string>
+  toggleNode: (id: string) => void
+  isRoot?: boolean
 }
 
-const RepositoryTree: React.FC<RepositoryTreeProps> = ({ 
-  parentId, 
-  level = 0, 
-  openNodes, 
+const RepositoryTree: React.FC<RepositoryTreeProps> = ({
+  parentId,
+  level = 0,
+  openNodes,
   toggleNode,
   isRoot = false
 }) => {
-  const { 
-    getRepositoryChildren, 
-    selectRepository, 
-    currentRepoId, 
+  const {
+    getRepositoryChildren,
+    selectRepository,
+    currentRepoId,
     isHomeRepository,
     getRepositoryById,
     repositories
-  } = useRepoStore();
-  
+  } = useRepoStore()
+
   // For the root level, we only show the Home repository
-  let reposToShow: Repository[] = [];
-  
+  let reposToShow: Repository[] = []
+
   if (isRoot) {
     // Get the home repository and show it at root level
-    const homeRepo = getRepositoryById('home-repo');
-    reposToShow = homeRepo ? [homeRepo] : [];
+    const homeRepo = getRepositoryById('home-repo')
+    reposToShow = homeRepo ? [homeRepo] : []
   } else if (parentId === 'home-repo') {
     // For home repo, show ALL non-nested repositories as its children
     // This includes repos that previously had no parent
-    reposToShow = repositories.filter(repo => 
-      repo.id !== 'home-repo' && 
-      (repo.parentId === 'home-repo' || !repo.parentId)
-    );
+    reposToShow = repositories.filter(
+      (repo) =>
+        repo.id !== 'home-repo' &&
+        (repo.parentId === 'home-repo' || !repo.parentId)
+    )
   } else {
     // For non-root, non-home cases, just get direct children
-    reposToShow = getRepositoryChildren(parentId);
+    reposToShow = getRepositoryChildren(parentId)
   }
-  
+
   if (reposToShow.length === 0) {
-    return null;
+    return null
   }
-  
+
   return (
     <div className={`${level > 0 ? 'pl-6 border-l border-gray-200 ml-3' : ''}`}>
-      {reposToShow.map(repo => {
-        const children = parentId === 'home-repo' 
-          ? repositories.filter(r => r.parentId === repo.id)
-          : getRepositoryChildren(repo.id);
-          
-        const hasChildren = children.length > 0;
-        const isOpen = openNodes.has(repo.id);
-        const isSelected = currentRepoId === repo.id;
-        
+      {reposToShow.map((repo) => {
+        const children =
+          parentId === 'home-repo'
+            ? repositories.filter((r) => r.parentId === repo.id)
+            : getRepositoryChildren(repo.id)
+
+        const hasChildren = children.length > 0
+        const isOpen = openNodes.has(repo.id)
+        const isSelected = currentRepoId === repo.id
+
         return (
           <div key={repo.id} className="py-1">
-            <div 
+            <div
               className={`flex items-center py-1.5 px-2 rounded-md cursor-pointer ${
-                isSelected 
-                  ? 'bg-blue-100 text-blue-700' 
-                  : 'hover:bg-gray-100'
+                isSelected ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
               }`}
               onClick={() => selectRepository(repo.id)}
             >
@@ -77,8 +84,8 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
                 {hasChildren && (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation();
-                      toggleNode(repo.id);
+                      e.stopPropagation()
+                      toggleNode(repo.id)
                     }}
                     className="text-gray-500 hover:text-gray-700"
                   >
@@ -99,9 +106,7 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
                     <GitBranch size={16} />
                   )}
                 </div>
-                <div className="truncate font-medium text-sm">
-                  {repo.name}
-                </div>
+                <div className="truncate font-medium text-sm">{repo.name}</div>
                 {repo.isLinked && (
                   <div className="ml-2">
                     <Link size={14} className="text-purple-500" />
@@ -109,20 +114,20 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
                 )}
               </div>
             </div>
-            
+
             {isOpen && hasChildren && (
-              <RepositoryTree 
-                parentId={repo.id} 
-                level={level + 1} 
-                openNodes={openNodes} 
-                toggleNode={toggleNode} 
+              <RepositoryTree
+                parentId={repo.id}
+                level={level + 1}
+                openNodes={openNodes}
+                toggleNode={toggleNode}
               />
             )}
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default RepositoryTree;
+export default RepositoryTree
