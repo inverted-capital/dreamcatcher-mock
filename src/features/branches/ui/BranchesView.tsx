@@ -1,22 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import {
-  Git,
-  GitBranch,
-  GitMerge,
-  GitCommit,
-  GitPullRequest,
-  Search,
-  Scissors,
-  RefreshCw,
-  Check,
-  Plus,
-  X,
-  Tag,
-  Clock,
-  Filter,
-  ArrowDown,
-  ArrowUp
-} from 'lucide-react'
+import { Github as Git, GitBranch, GitMerge, GitCommit, GitPullRequest, Search, Scissors, RefreshCw, Check, Plus, X, Tag, Clock, Filter, ArrowDown, ArrowUp } from 'lucide-react'
 import { useRepoStore } from '@/features/repos/state'
 import { Commit } from '@/shared/types'
 
