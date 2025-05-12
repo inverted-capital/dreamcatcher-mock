@@ -52,7 +52,7 @@ const RepositoryTree: React.FC<RepositoryTreeProps> = ({
   }
 
   return (
-    <div className={`${level > 0 ? 'pl-6 border-l border-gray-200 ml-3' : ''}`}>
+    <div className={`${level > 0 ? 'pl-4 border-l border-gray-200 ml-2' : ''}`}>
       {reposToShow.map((repo) => {
         const children =
           parentId === 'home-repo'
