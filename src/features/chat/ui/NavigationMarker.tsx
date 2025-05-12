@@ -5,7 +5,8 @@ import {
   Code,
   FileText,
   FolderGit2,
-  Home
+  Home,
+  GitBranch
 } from 'lucide-react'
 import { NavigationItem } from '@/shared/types'
 import { useChatStore } from '../state'
@@ -153,7 +154,7 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
                 {part.type === 'home' && <Home size={10} className="mr-1" />}
                 {part.type === 'repo' && <Code size={10} className="mr-1" />}
                 {part.type === 'branch' && (
-                  <FolderGit2 size={10} className="mr-1" />
+                  <GitBranch size={10} className="mr-1" />
                 )}
                 {part.type === 'file' && (
                   <FileText size={10} className="mr-1" />

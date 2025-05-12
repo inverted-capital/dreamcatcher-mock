@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from './Sidebar'
 import ChatContainer from '@/features/chat/ui/ChatContainer'
-import { Home, FolderGit2, FileText, ChevronDown, Code } from 'lucide-react'
+import { Home, FolderGit2, FileText, ChevronDown, Code, GitBranch } from 'lucide-react'
 import { useRepoStore } from '@/features/repos/state'
 import { useFilesStore } from '@/features/files/state'
 import { useNavigationStore } from '@/features/navigation/state'
@@ -229,7 +229,7 @@ const AppLayout: React.FC = () => {
                       onClick={handleBranchClick}
                       className="text-purple-600 font-medium flex items-center hover:text-purple-700 cursor-pointer"
                     >
-                      <FolderGit2 size={14} className="mr-1" />
+                      <GitBranch size={14} className="mr-1" />
                       <span className="hover:underline">{currentBranch}</span>
                     </div>
 

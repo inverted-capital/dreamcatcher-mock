@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, Github as Git } from 'lucide-react'
+import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, GitBranch } from 'lucide-react'
 import { SidebarItem, View } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
 import { useNavigationStore } from '@/features/navigation/state'
@@ -19,7 +19,7 @@ const Sidebar: React.FC = () => {
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
     { icon: 'Clipboard', label: 'Context', view: 'context' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
-    { icon: 'Git', label: 'Branches', view: 'branches' },
+    { icon: 'GitBranch', label: 'Branches', view: 'branches' },
     { icon: 'Folder', label: 'Files', view: 'files' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
@@ -39,8 +39,8 @@ const Sidebar: React.FC = () => {
         return <Folder size={20} />
       case 'FolderGit2':
         return <FolderGit2 size={20} />
-      case 'Git':
-        return <Git size={20} />
+      case 'GitBranch':
+        return <GitBranch size={20} />
       case 'Lightbulb':
         return <Lightbulb size={20} />
       case 'Settings':
