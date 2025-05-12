@@ -13,7 +13,7 @@
     "knip": "knip --production --fix --allow-remove-files --format --exports"
   },
   "dependencies": {
-    "@artifact/client": "npm:@jsr/artifact__client@^0.0.46",
+    "@artifact/client": "npm:@jsr/artifact__client@^0.0.47",
     "@privy-io/react-auth": "^2.13.1",
     "debug": "^4.4.0",
     "lucide-react": "^0.509.0",
