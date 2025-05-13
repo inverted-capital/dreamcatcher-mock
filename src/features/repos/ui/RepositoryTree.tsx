@@ -10,7 +10,7 @@ import {
 
 const RepositoryTreeRoot: React.FC = () => {
   const scope = useScope()
-  if (!scope) return <div>Loading repositories...</div>
+  if (!scope || !isRepoScope(scope)) return <div>Loading repositories...</div>
   return <RepositoryNode scope={scope} home />
 }
 
@@ -46,8 +46,10 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
         </div>
       </div>
 
-      {isOpen && children && children.length > 0 && (
-        <div className="pl-4 border-l border-gray-200 ml-2">
+      {children && children.length > 0 && (
+        <div
+          className={`pl-4 border-l border-gray-200 ml-2 ${isOpen ? '' : 'hidden'}`}
+        >
           {children.map((child) => (
             <ArtifactScope key={child.repo.publicKey} {...child}>
               <RepositoryNode scope={child} />
