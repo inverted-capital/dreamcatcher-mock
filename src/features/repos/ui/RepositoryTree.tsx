@@ -25,13 +25,15 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
   
   const isSelected = currentRepoId === scope.repo.publicKey
 
-  const toggle = (e?: React.MouseEvent) => {
-    e?.stopPropagation()
+  const handleToggle = (e: React.MouseEvent) => {
+    e.stopPropagation()
     if (children && children.length > 0) {
       setIsOpen((prev) => !prev)
     }
-    
-    // Select this repository when clicked
+  }
+
+  const handleSelect = (e: React.MouseEvent) => {
+    e.stopPropagation()
     selectRepository(scope.repo.publicKey)
   }
 
@@ -41,9 +43,12 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
         className={`flex items-center py-1.5 px-2 rounded-md hover:bg-gray-100 cursor-pointer ${
           isSelected ? 'bg-blue-100 border-l-2 border-blue-500' : ''
         }`}
-        onClick={toggle}
+        onClick={handleSelect}
       >
-        <div className="w-5 flex-shrink-0">
+        <div 
+          className="w-5 flex-shrink-0"
+          onClick={handleToggle}
+        >
           {children && children.length > 0 ? (
             isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />
           ) : (
