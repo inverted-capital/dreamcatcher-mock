@@ -83,7 +83,6 @@ function AuthenticatedApp() {
       global
     >
       <LoadingArtifact />
-      <App />
     </ArtifactBase>
   )
 }
@@ -93,6 +92,7 @@ function LoadingArtifact() {
   if (!ready) {
     return <div>Loading Artifact...</div>
   }
+  return <App />
 }
 
 function Boot() {

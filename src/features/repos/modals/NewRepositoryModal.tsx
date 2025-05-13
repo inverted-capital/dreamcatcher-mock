@@ -1,20 +1,22 @@
 import React, { useState } from 'react'
 import { X } from 'lucide-react'
 import { useRepoStore } from '../state'
+import { useArtifact } from '@artifact/client'
 
 interface NewRepositoryModalProps {
   onClose: () => void
 }
 
 const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
-  const { addRepository, selectRepository } = useRepoStore()
-
   const [newRepoName, setNewRepoName] = useState('')
   const [newRepoDesc, setNewRepoDesc] = useState('')
   const [newRepoLang, setNewRepoLang] = useState('JavaScript')
 
-  const handleCreateRepo = () => {
+  const artifact = useArtifact()
+
+  const handleCreateRepo = async () => {
     if (!newRepoName.trim()) return
+    if (!artifact) return
 
     const newRepo = {
       name: newRepoName.trim(),
@@ -23,6 +25,9 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
       lastUpdated: new Date().toISOString().split('T')[0],
       language: newRepoLang
     }
+
+    const next = await artifact.tree.init(newRepoName.trim())
+    console.log('next', next)
 
     const newRepoId = addRepository(newRepo)
     selectRepository(newRepoId)

@@ -159,13 +159,7 @@ const ReposView: React.FC = () => {
         </div>
 
         <div className="mt-4">
-          <RepositoryTree
-            parentId="home-repo"
-            level={0}
-            openNodes={openNodes}
-            toggleNode={toggleNode}
-            isRoot={true}
-          />
+          <RepositoryTree home />
         </div>
       </div>
 
