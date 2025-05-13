@@ -153,11 +153,6 @@ const ReposView: React.FC = () => {
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <h2 className="text-lg font-medium mb-4">Repository Structure</h2>
 
-        <div className="mb-2 text-sm text-gray-500">
-          Click on a repository to select it. Expand and collapse to navigate
-          the hierarchy.
-        </div>
-
         <div className="mt-4">
           <RepositoryTree home />
         </div>
