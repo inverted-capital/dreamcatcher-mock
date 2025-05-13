@@ -8,7 +8,8 @@ import {
   ArrowUpToLine,
   FolderOpen,
   ExternalLink,
-  Home
+  Home,
+  Settings
 } from 'lucide-react'
 import { Repository } from '@/shared/types'
 import { useRepoStore } from '../state'
@@ -19,11 +20,13 @@ import ConfirmationModal from '../modals/ConfirmationModal'
 interface RepositoryCardProps {
   repo: Repository
   isSelected: boolean
+  onSettingsClick?: () => void
 }
 
 const RepositoryCard: React.FC<RepositoryCardProps> = ({
   repo,
-  isSelected
+  isSelected,
+  onSettingsClick
 }) => {
   const {
     selectRepository,
@@ -128,6 +131,17 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
         >
           <FolderOpen size={12} className="mr-1" />
           View Files
+        </button>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onSettingsClick?.()
+          }}
+          className={`text-xs px-2 py-1 bg-gray-50 text-gray-600 rounded flex items-center hover:bg-gray-100 transition-colors`}
+        >
+          <Settings size={12} className="mr-1" />
+          Settings
         </button>
 
         <button

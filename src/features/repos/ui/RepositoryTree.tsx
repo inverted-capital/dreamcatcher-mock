@@ -7,6 +7,7 @@ import {
   useScope,
   isRepoScope
 } from '@artifact/client'
+import { useRepoStore } from '../state'
 
 const RepositoryTreeRoot: React.FC = () => {
   const scope = useScope()
@@ -20,29 +21,41 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(true)
   const children = useTree() // children of *this* scope
+  const { currentRepoId, selectRepository } = useRepoStore()
+  
+  const isSelected = currentRepoId === scope.repo.publicKey
 
   const toggle = (e?: React.MouseEvent) => {
     e?.stopPropagation()
     if (children && children.length > 0) {
       setIsOpen((prev) => !prev)
     }
+    
+    // Select this repository when clicked
+    selectRepository(scope.repo.publicKey)
   }
 
   return (
     <div className="py-1">
       <div
-        className="flex items-center py-1.5 px-2 rounded-md hover:bg-gray-100 cursor-pointer"
+        className={`flex items-center py-1.5 px-2 rounded-md hover:bg-gray-100 cursor-pointer ${
+          isSelected ? 'bg-blue-100 border-l-2 border-blue-500' : ''
+        }`}
         onClick={toggle}
       >
         <div className="w-5 flex-shrink-0">
-          {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+          {children && children.length > 0 ? (
+            isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />
+          ) : (
+            <span className="w-4"></span>
+          )}
         </div>
         <div className="flex items-center flex-1 min-w-0">
           <div className="mr-2 text-gray-500">
             {home ? <Home size={16} /> : <FolderGit2 size={16} />}
           </div>
           <div className="truncate font-medium text-sm">{scope.repo.name}</div>
-          {scope.repo && <Link size={14} className="ml-2 text-purple-500" />}
+          {scope.repo.isLinked && <Link size={14} className="ml-2 text-purple-500" />}
         </div>
       </div>
 

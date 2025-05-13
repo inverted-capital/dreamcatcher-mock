@@ -72,6 +72,16 @@ const ReposView: React.FC = () => {
     })
   }
 
+  const viewRepositorySettings = (repoId: string) => {
+    selectRepository(repoId)
+    setCurrentView('settings')
+    navigateTo({
+      title: 'Settings',
+      icon: 'Settings',
+      view: 'settings'
+    })
+  }
+
   return (
     <div className="animate-fadeIn">
       <div className="flex justify-between items-center mb-6">
@@ -110,7 +120,11 @@ const ReposView: React.FC = () => {
       {/* Current Repository Card */}
       {currentRepo && (
         <div className="mb-6">
-          <RepositoryCard repo={currentRepo} isSelected={true} />
+          <RepositoryCard 
+            repo={currentRepo} 
+            isSelected={true}
+            onSettingsClick={() => viewRepositorySettings(currentRepo.id)}
+          />
         </div>
       )}
 
