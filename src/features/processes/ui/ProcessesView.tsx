@@ -739,6 +739,7 @@ const ProcessesView: React.FC = () => {
               </div>
               <div className="flex items-center space-x-2">
                 {selectedProcess.status === 'running' ? (
+          <>
           <button
                     className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
                     title="Debug Process"
@@ -750,7 +751,7 @@ const ProcessesView: React.FC = () => {
                     title="Stop Process"
                   >
                     <Square size={14} />
-                  </button>
+                  </button></>
                 ) : (
                   <button
                     className="p-1.5 bg-green-50 text-green-500 rounded-md hover:bg-green-100"
