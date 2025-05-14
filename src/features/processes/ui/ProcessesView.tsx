@@ -6,7 +6,7 @@ import {
   FileText, Settings, Eye, Code, PanelRight,
   Filter, BarChart, Clock, User, Zap,
   MessageSquare, ArrowDown, ArrowUp, MoreHorizontal,
-  Check, Clock3, Loader, HelpCircle, DebugPlay
+  Check, Clock3, Loader, HelpCircle, BugPlay
 } from 'lucide-react'
 import { useProcessesStore } from '../state'
 import { Process, ProcessFile, ProcessEnvironment, ProcessLog, ProcessMessage } from '@/shared/types'
@@ -744,7 +744,7 @@ const ProcessesView: React.FC = () => {
                     className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
                     title="Debug Process"
                   >
-                    <DebugPlay size={14} />
+                    <BugPlay size={14} />
                   </button>
                   <button
                     className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
