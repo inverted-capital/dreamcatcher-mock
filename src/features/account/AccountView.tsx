@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { User, Camera, Edit, CheckCircle, X, CreditCard, Link, ExternalLink, Plus, Wallet } from 'lucide-react'
+import { User, Camera, Edit, CheckCircle, X, CreditCard, Link, ExternalLink, Plus, Wallet, Landmark } from 'lucide-react'
 import { useNavigationStore } from '@/features/navigation/state'
 import { useChatStore } from '@/features/chat/state'
 import { useRepoStore } from '@/features/repos/state'
@@ -134,7 +134,7 @@ const AccountView: React.FC = () => {
       case 'wise':
         return <CreditCard className="text-green-600" size={24} />
       case 'bank':
-        return <CreditCard className="text-blue-600" size={24} />
+        return <Landmark className="text-blue-600" size={24} />
       default:
         return <CreditCard className="text-gray-600" size={24} />
     }
