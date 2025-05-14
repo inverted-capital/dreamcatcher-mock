@@ -741,7 +741,7 @@ const ProcessesView: React.FC = () => {
                 {selectedProcess.status === 'running' ? (
           <>
           <button
-                    className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
+                    className="p-1.5 bg-purple-50 text-purple-500 rounded-md hover:bg-purple-100"
                     title="Debug Process"
                   >
                     <BugPlay size={14} />
