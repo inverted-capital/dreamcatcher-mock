@@ -4,10 +4,12 @@ import {
   LayoutGrid, ChevronRight, ChevronDown, Play, 
   Square, AlertTriangle, X, Info, Terminal,
   FileText, Settings, Eye, Code, PanelRight,
-  Filter, BarChart, Clock, User, Zap
+  Filter, BarChart, Clock, User, Zap,
+  MessageSquare, ArrowDown, ArrowUp, MoreHorizontal,
+  Check, Clock3, Loader, HelpCircle
 } from 'lucide-react'
 import { useProcessesStore } from '../state'
-import { Process, ProcessFile, ProcessEnvironment, ProcessLog } from '@/shared/types'
+import { Process, ProcessFile, ProcessEnvironment, ProcessLog, ProcessMessage } from '@/shared/types'
 
 const ProcessesView: React.FC = () => {
   const {
@@ -28,6 +30,7 @@ const ProcessesView: React.FC = () => {
     getProcessFiles,
     getProcessLogs,
     getProcessEnv,
+    getProcessMessageQueue,
     getFilteredProcesses
   } = useProcessesStore()
 
@@ -36,6 +39,8 @@ const ProcessesView: React.FC = () => {
   const [showFilterOptions, setShowFilterOptions] = useState(false)
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const [userFilter, setUserFilter] = useState<string | null>(null)
+  const [activeMessageTab, setActiveMessageTab] = useState<'input' | 'output'>('input')
+  const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null)
 
   // Get the selected process
   const selectedProcess = selectedProcessId ? getProcessById(selectedProcessId) : null
@@ -44,6 +49,7 @@ const ProcessesView: React.FC = () => {
   const processFiles = selectedProcessId ? getProcessFiles(selectedProcessId) : []
   const processLogs = selectedProcessId ? getProcessLogs(selectedProcessId) : []
   const processEnv = selectedProcessId ? getProcessEnv(selectedProcessId) : []
+  const processMessageQueue = selectedProcessId ? getProcessMessageQueue(selectedProcessId) : undefined
 
   // Get filtered processes
   const filteredProcesses = getFilteredProcesses()
@@ -107,6 +113,42 @@ const ProcessesView: React.FC = () => {
     }
   }
 
+  // Get message status color and icon
+  const getMessageStatusInfo = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return { 
+          color: 'text-green-500',
+          bgColor: 'bg-green-100',
+          icon: <Check size={14} />
+        }
+      case 'in-progress':
+        return { 
+          color: 'text-blue-500',
+          bgColor: 'bg-blue-100',
+          icon: <Loader size={14} className="animate-spin" />
+        }
+      case 'pending':
+        return { 
+          color: 'text-gray-500',
+          bgColor: 'bg-gray-100',
+          icon: <Clock3 size={14} />
+        }
+      case 'waiting':
+        return { 
+          color: 'text-yellow-500',
+          bgColor: 'bg-yellow-100',
+          icon: <HelpCircle size={14} />
+        }
+      default:
+        return { 
+          color: 'text-gray-500',
+          bgColor: 'bg-gray-100',
+          icon: <Info size={14} />
+        }
+    }
+  }
+
   // Get log level color
   const getLogLevelColor = (level: string) => {
     switch (level) {
@@ -148,6 +190,15 @@ const ProcessesView: React.FC = () => {
     } else {
       setSortBy(field)
       setSortOrder('asc')
+    }
+  }
+
+  // Toggle expanded message details
+  const toggleMessageDetails = (id: string) => {
+    if (expandedMessageId === id) {
+      setExpandedMessageId(null)
+    } else {
+      setExpandedMessageId(id)
     }
   }
 
@@ -375,6 +426,104 @@ const ProcessesView: React.FC = () => {
             })}
           </tbody>
         </table>
+      </div>
+    )
+  }
+
+  // Render message queue section
+  const renderMessageQueue = (messages: ProcessMessage[], direction: 'input' | 'output') => {
+    if (!messages || messages.length === 0) {
+      return (
+        <div className="text-center py-8 text-gray-500">
+          <MessageSquare size={32} className="mx-auto mb-2 text-gray-300" />
+          <p>No {direction} messages</p>
+        </div>
+      )
+    }
+
+    return (
+      <div className="space-y-2">
+        {messages.map(message => {
+          const statusInfo = getMessageStatusInfo(message.status)
+          const isExpanded = expandedMessageId === message.id
+          
+          return (
+            <div key={message.id} className={`border rounded-lg overflow-hidden ${
+              message.status === 'completed' ? 'opacity-60 border-gray-200' : 'border-gray-300'
+            }`}>
+              <div 
+                className={`p-3 flex items-start justify-between cursor-pointer ${
+                  message.status === 'in-progress' ? 'bg-blue-50' : 
+                  message.status === 'waiting' ? 'bg-yellow-50' : 
+                  'bg-white'
+                }`}
+                onClick={() => toggleMessageDetails(message.id)}
+              >
+                <div className="flex-1">
+                  <div className="flex items-center">
+                    <div className="flex items-center">
+                      <span className={`mr-2 ${statusInfo.color}`}>
+                        {statusInfo.icon}
+                      </span>
+                      <span className="font-medium text-sm">{message.type}</span>
+                    </div>
+                    <span className="mx-2 text-gray-300">|</span>
+                    <span className="text-xs text-gray-500">
+                      {formatRelativeTime(message.timestamp)}
+                    </span>
+                    {message.correlationId && (
+                      <span className="ml-2 px-1.5 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
+                        {message.correlationId}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-1 text-xs text-gray-600 line-clamp-1">
+                    {direction === 'input' ? (
+                      <span className="flex items-center">
+                        <span className="text-gray-500">From: </span>
+                        <span className="mx-1 font-medium">{message.source}</span>
+                        <ArrowDown size={12} className="mx-1 text-blue-500" />
+                        <span className="text-gray-500">To: </span>
+                        <span className="mx-1 font-medium">{message.target}</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center">
+                        <span className="text-gray-500">To: </span>
+                        <span className="mx-1 font-medium">{message.target}</span>
+                        <ArrowUp size={12} className="mx-1 text-green-500" />
+                        <span className="text-gray-500">From: </span>
+                        <span className="mx-1 font-medium">{message.source}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="text-gray-400">
+                  {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                </div>
+              </div>
+              
+              {isExpanded && (
+                <div className="border-t border-gray-200 p-3 bg-gray-50">
+                  <div className="text-xs font-medium mb-1 text-gray-600">Payload:</div>
+                  <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">
+                    {JSON.stringify(message.payload, null, 2)}
+                  </pre>
+                  
+                  <div className="flex justify-between mt-2 text-xs text-gray-500">
+                    <div>ID: {message.id}</div>
+                    <div>
+                      <span className={`px-1.5 py-0.5 rounded-full ${statusInfo.bgColor}`}>
+                        {message.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
     )
   }
@@ -632,6 +781,16 @@ const ProcessesView: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 text-sm font-medium ${
+                  currentTabName === 'messages' 
+                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                    : 'text-gray-600 hover:text-gray-800'
+                }`}
+                onClick={() => setCurrentTab('messages')}
+              >
+                Messages
+              </button>
+              <button
+                className={`px-4 py-2 text-sm font-medium ${
                   currentTabName === 'files' 
                     ? 'text-blue-600 border-b-2 border-blue-500' 
                     : 'text-gray-600 hover:text-gray-800'
@@ -802,6 +961,78 @@ const ProcessesView: React.FC = () => {
                     )}
                   </div>
                 </div>
+              </div>
+            )}
+            
+            {currentTabName === 'messages' && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="inline-flex rounded-lg overflow-hidden border border-gray-200">
+                    <button
+                      className={`px-4 py-2 text-sm ${
+                        activeMessageTab === 'input' 
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'bg-white text-gray-600'
+                      }`}
+                      onClick={() => setActiveMessageTab('input')}
+                    >
+                      <div className="flex items-center">
+                        <ArrowDown size={14} className="mr-2" />
+                        Input Queue
+                      </div>
+                    </button>
+                    <button
+                      className={`px-4 py-2 text-sm ${
+                        activeMessageTab === 'output' 
+                          ? 'bg-blue-50 text-blue-600'
+                          : 'bg-white text-gray-600'
+                      }`}
+                      onClick={() => setActiveMessageTab('output')}
+                    >
+                      <div className="flex items-center">
+                        <ArrowUp size={14} className="mr-2" />
+                        Output Queue
+                      </div>
+                    </button>
+                  </div>
+
+                  <div className="text-xs text-gray-500 flex items-center">
+                    <span className="inline-flex items-center mr-3">
+                      <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+                      Completed
+                    </span>
+                    <span className="inline-flex items-center mr-3">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
+                      In Progress
+                    </span>
+                    <span className="inline-flex items-center mr-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-400 mr-1"></span>
+                      Pending
+                    </span>
+                    <span className="inline-flex items-center">
+                      <span className="w-2 h-2 rounded-full bg-yellow-500 mr-1"></span>
+                      Waiting
+                    </span>
+                  </div>
+                </div>
+
+                {processMessageQueue ? (
+                  <div className="border border-gray-200 rounded-lg overflow-hidden p-4">
+                    {activeMessageTab === 'input' ? (
+                      renderMessageQueue(processMessageQueue.input, 'input')
+                    ) : (
+                      renderMessageQueue(processMessageQueue.output, 'output')
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-12 text-gray-500 border border-gray-200 rounded-lg">
+                    <MessageSquare size={40} className="mx-auto mb-2 text-gray-300" />
+                    <p className="font-medium text-gray-700 mb-1">No Message Queue Available</p>
+                    <p className="text-sm text-gray-500">
+                      This process doesn't have a message queue or is not message-driven
+                    </p>
+                  </div>
+                )}
               </div>
             )}
             

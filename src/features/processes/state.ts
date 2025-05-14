@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Process, ProcessEnvironment, ProcessFile, ProcessLog } from '@/shared/types'
+import { Process, ProcessEnvironment, ProcessFile, ProcessLog, ProcessMessage, MessageQueue } from '@/shared/types'
 
 // Mock data for processes
 const mockProcesses: Process[] = [
@@ -234,6 +234,126 @@ const mockProcessEnv: Record<string, ProcessEnvironment[]> = {
   ]
 }
 
+// Mock message queues for processes
+const mockMessageQueues: Record<string, MessageQueue> = {
+  'p4': {
+    input: [
+      {
+        id: 'in1',
+        type: 'HTTP_REQUEST',
+        payload: { method: 'GET', path: '/api/users', query: { page: 1 } },
+        timestamp: '2023-06-16T15:35:10Z',
+        status: 'completed',
+        source: 'external',
+        target: 'p4'
+      },
+      {
+        id: 'in2',
+        type: 'DATABASE_QUERY',
+        payload: { query: 'SELECT * FROM users LIMIT 10 OFFSET 0' },
+        timestamp: '2023-06-16T15:35:12Z',
+        status: 'completed',
+        source: 'p5',
+        target: 'p4',
+        correlationId: 'txn-123456'
+      },
+      {
+        id: 'in3',
+        type: 'HTTP_REQUEST',
+        payload: { method: 'POST', path: '/api/users', body: { name: 'New User' } },
+        timestamp: '2023-06-16T15:36:00Z',
+        status: 'in-progress',
+        source: 'external',
+        target: 'p4'
+      },
+      {
+        id: 'in4',
+        type: 'SYSTEM_NOTIFICATION',
+        payload: { level: 'warning', message: 'High CPU usage detected' },
+        timestamp: '2023-06-16T15:36:30Z',
+        status: 'pending',
+        source: 'p1',
+        target: 'p4'
+      }
+    ],
+    output: [
+      {
+        id: 'out1',
+        type: 'HTTP_RESPONSE',
+        payload: { status: 200, body: { users: [/* array of 10 users */], total: 42 } },
+        timestamp: '2023-06-16T15:35:15Z',
+        status: 'completed',
+        source: 'p4',
+        target: 'external'
+      },
+      {
+        id: 'out2',
+        type: 'DATABASE_QUERY',
+        payload: { query: 'INSERT INTO users (name) VALUES ($1)', params: ['New User'] },
+        timestamp: '2023-06-16T15:36:05Z',
+        status: 'waiting',
+        source: 'p4',
+        target: 'p5',
+        correlationId: 'txn-789012'
+      }
+    ]
+  },
+  'p5': {
+    input: [
+      {
+        id: 'db-in1',
+        type: 'DATABASE_QUERY',
+        payload: { query: 'SELECT * FROM users LIMIT 10 OFFSET 0' },
+        timestamp: '2023-06-16T15:35:12Z',
+        status: 'completed',
+        source: 'p4',
+        target: 'p5',
+        correlationId: 'txn-123456'
+      },
+      {
+        id: 'db-in2',
+        type: 'DATABASE_QUERY',
+        payload: { query: 'INSERT INTO users (name) VALUES ($1)', params: ['New User'] },
+        timestamp: '2023-06-16T15:36:05Z',
+        status: 'in-progress',
+        source: 'p4',
+        target: 'p5',
+        correlationId: 'txn-789012'
+      },
+      {
+        id: 'db-in3',
+        type: 'MAINTENANCE',
+        payload: { operation: 'VACUUM', table: 'users' },
+        timestamp: '2023-06-16T15:00:00Z',
+        status: 'pending',
+        source: 'scheduler',
+        target: 'p5'
+      }
+    ],
+    output: [
+      {
+        id: 'db-out1',
+        type: 'QUERY_RESULT',
+        payload: { rows: [/* array of 10 users */], rowCount: 10 },
+        timestamp: '2023-06-16T15:35:14Z',
+        status: 'completed',
+        source: 'p5',
+        target: 'p4',
+        correlationId: 'txn-123456'
+      },
+      {
+        id: 'db-out2',
+        type: 'NOTIFICATION',
+        payload: { channel: 'user_changes', message: 'user_created' },
+        timestamp: '2023-06-16T15:36:10Z',
+        status: 'completed',
+        source: 'p5',
+        target: 'broadcast'
+      }
+    ]
+  }
+}
+
 // Define the interface for process state
 interface ProcessesState {
   processes: Process[]
@@ -244,7 +364,7 @@ interface ProcessesState {
   showFileDetails: boolean
   showEnvVars: boolean
   showLogs: boolean
-  currentTabName: 'overview' | 'files' | 'env' | 'logs'
+  currentTabName: 'overview' | 'files' | 'env' | 'logs' | 'messages'
 }
 
 // Define the interface for process actions
@@ -258,11 +378,12 @@ interface ProcessesActions {
   toggleFileDetails: () => void
   toggleEnvVars: () => void
   toggleLogs: () => void
-  setCurrentTab: (tab: 'overview' | 'files' | 'env' | 'logs') => void
+  setCurrentTab: (tab: 'overview' | 'files' | 'env' | 'logs' | 'messages') => void
   getProcessById: (id: string) => Process | undefined
   getProcessFiles: (id: string) => ProcessFile[]
   getProcessLogs: (id: string) => ProcessLog[]
   getProcessEnv: (id: string) => ProcessEnvironment[]
+  getProcessMessageQueue: (id: string) => MessageQueue | undefined
   filterProcesses: (term: string) => Process[]
   getFilteredProcesses: () => Process[]
 }
@@ -393,6 +514,10 @@ export const useProcessesStore = create<ProcessesState & ProcessesActions>((set,
   
   getProcessEnv: (id) => {
     return mockProcessEnv[id] || []
+  },
+  
+  getProcessMessageQueue: (id) => {
+    return mockMessageQueues[id]
   },
   
   filterProcesses: (term) => {

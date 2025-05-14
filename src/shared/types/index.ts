@@ -248,3 +248,19 @@ export interface ProcessLog {
   level: 'info' | 'warning' | 'error' | 'debug'
   message: string
 }
+
+export interface ProcessMessage {
+  id: string
+  type: string
+  payload: Record<string, any>
+  timestamp: string
+  status: 'completed' | 'in-progress' | 'pending' | 'waiting'
+  source: string
+  target: string
+  correlationId?: string
+}
+
+export interface MessageQueue {
+  input: ProcessMessage[]
+  output: ProcessMessage[]
+}
