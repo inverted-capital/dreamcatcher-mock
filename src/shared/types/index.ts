@@ -17,6 +17,7 @@ export type View =
   | 'napps'
   | 'context'
   | 'messages'
+  | 'processes'
 
 export interface ChatMessage {
   id: string
@@ -210,4 +211,40 @@ export interface Message {
   timestamp: string
   read: boolean
   status?: 'delivered' | 'pending' | 'failed'
+  starred?: boolean
+}
+
+export interface Process {
+  id: string
+  pid: number
+  name: string
+  command: string
+  status: 'running' | 'stopped' | 'sleeping' | 'zombie' | 'unknown'
+  cpu: number
+  memory: number
+  user: string
+  startTime: string
+  parentId?: string
+  children?: Process[]
+}
+
+export interface ProcessEnvironment {
+  key: string
+  value: string
+}
+
+export interface ProcessFile {
+  id: string
+  name: string
+  type: 'in' | 'out' | 'err' | 'config' | 'socket' | 'other'
+  size: number
+  path: string
+  lastAccessed?: string
+}
+
+export interface ProcessLog {
+  id: string
+  timestamp: string
+  level: 'info' | 'warning' | 'error' | 'debug'
+  message: string
 }
