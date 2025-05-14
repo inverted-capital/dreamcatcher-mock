@@ -22,7 +22,7 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
   const [isOpen, setIsOpen] = useState(true)
   const children = useTree() // children of *this* scope
   const { currentRepoId, selectRepository } = useRepoStore()
-  
+
   const isSelected = currentRepoId === scope.repo.publicKey
 
   const handleToggle = (e: React.MouseEvent) => {
@@ -45,12 +45,13 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
         }`}
         onClick={handleSelect}
       >
-        <div 
-          className="w-5 flex-shrink-0"
-          onClick={handleToggle}
-        >
+        <div className="w-5 flex-shrink-0" onClick={handleToggle}>
           {children && children.length > 0 ? (
-            isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />
+            isOpen ? (
+              <ChevronDown size={16} />
+            ) : (
+              <ChevronRight size={16} />
+            )
           ) : (
             <span className="w-4"></span>
           )}
@@ -60,7 +61,7 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
             {home ? <Home size={16} /> : <FolderGit2 size={16} />}
           </div>
           <div className="truncate font-medium text-sm">{scope.repo.name}</div>
-          {scope.repo.isLinked && <Link size={14} className="ml-2 text-purple-500" />}
+          <Link size={14} className="ml-2 text-purple-500" />
         </div>
       </div>
 
