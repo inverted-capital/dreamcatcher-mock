@@ -236,6 +236,123 @@ const mockProcessEnv: Record<string, ProcessEnvironment[]> = {
 
 // Mock message queues for processes
 const mockMessageQueues: Record<string, MessageQueue> = {
+  'p1': {
+    input: [
+      {
+        id: 'p1-in1',
+        type: 'SYSTEM_CONTROL',
+        payload: { command: 'STATUS', reportLevel: 'detailed' },
+        timestamp: '2023-06-16T15:30:00Z',
+        status: 'completed',
+        source: 'system',
+        target: 'p1'
+      },
+      {
+        id: 'p1-in2',
+        type: 'SERVICE_REQUEST',
+        payload: { service: 'networking', action: 'restart' },
+        timestamp: '2023-06-16T15:32:00Z',
+        status: 'in-progress',
+        source: 'admin',
+        target: 'p1'
+      }
+    ],
+    output: [
+      {
+        id: 'p1-out1',
+        type: 'STATUS_REPORT',
+        payload: { status: 'healthy', services: { running: 42, stopped: 2 } },
+        timestamp: '2023-06-16T15:30:05Z',
+        status: 'completed',
+        source: 'p1',
+        target: 'system'
+      }
+    ]
+  },
+  'p2': {
+    input: [
+      {
+        id: 'p2-in1',
+        type: 'CONNECTION_REQUEST',
+        payload: { ip: '192.168.1.100', user: 'admin', auth: 'key-based' },
+        timestamp: '2023-06-16T15:25:00Z',
+        status: 'completed',
+        source: 'external',
+        target: 'p2'
+      }
+    ],
+    output: [
+      {
+        id: 'p2-out1',
+        type: 'CONNECTION_ACCEPTED',
+        payload: { sessionId: 'ssh-12345', channel: 'secure' },
+        timestamp: '2023-06-16T15:25:02Z',
+        status: 'completed',
+        source: 'p2',
+        target: 'external'
+      },
+      {
+        id: 'p2-out2',
+        type: 'LOG_EVENT',
+        payload: { level: 'info', message: 'New SSH connection established' },
+        timestamp: '2023-06-16T15:25:03Z',
+        status: 'completed',
+        source: 'p2',
+        target: 'p1'
+      }
+    ]
+  },
+  'p3': {
+    input: [
+      {
+        id: 'p3-in1',
+        type: 'CONTAINER_CREATE',
+        payload: { image: 'node:18-alpine', name: 'api-server' },
+        timestamp: '2023-06-16T14:50:00Z',
+        status: 'completed',
+        source: 'docker-cli',
+        target: 'p3'
+      },
+      {
+        id: 'p3-in2',
+        type: 'CONTAINER_START',
+        payload: { containerId: 'abcdef123456' },
+        timestamp: '2023-06-16T14:52:00Z',
+        status: 'completed',
+        source: 'docker-cli',
+        target: 'p3'
+      },
+      {
+        id: 'p3-in3',
+        type: 'VOLUME_MOUNT',
+        payload: { volumeName: 'data-volume', mountPath: '/app/data' },
+        timestamp: '2023-06-16T14:55:00Z',
+        status: 'in-progress',
+        source: 'docker-cli',
+        target: 'p3'
+      }
+    ],
+    output: [
+      {
+        id: 'p3-out1',
+        type: 'CONTAINER_CREATED',
+        payload: { containerId: 'abcdef123456', status: 'created' },
+        timestamp: '2023-06-16T14:51:00Z',
+        status: 'completed',
+        source: 'p3',
+        target: 'docker-cli'
+      },
+      {
+        id: 'p3-out2',
+        type: 'CONTAINER_STARTED',
+        payload: { containerId: 'abcdef123456', status: 'running' },
+        timestamp: '2023-06-16T14:53:00Z',
+        status: 'completed',
+        source: 'p3',
+        target: 'docker-cli'
+      }
+    ]
+  },
   'p4': {
     input: [
       {
@@ -351,6 +468,143 @@ const mockMessageQueues: Record<string, MessageQueue> = {
         target: 'broadcast'
       }
     ]
+  },
+  'p6': {
+    input: [
+      {
+        id: 'p6-in1',
+        type: 'HTTP_REQUEST',
+        payload: { method: 'GET', path: '/', ip: '192.168.1.42' },
+        timestamp: '2023-06-16T15:40:00Z',
+        status: 'completed',
+        source: 'external',
+        target: 'p6'
+      },
+      {
+        id: 'p6-in2',
+        type: 'CONFIG_RELOAD',
+        payload: { config: 'nginx.conf', triggeredBy: 'admin' },
+        timestamp: '2023-06-16T15:45:00Z',
+        status: 'pending',
+        source: 'p1',
+        target: 'p6'
+      }
+    ],
+    output: [
+      {
+        id: 'p6-out1',
+        type: 'WORKER_INSTRUCTION',
+        payload: { action: 'process_request', clientIp: '192.168.1.42' },
+        timestamp: '2023-06-16T15:40:01Z',
+        status: 'completed',
+        source: 'p6',
+        target: 'p7'
+      }
+    ]
+  },
+  'p7': {
+    input: [
+      {
+        id: 'p7-in1',
+        type: 'WORKER_INSTRUCTION',
+        payload: { action: 'process_request', clientIp: '192.168.1.42' },
+        timestamp: '2023-06-16T15:40:01Z',
+        status: 'completed',
+        source: 'p6',
+        target: 'p7'
+      }
+    ],
+    output: [
+      {
+        id: 'p7-out1',
+        type: 'HTTP_RESPONSE',
+        payload: { status: 200, size: 12345, timeMs: 42 },
+        timestamp: '2023-06-16T15:40:02Z',
+        status: 'completed',
+        source: 'p7',
+        target: 'external'
+      },
+      {
+        id: 'p7-out2',
+        type: 'ACCESS_LOG',
+        payload: { ip: '192.168.1.42', method: 'GET', path: '/', status: 200 },
+        timestamp: '2023-06-16T15:40:03Z',
+        status: 'completed',
+        source: 'p7',
+        target: 'p6'
+      }
+    ]
+  },
+  'p8': {
+    input: [
+      {
+        id: 'p8-in1',
+        type: 'SCHEDULER_EVENT',
+        payload: { action: 'spawn_worker', cpuId: 0 },
+        timestamp: '2023-06-16T15:10:00Z',
+        status: 'completed',
+        source: 'kernel',
+        target: 'p8'
+      }
+    ],
+    output: [
+      {
+        id: 'p8-out1',
+        type: 'WORKER_SPAWN',
+        payload: { worker: 'kworker/0:0', priority: 'normal' },
+        timestamp: '2023-06-16T15:10:01Z',
+        status: 'completed',
+        source: 'p8',
+        target: 'p9'
+      }
+    ]
+  },
+  'p9': {
+    input: [
+      {
+        id: 'p9-in1',
+        type: 'WORKER_SPAWN',
+        payload: { worker: 'kworker/0:0', priority: 'normal' },
+        timestamp: '2023-06-16T15:10:01Z',
+        status: 'completed',
+        source: 'p8',
+        target: 'p9'
+      },
+      {
+        id: 'p9-in2',
+        type: 'IO_TASK',
+        payload: { device: 'sda1', operation: 'read', blocks: 128 },
+        timestamp: '2023-06-16T15:20:00Z',
+        status: 'in-progress',
+        source: 'kernel',
+        target: 'p9'
+      }
+    ],
+    output: [
+      {
+        id: 'p9-out1',
+        type: 'TASK_STATUS',
+        payload: { task: 'io', status: 'processing', progress: 65 },
+        timestamp: '2023-06-16T15:20:10Z',
+        status: 'waiting',
+        source: 'p9',
+        target: 'kernel'
+      }
+    ]
+  },
+  'p10': {
+    input: [
+      {
+        id: 'p10-in1',
+        type: 'DEFERRED_WORK',
+        payload: { type: 'housekeeping', priority: 'low' },
+        timestamp: '2023-06-16T15:15:00Z',
+        status: 'pending',
+        source: 'kernel',
+        target: 'p10'
+      }
+    ],
+    output: []
   }
 }
 
