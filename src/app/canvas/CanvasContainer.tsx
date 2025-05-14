@@ -13,6 +13,7 @@ import SettingsView from '@/features/settings/SettingsView'
 import AccountView from '@/features/account/AccountView'
 import NappsView from '@/features/napps/ui/NappsView'
 import ContextView from '@/features/context/ContextView'
+import MessagesView from '@/features/messages/MessagesView'
 
 const CanvasContainer: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
@@ -31,6 +32,8 @@ const CanvasContainer: React.FC = () => {
         return <NappsView />
       case 'context':
         return <ContextView />
+      case 'messages':
+        return <MessagesView />
       case 'help':
         return <HelpView />
       case 'customers':

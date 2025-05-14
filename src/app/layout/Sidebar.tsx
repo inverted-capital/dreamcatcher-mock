@@ -1,5 +1,5 @@
 import React from 'react'
-import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, GitBranch } from 'lucide-react'
+import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, GitBranch, Mail } from 'lucide-react'
 import { SidebarItem, View } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
 import { useNavigationStore } from '@/features/navigation/state'
@@ -18,6 +18,7 @@ const Sidebar: React.FC = () => {
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
     { icon: 'Clipboard', label: 'Context', view: 'context' },
+    { icon: 'Mail', label: 'Messages', view: 'messages' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
     { icon: 'GitBranch', label: 'Branches', view: 'branches' },
     { icon: 'Folder', label: 'Files', view: 'files' },
@@ -55,6 +56,8 @@ const Sidebar: React.FC = () => {
         return <User size={20} />
       case 'Clipboard':
         return <Clipboard size={20} />
+      case 'Mail':
+        return <Mail size={20} />
       default:
         return <MessageSquare size={20} />
     }
@@ -77,12 +80,12 @@ const Sidebar: React.FC = () => {
     return currentView === item.view && !item.action
   }
 
-  // Group 1: User-specific items (Home, Chats, Context)
-  const userGroup = sidebarItems.slice(0, 3)
+  // Group 1: User-specific items (Home, Chats, Context, Messages)
+  const userGroup = sidebarItems.slice(0, 4)
   // Group 2: Context/scope selection items (Repos, Branches, Files, Napps, Innovations, Settings)
-  const contextSelectorGroup = sidebarItems.slice(3, 9)
+  const contextSelectorGroup = sidebarItems.slice(4, 10)
   // Group 3: Account and help items
-  const accountGroup = sidebarItems.slice(9)
+  const accountGroup = sidebarItems.slice(10)
 
   return (
     <nav className="w-16 bg-gray-900 text-white flex flex-col items-center py-6">

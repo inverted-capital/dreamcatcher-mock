@@ -16,6 +16,7 @@ export type View =
   | 'account'
   | 'napps'
   | 'context'
+  | 'messages'
 
 export interface ChatMessage {
   id: string
@@ -196,4 +197,17 @@ export interface Napp {
   version: string
   isEnabled: boolean
   installDate: string
+}
+
+export interface Message {
+  id: string
+  type: 'incoming' | 'outgoing'
+  channel: 'email' | 'whatsapp' | 'status' | 'system' | 'other'
+  subject: string
+  content: string
+  sender: string
+  recipient: string
+  timestamp: string
+  read: boolean
+  status?: 'delivered' | 'pending' | 'failed'
 }
