@@ -9,7 +9,10 @@ import {
   ExternalLink,
   Plus,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  ChevronUp,
+  X,
+  Info
 } from 'lucide-react'
 import { Innovation } from '@/shared/types'
 
@@ -273,10 +276,7 @@ const InnovationsView: React.FC = () => {
     // Filter to only show root items that pass the current filters
     const rootItems = sortedInnovations.filter((item) => {
       // An item is a root if no other item points to it, OR it has no related items itself
-      const isRoot =
-        !referencedIds.has(item.id) ||
-        !item.relatedItems ||
-        item.relatedItems.length === 0
+      const isRoot = !referencedIds.has(item.id)
 
       return isRoot
     })
