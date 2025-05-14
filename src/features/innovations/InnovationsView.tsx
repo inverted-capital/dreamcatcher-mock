@@ -157,7 +157,9 @@ const InnovationsView: React.FC = () => {
   const [sortField, setSortField] = useState('createdAt')
   const [sortDirection, setSortDirection] = useState('desc')
   const [viewMode, setViewMode] = useState<'flat' | 'tree'>('tree')
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(
+    () => new Set(mockInnovations.map((item) => item.id))
+  )
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<'all' | 'problem' | 'solution'>(
     'all'
@@ -265,13 +267,15 @@ const InnovationsView: React.FC = () => {
     // First, find root items (items that are not referenced by any other item)
     const referencedIds = new Set<string>()
 
-    mockInnovations.forEach((item) => {
-      if (item.relatedItems) {
-        item.relatedItems.forEach((relId) => {
-          referencedIds.add(relId)
-        })
-      }
-    })
+    sortedInnovations
+      .filter((item) => item.type === 'problem')
+      .forEach((item) => {
+        if (item.relatedItems) {
+          item.relatedItems.forEach((relId) => {
+            referencedIds.add(relId)
+          })
+        }
+      })
 
     // Filter to only show root items that pass the current filters
     const rootItems = sortedInnovations.filter((item) => {
@@ -284,7 +288,16 @@ const InnovationsView: React.FC = () => {
     return rootItems
   }
 
-  const renderTreeItem = (item: Innovation, level: number = 0) => {
+  const renderTreeItem = (
+    item: Innovation,
+    level: number = 0,
+    visited: Set<string> = new Set()
+  ) => {
+    if (visited.has(item.id)) {
+      return null
+    }
+    const newVisited = new Set(visited)
+    newVisited.add(item.id)
     const relatedItems = getRelatedItems(item.id)
     const hasChildren = relatedItems.length > 0
     const isExpanded = expandedItems.has(item.id)
@@ -361,7 +374,9 @@ const InnovationsView: React.FC = () => {
 
         {isExpanded && hasChildren && (
           <div className="mt-1 ml-5 pl-3 border-l border-gray-200">
-            {relatedItems.map((related) => renderTreeItem(related, level + 1))}
+            {relatedItems.map((related) =>
+              renderTreeItem(related, level + 1, newVisited)
+            )}
           </div>
         )}
       </div>
