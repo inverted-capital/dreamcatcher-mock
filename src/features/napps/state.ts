@@ -27,12 +27,21 @@ const mockInstalledNapps: Napp[] = [
     version: '1.0.5',
     isEnabled: false,
     installDate: '2023-04-10'
+  },
+  {
+    id: '4',
+    name: 'Wallet Manager',
+    description:
+      'Manage cryptocurrency wallets, bank accounts, and payment methods',
+    version: '2.1.0',
+    isEnabled: true,
+    installDate: '2023-05-15'
   }
 ]
 
 const mockAvailableNapps: Napp[] = [
   {
-    id: '4',
+    id: '5',
     name: 'Database Manager',
     description:
       'Manage database schemas, migrations, and queries directly from the repository',
@@ -41,7 +50,7 @@ const mockAvailableNapps: Napp[] = [
     installDate: ''
   },
   {
-    id: '5',
+    id: '6',
     name: 'CI/CD Pipeline',
     description:
       'Configure and manage continuous integration and deployment workflows',
@@ -50,7 +59,7 @@ const mockAvailableNapps: Napp[] = [
     installDate: ''
   },
   {
-    id: '6',
+    id: '7',
     name: 'Test Generator',
     description: 'Generate unit and integration tests based on your codebase',
     version: '1.1.2',
