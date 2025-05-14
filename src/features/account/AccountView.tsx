@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { User, Camera, Edit, CheckCircle, X, CreditCard, Link, ExternalLink, Plus, Wallet, Landmark } from 'lucide-react'
+import { User, Camera, Edit, CheckCircle, X, CreditCard, Link, ExternalLink, Plus, Wallet, Landmark, Calendar, DollarSign, HardDrive, Cpu, RefreshCw, Wifi, PenTool } from 'lucide-react'
 import { useNavigationStore } from '@/features/navigation/state'
 import { useChatStore } from '@/features/chat/state'
 import { useRepoStore } from '@/features/repos/state'
@@ -36,6 +36,59 @@ const mockPaymentMethods = [
   }
 ]
 
+// Mock billing data
+const mockBillingData = {
+  balance: 125.78,
+  currency: 'USD',
+  usageHistory: [
+    {
+      period: '2023-06-01',
+      storage: {
+        gained: 1.23, // GB
+        lost: 0.34, // GB
+        gainedCost: 0.62, // USD
+        lostRefund: 0.17, // USD
+      },
+      compute: 420, // Processor units
+      computeCost: 0.84,
+      bandwidth: 5.67, // GB
+      bandwidthCost: 1.13,
+      aiTokens: 15320, // Tokens
+      aiTokensCost: 0.31
+    },
+    {
+      period: '2023-05-01',
+      storage: {
+        gained: 2.45, // GB
+        lost: 0.12, // GB
+        gainedCost: 1.23, // USD
+        lostRefund: 0.06, // USD
+      },
+      compute: 830, // Processor units
+      computeCost: 1.66,
+      bandwidth: 12.34, // GB
+      bandwidthCost: 2.47,
+      aiTokens: 45670, // Tokens
+      aiTokensCost: 0.91
+    },
+    {
+      period: '2023-04-01',
+      storage: {
+        gained: 0.87, // GB
+        lost: 1.45, // GB
+        gainedCost: 0.44, // USD
+        lostRefund: 0.73, // USD
+      },
+      compute: 640, // Processor units
+      computeCost: 1.28,
+      bandwidth: 8.92, // GB
+      bandwidthCost: 1.78,
+      aiTokens: 28940, // Tokens
+      aiTokensCost: 0.58
+    }
+  ]
+}
+
 const AccountView: React.FC = () => {
   const [userProfile, setUserProfile] = useState(mockUserProfile)
   const [editingName, setEditingName] = useState(false)
@@ -45,6 +98,13 @@ const AccountView: React.FC = () => {
   const [showAddPaymentModal, setShowAddPaymentModal] = useState(false)
   const [newPaymentType, setNewPaymentType] = useState('ethereum')
   const [newPaymentValue, setNewPaymentValue] = useState('')
+  
+  // Billing related state
+  const [billingData, setBillingData] = useState(mockBillingData)
+  const [selectedPeriod, setSelectedPeriod] = useState('current')
+  const [showTopUpModal, setShowTopUpModal] = useState(false)
+  const [topUpAmount, setTopUpAmount] = useState('10')
+  const [customAmount, setCustomAmount] = useState('')
 
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
   const navigateTo = useChatStore((state) => state.navigateTo)
@@ -139,6 +199,62 @@ const AccountView: React.FC = () => {
         return <CreditCard className="text-gray-600" size={24} />
     }
   }
+  
+  const handleTopUp = () => {
+    // In a real app, this would process payment and update balance
+    const amount = topUpAmount === 'custom' ? (parseFloat(customAmount) || 0) : parseFloat(topUpAmount)
+    
+    if (amount > 0) {
+      setBillingData({
+        ...billingData,
+        balance: billingData.balance + amount
+      })
+      setShowTopUpModal(false)
+      setTopUpAmount('10')
+      setCustomAmount('')
+    }
+  }
+  
+  const getCurrentBillingPeriod = () => {
+    const today = new Date()
+    const startDate = selectedPeriod === 'current' 
+      ? new Date(today.getFullYear(), today.getMonth(), 1) 
+      : selectedPeriod === 'previous'
+        ? new Date(today.getFullYear(), today.getMonth() - 1, 1)
+        : new Date(today.getFullYear(), today.getMonth() - 2, 1)
+        
+    let endDate
+    if (selectedPeriod === 'current') {
+      endDate = today
+    } else if (selectedPeriod === 'previous') {
+      endDate = new Date(today.getFullYear(), today.getMonth(), 0)
+    } else {
+      endDate = new Date(today.getFullYear(), today.getMonth() - 1, 0)
+    }
+    
+    return {
+      start: startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+      end: endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    }
+  }
+  
+  const getPeriodData = () => {
+    const index = selectedPeriod === 'current' ? 0 : selectedPeriod === 'previous' ? 1 : 2
+    return billingData.usageHistory[index] || billingData.usageHistory[0]
+  }
+  
+  const periodData = getPeriodData()
+  const billingPeriod = getCurrentBillingPeriod()
+  
+  const totalCost = (
+    periodData.storage.gainedCost - 
+    periodData.storage.lostRefund + 
+    periodData.computeCost + 
+    periodData.bandwidthCost + 
+    periodData.aiTokensCost
+  ).toFixed(2)
+  
+  const netStorageCost = (periodData.storage.gainedCost - periodData.storage.lostRefund).toFixed(2)
 
   return (
     <div className="animate-fadeIn">
@@ -279,6 +395,178 @@ const AccountView: React.FC = () => {
           </div>
         )}
       </div>
+      
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-lg font-medium flex items-center">
+              <DollarSign size={20} className="mr-2 text-green-600" />
+              Billing & Usage
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Pay only for resources you use
+            </p>
+          </div>
+          
+          <div className="flex items-center">
+            <div className="mr-4 text-right">
+              <div className="text-sm text-gray-500">Current Balance</div>
+              <div className="font-medium text-xl text-green-600">
+                ${billingData.balance.toFixed(2)}
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setShowTopUpModal(true)}
+              className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md flex items-center"
+            >
+              <Plus size={16} className="mr-2" />
+              Top Up
+            </button>
+          </div>
+        </div>
+        
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-medium">Usage Period</h3>
+            <div className="flex items-center">
+              <Calendar size={16} className="mr-2 text-gray-500" />
+              <div>
+                {billingPeriod.start} - {billingPeriod.end}
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-3 flex justify-between">
+            <button
+              onClick={() => setSelectedPeriod('current')}
+              className={`px-3 py-1.5 rounded ${selectedPeriod === 'current' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              Current Month
+            </button>
+            <button
+              onClick={() => setSelectedPeriod('previous')}
+              className={`px-3 py-1.5 rounded ${selectedPeriod === 'previous' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              Previous Month
+            </button>
+            <button
+              onClick={() => setSelectedPeriod('older')}
+              className={`px-3 py-1.5 rounded ${selectedPeriod === 'older' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              2 Months Ago
+            </button>
+          </div>
+        </div>
+        
+        <div>
+          <div className="mb-4">
+            <h3 className="font-medium mb-2">Usage Summary</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <HardDrive size={18} className="text-blue-500 mr-2" />
+                    <span className="font-medium">Storage</span>
+                  </div>
+                  <span className="text-sm px-2 py-1 bg-blue-50 text-blue-700 rounded-full">
+                    ${netStorageCost} net
+                  </span>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <div>
+                      <span className="text-green-500 mr-1">+</span>
+                      {periodData.storage.gained.toFixed(2)} GB gained
+                    </div>
+                    <div className="text-gray-500">
+                      ${periodData.storage.gainedCost.toFixed(2)}
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between text-sm">
+                    <div>
+                      <span className="text-red-500 mr-1">-</span>
+                      {periodData.storage.lost.toFixed(2)} GB deleted
+                    </div>
+                    <div className="text-gray-500">
+                      -${periodData.storage.lostRefund.toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <Cpu size={18} className="text-purple-500 mr-2" />
+                    <span className="font-medium">Compute</span>
+                  </div>
+                  <span className="text-sm px-2 py-1 bg-purple-50 text-purple-700 rounded-full">
+                    ${periodData.computeCost.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <div>{periodData.compute} processor units</div>
+                    <div className="text-gray-500">${periodData.computeCost.toFixed(2)}</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <Wifi size={18} className="text-green-500 mr-2" />
+                    <span className="font-medium">Bandwidth</span>
+                  </div>
+                  <span className="text-sm px-2 py-1 bg-green-50 text-green-700 rounded-full">
+                    ${periodData.bandwidthCost.toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <div>{periodData.bandwidth.toFixed(2)} GB transferred</div>
+                    <div className="text-gray-500">${periodData.bandwidthCost.toFixed(2)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-medium">AI Token Usage</h3>
+              <span className="text-sm px-2 py-1 bg-indigo-50 text-indigo-700 rounded-full">
+                ${periodData.aiTokensCost.toFixed(2)}
+              </span>
+            </div>
+            
+            <div className="border border-gray-200 rounded-lg p-4 flex items-center justify-between">
+              <div className="flex items-center">
+                <PenTool size={18} className="text-indigo-500 mr-2" />
+                <span>{periodData.aiTokens.toLocaleString()} tokens consumed</span>
+              </div>
+              <div className="text-gray-500">${periodData.aiTokensCost.toFixed(2)}</div>
+            </div>
+          </div>
+          
+          <div className="mt-6 pt-4 border-t border-gray-200 flex justify-between items-center">
+            <div>
+              <span className="text-sm text-gray-500">Total for period:</span>
+              <span className="ml-2 font-medium text-lg">${totalCost}</span>
+            </div>
+            
+            <div className="flex items-center text-sm text-gray-600">
+              <RefreshCw size={14} className="mr-1" />
+              Updated {new Date().toLocaleDateString()}
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
         <h2 className="text-lg font-medium mb-4">Account Security</h2>
@@ -384,6 +672,104 @@ const AccountView: React.FC = () => {
                   Add Payment Method
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Top Up Balance Modal */}
+      {showTopUpModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium">Top Up Balance</h3>
+              <button
+                onClick={() => setShowTopUpModal(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div>
+              <p className="mb-4 text-gray-600">
+                Current balance: <span className="font-medium text-green-600">${billingData.balance.toFixed(2)}</span>
+              </p>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Choose amount to add:
+                </label>
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  {['10', '25', '50', '100'].map(amount => (
+                    <button
+                      key={amount}
+                      onClick={() => setTopUpAmount(amount)}
+                      className={`py-2 border ${topUpAmount === amount ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-gray-300 hover:border-gray-400'} rounded-md`}
+                    >
+                      ${amount}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setTopUpAmount('custom')}
+                    className={`py-2 border ${topUpAmount === 'custom' ? 'border-blue-500 bg-blue-50 text-blue-600' : 'border-gray-300 hover:border-gray-400'} rounded-md`}
+                  >
+                    Custom
+                  </button>
+                </div>
+                
+                {topUpAmount === 'custom' && (
+                  <div>
+                    <label className="block text-sm text-gray-700 mb-1">
+                      Enter amount:
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                      <input
+                        type="number"
+                        value={customAmount}
+                        onChange={(e) => setCustomAmount(e.target.value)}
+                        placeholder="0.00"
+                        min="1"
+                        step="0.01"
+                        className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Payment method:
+                </label>
+                <select className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  {paymentMethods
+                    .filter(method => method.isConnected)
+                    .map(method => (
+                      <option key={method.id} value={method.id}>
+                        {method.name} ({method.value.slice(0, 10)}...)
+                      </option>
+                    ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+              <button
+                onClick={() => setShowTopUpModal(false)}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleTopUp}
+                disabled={topUpAmount === 'custom' && (!customAmount.trim() || parseFloat(customAmount) <= 0)}
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:opacity-50 flex items-center"
+              >
+                <Plus size={16} className="mr-2" />
+                Add ${topUpAmount === 'custom' ? customAmount : topUpAmount}
+              </button>
             </div>
           </div>
         </div>
