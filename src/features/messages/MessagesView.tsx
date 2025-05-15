@@ -100,7 +100,7 @@ const MessagesView: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold flex items-center">
           <Mail className="mr-2" size={24} />
-          Messages
+          Agentic Messages
         </h1>
 
         <div className="flex space-x-2">
@@ -109,7 +109,7 @@ const MessagesView: React.FC = () => {
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md flex items-center transition-colors"
           >
             <Plus size={16} className="mr-2" />
-            New Message
+            New Agentic Message
           </button>
           
           <button className="border border-gray-200 bg-white hover:bg-gray-50 px-3 py-2 rounded-md flex items-center transition-colors">
@@ -148,7 +148,7 @@ const MessagesView: React.FC = () => {
           />
           <input
             type="text"
-            placeholder="Search messages..."
+            placeholder="Search agentic messages..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-9 pr-4 py-2 w-full border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -226,8 +226,8 @@ const MessagesView: React.FC = () => {
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 p-6">
               <Mail size={32} className="mb-2 text-gray-300" />
-              <p className="text-center">
-                {searchTerm ? 'No messages match your search criteria' : 'No messages to display'}
+              <p className="text-center mb-2">
+                {searchTerm ? 'No agentic messages match your search criteria' : 'No agentic messages to display'}
               </p>
             </div>
           )}
@@ -345,7 +345,7 @@ const MessagesView: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg w-full max-w-2xl">
             <div className="flex justify-between items-center border-b border-gray-200 p-4">
-              <h3 className="text-lg font-medium">New Message</h3>
+              <h3 className="text-lg font-medium">New Agentic Message</h3>
               <button 
                 onClick={() => setShowComposeModal(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -417,7 +417,7 @@ const MessagesView: React.FC = () => {
                 className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
               >
                 <Send size={16} className="mr-2" />
-                Send Message
+                Send Agentic Message
               </button>
             </div>
           </div>
