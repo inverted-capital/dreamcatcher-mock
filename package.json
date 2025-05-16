@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@artifact/client": "npm:@jsr/artifact__client@^0.0.55",
+    "@iframe-resizer/react": "^5.4.6",
     "@privy-io/react-auth": "^2.13.1",
     "debug": "^4.4.0",
     "lucide-react": "^0.510.0",
