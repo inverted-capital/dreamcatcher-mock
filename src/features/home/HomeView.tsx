@@ -2,17 +2,18 @@ import React from 'react'
 import { ArrowRight, BarChart2, Clock, Sparkles } from 'lucide-react'
 import { useNavigationStore } from '@/features/navigation/state'
 import { useChatStore } from '@/features/chat/state'
+import type { View } from '@/shared/types'
 
 const HomeView: React.FC = () => {
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
   const navigateTo = useChatStore((state) => state.navigateTo)
 
-  const handleNavigate = (view: string, title: string, icon: string) => {
-    setCurrentView(view as any)
+  const handleNavigate = (view: View, title: string, icon: string) => {
+    setCurrentView(view)
     navigateTo({
       title,
       icon,
-      view: view as any
+      view
     })
   }
 
