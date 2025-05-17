@@ -3,6 +3,11 @@ import { useChatStore } from '../state'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
 import { MessageSquare } from 'lucide-react'
+import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
+
+type TimelineItem =
+  | { type: 'message'; data: ChatMessageType; time: number }
+  | { type: 'navigation'; data: NavigationItem; time: number }
 
 const ChatHistory: React.FC = () => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
@@ -10,7 +15,6 @@ const ChatHistory: React.FC = () => {
   // Get state from Zustand store
   const navigationHistory = useChatStore((state) => state.navigationHistory)
   const currentChatId = useChatStore((state) => state.currentChatId)
-  const isNewEmptyChat = useChatStore((state) => state.isNewEmptyChat)
   const getChatMessages = useChatStore((state) => state.getChatMessages)
 
   // Get messages for the current chat
@@ -21,7 +25,7 @@ const ChatHistory: React.FC = () => {
   }, [chatMessages])
 
   // Get items for the timeline display
-  const getTimelineItems = () => {
+  const getTimelineItems = (): TimelineItem[] => {
     // Sort messages by timestamp
     const sortedMessages = [...chatMessages].sort(
       (a, b) =>
@@ -36,7 +40,7 @@ const ChatHistory: React.FC = () => {
     const mostRecentNav = sortedNavigation[0]
 
     // Initialize result array with messages
-    const result = sortedMessages.map((msg) => ({
+    const result: TimelineItem[] = sortedMessages.map((msg) => ({
       type: 'message',
       data: msg,
       time: new Date(msg.timestamp).getTime()

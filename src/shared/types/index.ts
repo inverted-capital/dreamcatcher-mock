@@ -1,4 +1,3 @@
-import { DivideIcon as LucideIcon } from 'lucide-react'
 
 type Role = 'user' | 'assistant' | 'system'
 type MessageType = 'text' | 'navigation' | 'file' | 'code'
@@ -152,44 +151,6 @@ export interface Chat {
   messageIds: string[]
 }
 
-interface ConnectedMachine {
-  id: string
-  name: string
-  lastActive: string
-  isActive: boolean
-}
-
-interface UserProfile {
-  name: string
-  email: string
-  profilePicture?: string
-}
-
-interface Remote {
-  id: string
-  name: string
-  url: string
-  type: 'fetch' | 'push' | 'both'
-  isDefault: boolean
-}
-
-interface Permission {
-  id: string
-  name: string
-  type: 'read' | 'write' | 'admin'
-  scope: 'file' | 'branch' | 'repo'
-  entityId?: string
-  entityName?: string
-}
-
-interface Role {
-  id: string
-  name: string
-  description: string
-  permissions: string[]
-  isInherited: boolean
-  inheritedFrom?: string
-}
 
 export interface Napp {
   id: string

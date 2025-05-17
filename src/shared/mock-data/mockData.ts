@@ -1,4 +1,4 @@
-import { Customer, FileItem, Repository, WeatherData } from '@/shared/types'
+import { Customer, Repository, WeatherData } from '@/shared/types'
 
 export const mockCustomers: Customer[] = [
   {
@@ -38,48 +38,6 @@ export const mockCustomers: Customer[] = [
   }
 ]
 
-const mockFiles: FileItem[] = [
-  {
-    id: 'file-1',
-    name: 'Project Proposal.pdf',
-    type: 'pdf',
-    size: 2500000,
-    modified: '2023-06-01',
-    path: '/documents/proposals/'
-  },
-  {
-    id: 'file-2',
-    name: 'Meeting Notes.docx',
-    type: 'docx',
-    size: 150000,
-    modified: '2023-06-10',
-    path: '/documents/meetings/'
-  },
-  {
-    id: 'file-3',
-    name: 'Budget 2023.xlsx',
-    type: 'xlsx',
-    size: 350000,
-    modified: '2023-05-15',
-    path: '/documents/finance/'
-  },
-  {
-    id: 'file-4',
-    name: 'Logo.png',
-    type: 'png',
-    size: 500000,
-    modified: '2023-04-20',
-    path: '/images/'
-  },
-  {
-    id: 'file-5',
-    name: 'Product Roadmap.pptx',
-    type: 'pptx',
-    size: 4000000,
-    modified: '2023-06-05',
-    path: '/documents/planning/'
-  }
-]
 
 export const mockRepositories: Repository[] = [
   {

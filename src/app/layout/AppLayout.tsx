@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from './Sidebar'
 import ChatContainer from '@/features/chat/ui/ChatContainer'
-import { Home, FolderGit2, FileText, ChevronDown, Code, GitBranch } from 'lucide-react'
+import { Home, FileText, Code, GitBranch } from 'lucide-react'
 import { useRepoStore } from '@/features/repos/state'
 import { useFilesStore } from '@/features/files/state'
 import { useNavigationStore } from '@/features/navigation/state'
@@ -14,7 +14,6 @@ const AppLayout: React.FC = () => {
     currentBranch,
     getRepositoryById,
     isHomeRepository,
-    selectRepository,
     switchBranch,
     availableBranches,
     selectHomeRepository

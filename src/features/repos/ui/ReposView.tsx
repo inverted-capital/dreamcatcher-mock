@@ -4,7 +4,6 @@ import {
   FileText,
   FolderGit2,
   GitFork,
-  Home,
   Link as LinkIcon2,
   LinkIcon,
   Plus
@@ -20,10 +19,8 @@ import { useChatStore } from '@/features/chat/state'
 
 const ReposView: React.FC = () => {
   const {
-    repositories,
     currentRepoId,
     getRepositoryById,
-    isHomeRepository,
     getRepositoryPath,
     selectRepository
   } = useRepoStore()
@@ -35,12 +32,6 @@ const ReposView: React.FC = () => {
   const [showCloneRepoModal, setShowCloneRepoModal] = useState(false)
   const [showLinkRepoModal, setShowLinkRepoModal] = useState(false)
 
-  // Initialize with all repo IDs to fully expand the tree by default
-  const [openNodes, setOpenNodes] = useState<Set<string>>(() => {
-    const allRepoIds = new Set<string>()
-    repositories.forEach((repo) => allRepoIds.add(repo.id))
-    return allRepoIds
-  })
 
   // Always ensure we have a repository selected, defaulting to home
   useEffect(() => {
@@ -49,15 +40,6 @@ const ReposView: React.FC = () => {
     }
   }, [currentRepoId, selectRepository])
 
-  const toggleNode = (id: string) => {
-    const newOpenNodes = new Set(openNodes)
-    if (newOpenNodes.has(id)) {
-      newOpenNodes.delete(id)
-    } else {
-      newOpenNodes.add(id)
-    }
-    setOpenNodes(newOpenNodes)
-  }
 
   const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null
   const repoPath = currentRepoId ? getRepositoryPath(currentRepoId) : []
@@ -168,7 +150,7 @@ const ReposView: React.FC = () => {
         <h2 className="text-lg font-medium mb-4">Repository Structure</h2>
 
         <div className="mt-4">
-          <RepositoryTree home />
+          <RepositoryTree />
         </div>
       </div>
 

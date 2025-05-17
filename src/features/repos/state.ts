@@ -265,7 +265,7 @@ export const useRepoStore = create<RepositoryState>((set, get) => ({
 
   // Get full path of repositories from root to the current repository
   getRepositoryPath: (repoId: string): Repository[] => {
-    const { repositories, getRepositoryById } = get()
+    const { getRepositoryById } = get()
 
     const path: Repository[] = []
     let currentRepo = getRepositoryById(repoId)

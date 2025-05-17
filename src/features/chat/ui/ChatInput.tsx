@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Send, Paperclip, Mic, Home, GitBranch, FileText } from 'lucide-react'
+import { Send, Paperclip, Mic } from 'lucide-react'
+import { View } from '@/shared/types'
 import { useChatStore } from '../state'
 import { useRepoStore } from '@/features/repos/state'
 import { useFilesStore } from '@/features/files/state'
@@ -86,14 +87,14 @@ const ChatInput: React.FC = () => {
   }
 
   // Helper to get the current view
-  const getCurrentView = (): string => {
+  const getCurrentView = (): View => {
     if (currentFileId) return 'files'
     if (currentRepoId) return 'repos'
     return currentView
   }
 
   // Helper to get icon name for view
-  const getIconForView = (view: string): string => {
+  const getIconForView = (view: View): string => {
     switch (view) {
       case 'files':
         return 'Folder'

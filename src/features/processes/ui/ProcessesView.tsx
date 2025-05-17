@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { 
-  Cpu, Search, RefreshCw, Activity, List, 
-  LayoutGrid, ChevronRight, ChevronDown, Play, 
-  Square, AlertTriangle, X, Info, Terminal,
-  FileText, Settings, Eye, Code, PanelRight,
-  Filter, BarChart, Clock, User, Zap,
-  MessageSquare, ArrowDown, ArrowUp, MoreHorizontal,
+import {
+  Cpu, Search, RefreshCw, Activity, List,
+  ChevronRight, ChevronDown, Play,
+  Square, X, Info, Terminal,
+  FileText, Settings, Eye, Code,
+  Filter, BarChart,
+  MessageSquare, ArrowDown, ArrowUp,
   Check, Clock3, Loader, HelpCircle, BugPlay
 } from 'lucide-react'
 import { useProcessesStore } from '../state'
-import { Process, ProcessFile, ProcessEnvironment, ProcessLog, ProcessMessage } from '@/shared/types'
+import { Process, ProcessMessage } from '@/shared/types'
 
 const ProcessesView: React.FC = () => {
   const {
-    processes,
     selectedProcessId,
     expandedProcessIds,
     searchTerm,
@@ -1105,10 +1104,10 @@ const ProcessesView: React.FC = () => {
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-sm">
                               <button className="text-blue-500 hover:text-blue-700 mr-2">
-                                <Eye size={16} title="View" />
+                                <Eye size={16} />
                               </button>
                               <button className="text-purple-500 hover:text-purple-700">
-                                <Terminal size={16} title="Tail" />
+                                <Terminal size={16} />
                               </button>
                             </td>
                           </tr>

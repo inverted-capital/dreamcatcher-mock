@@ -2,14 +2,11 @@ import React, { useState } from 'react'
 import {
   Settings,
   Server,
-  GitBranch,
   Shield,
   UserCheck,
   Package,
   Plus,
   Trash2,
-  Edit,
-  CheckCircle,
   X,
   Link
 } from 'lucide-react'

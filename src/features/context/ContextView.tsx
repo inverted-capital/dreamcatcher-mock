@@ -15,8 +15,7 @@ import { useContextStore } from './state'
 
 const ContextView: React.FC = () => {
   const navigationHistory = useChatStore((state) => state.navigationHistory)
-  const { snapshots, addSnapshot, removeSnapshot, updateSnapshot } =
-    useContextStore()
+  const { snapshots, addSnapshot, removeSnapshot } = useContextStore()
 
   const [showSnapshotForm, setShowSnapshotForm] = useState(false)
   const [snapshotTitle, setSnapshotTitle] = useState('')

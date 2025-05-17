@@ -1,4 +1,3 @@
-import React from 'react'
 import AppLayout from './layout/AppLayout'
 
 function App() {

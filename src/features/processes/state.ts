@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Process, ProcessEnvironment, ProcessFile, ProcessLog, ProcessMessage, MessageQueue } from '@/shared/types'
+import { Process, ProcessEnvironment, ProcessFile, ProcessLog, MessageQueue } from '@/shared/types'
 
 // Mock data for processes
 const mockProcesses: Process[] = [
