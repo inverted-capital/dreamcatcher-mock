@@ -1,7 +1,5 @@
 import React from 'react'
-import { useChatStore } from '../state'
-import { useRepoStore } from '@/features/repos/state'
-import { useFilesStore } from '@/features/files/state'
+
 import { ChatMessage as ChatMessageType } from '@/shared/types'
 
 interface ChatMessageProps {
@@ -12,15 +10,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user'
 
   // Get actions from Zustand stores
-  const navigateTo = useChatStore((state) => state.navigateTo)
-
-  const selectRepository = useRepoStore((state) => state.selectRepository)
-  const isHomeRepository = useRepoStore((state) => state.isHomeRepository)
-  const selectHomeRepository = useRepoStore(
-    (state) => state.selectHomeRepository
-  )
-
-  const selectFile = useFilesStore((state) => state.selectFile)
 
   // Extract context information from the message if it exists
   const hasContext = isUser && message.content.startsWith('Context:')

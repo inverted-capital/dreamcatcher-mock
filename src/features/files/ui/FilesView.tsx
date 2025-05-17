@@ -4,8 +4,6 @@ import {
   Upload,
   Code,
   GitBranch,
-  FolderOpen,
-  ArrowRight,
   ChevronDown,
   FileText,
   Edit,
@@ -24,12 +22,10 @@ import { FileItem } from '@/shared/types'
 const FilesView: React.FC = () => {
   const {
     selectFile,
-    selectFolder,
     navigateToFolder,
     navigateUp,
     currentFileId,
     currentFolderId,
-    getCurrentFile,
     getRepositoryFiles,
     getCurrentFolderContents,
     getCurrentPath
@@ -41,10 +37,8 @@ const FilesView: React.FC = () => {
     currentBranch,
     availableBranches,
     switchBranch,
-    getRepositoryById,
     isHomeRepository,
-    selectHomeRepository,
-    selectRepository
+    selectHomeRepository
   } = useRepoStore()
 
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
@@ -112,7 +106,7 @@ const FilesView: React.FC = () => {
   }
 
   const handleRepoClick = () => {
-    if (isHomeRepository(currentRepoId)) {
+    if (currentRepoId && isHomeRepository(currentRepoId)) {
       // For home repo, directly select it
       selectHomeRepository()
     } else {
@@ -125,11 +119,6 @@ const FilesView: React.FC = () => {
       })
     }
     setShowBranchDropdown(false)
-  }
-
-  const handleBranchClick = (e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent triggering the repo click
-    setShowBranchDropdown(!showBranchDropdown)
   }
 
   const handleNavigateUp = () => {

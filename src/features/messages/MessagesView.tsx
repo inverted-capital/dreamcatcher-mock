@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Mail, Search, Filter, Plus, CheckCircle, AlertCircle, Clock, ArrowUpRight, ArrowDownLeft, X, Trash2, Star, StarOff, RefreshCw, Send, PhoneCall, Video } from 'lucide-react'
+import { Mail, Search, Filter, Plus, ArrowUpRight, ArrowDownLeft, X, Trash2, Star, StarOff, RefreshCw, Send, PhoneCall, Video } from 'lucide-react'
 import { useMessagesStore } from './state'
 
 const MessagesView: React.FC = () => {
@@ -8,7 +8,6 @@ const MessagesView: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null)
   const [filterType, setFilterType] = useState<'all' | 'incoming' | 'outgoing'>('all')
-  const [filterChannel, setFilterChannel] = useState<string | null>(null)
   const [showComposeModal, setShowComposeModal] = useState(false)
   const [newMessage, setNewMessage] = useState({
     recipient: '',
@@ -26,7 +25,7 @@ const MessagesView: React.FC = () => {
       message.recipient.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = filterType === 'all' || message.type === filterType;
-    const matchesChannel = !filterChannel || message.channel === filterChannel;
+    const matchesChannel = true;
     
     return matchesSearch && matchesType && matchesChannel;
   });

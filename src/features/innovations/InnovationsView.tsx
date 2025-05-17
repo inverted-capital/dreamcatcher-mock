@@ -3,16 +3,12 @@ import {
   Lightbulb,
   Search,
   Filter,
-  ArrowUp,
-  ArrowDown,
+  
   Link,
   ExternalLink,
   Plus,
   ChevronDown,
-  ChevronRight,
-  ChevronUp,
-  X,
-  Info
+  ChevronRight
 } from 'lucide-react'
 import { Innovation } from '@/shared/types'
 
@@ -154,8 +150,8 @@ const mockInnovations: Innovation[] = [
 ]
 
 const InnovationsView: React.FC = () => {
-  const [sortField, setSortField] = useState('createdAt')
-  const [sortDirection, setSortDirection] = useState('desc')
+  const [sortField] = useState('createdAt')
+  const [sortDirection] = useState<'asc' | 'desc'>('desc')
   const [viewMode, setViewMode] = useState<'flat' | 'tree'>('tree')
   const [expandedItems, setExpandedItems] = useState<Set<string>>(
     () => new Set(mockInnovations.map((item) => item.id))
@@ -206,15 +202,6 @@ const InnovationsView: React.FC = () => {
       return <span className="text-red-500">⚠️</span>
     } else {
       return <span className="text-blue-500">💡</span>
-    }
-  }
-
-  const handleSort = (field: string) => {
-    if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-    } else {
-      setSortField(field)
-      setSortDirection('asc')
     }
   }
 

@@ -79,7 +79,6 @@ export const useFilesStore = create<FilesState & FilesActions>()(
 
     getRepositoryFiles: () => {
       const currentRepoId = useRepoStore.getState().currentRepoId
-      const currentBranch = useRepoStore.getState().currentBranch
 
       if (!currentRepoId) return []
 
@@ -91,10 +90,7 @@ export const useFilesStore = create<FilesState & FilesActions>()(
 
       // Filter files by branch if needed
       // In a real app, this would query different files based on the branch
-      return repoFiles.filter((file) => {
-        // Show all files for now, but in a real app you would filter by branch
-        return true
-      })
+      return repoFiles
     },
 
     getCurrentFile: () => {

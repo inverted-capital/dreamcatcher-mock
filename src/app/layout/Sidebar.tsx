@@ -1,6 +1,6 @@
 import React from 'react'
 import { Home, MessageSquare, Folder, FolderGit2, LogOut, HelpCircle, User, Lightbulb, Settings, Package, Clipboard, GitBranch, Mail, Cpu } from 'lucide-react'
-import { SidebarItem, View } from '@/shared/types'
+import { SidebarItem } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
 import { useNavigationStore } from '@/features/navigation/state'
 import { usePrivy } from '@privy-io/react-auth'

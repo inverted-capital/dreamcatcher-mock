@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import { useNappsStore } from '../state'
 import { useRepoStore } from '@/features/repos/state'
-import { Napp } from '@/shared/types'
 
 const NappsView: React.FC = () => {
   const { currentRepoId, getRepositoryById } = useRepoStore()

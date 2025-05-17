@@ -4,7 +4,6 @@ import {
   ChevronRight,
   Code,
   FileText,
-  FolderGit2,
   Home,
   GitBranch
 } from 'lucide-react'
@@ -12,7 +11,6 @@ import { NavigationItem } from '@/shared/types'
 import { useChatStore } from '../state'
 import { useNavigationStore } from '@/features/navigation/state'
 import { useRepoStore } from '@/features/repos/state'
-import { useFilesStore } from '@/features/files/state'
 
 interface NavigationMarkerProps {
   item: NavigationItem
@@ -27,8 +25,6 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
 
   const { selectRepository, switchBranch, selectHomeRepository } =
     useRepoStore()
-
-  const { selectFile } = useFilesStore()
 
   const isActive = currentView === item.view
 
