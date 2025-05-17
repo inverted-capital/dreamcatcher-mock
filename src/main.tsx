@@ -15,6 +15,7 @@ Debug.enable('artifact:client:*')
 const url = 'https://web-client-shy-dawn-4057.fly.dev'
 
 declare global {
+  // eslint-disable-next-line no-var
   var artifact: Artifact | undefined
 }
 

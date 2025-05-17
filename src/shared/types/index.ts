@@ -213,7 +213,7 @@ export interface ProcessLog {
 export interface ProcessMessage {
   id: string
   type: string
-  payload: Record<string, any>
+  payload: Record<string, unknown>
   timestamp: string
   status: 'completed' | 'in-progress' | 'pending' | 'waiting'
   source: string

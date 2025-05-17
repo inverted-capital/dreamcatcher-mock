@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Mail, Search, Filter, Plus, ArrowUpRight, ArrowDownLeft, X, Trash2, Star, StarOff, RefreshCw, Send, PhoneCall, Video } from 'lucide-react'
 import { useMessagesStore } from './state'
 
+type Channel = 'email' | 'whatsapp' | 'status' | 'system' | 'other'
+
 const MessagesView: React.FC = () => {
   const { messages, markAsRead, deleteMessage, toggleStarred, sendMessage } = useMessagesStore()
   
@@ -9,11 +11,16 @@ const MessagesView: React.FC = () => {
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null)
   const [filterType, setFilterType] = useState<'all' | 'incoming' | 'outgoing'>('all')
   const [showComposeModal, setShowComposeModal] = useState(false)
-  const [newMessage, setNewMessage] = useState({
+  const [newMessage, setNewMessage] = useState<{
+    recipient: string
+    subject: string
+    content: string
+    channel: Channel
+  }>({
     recipient: '',
     subject: '',
     content: '',
-    channel: 'email' as 'email' | 'whatsapp' | 'status' | 'system' | 'other'
+    channel: 'email'
   })
 
   // Filter messages based on search term and filters
@@ -357,7 +364,9 @@ const MessagesView: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Channel</label>
                 <select
                   value={newMessage.channel}
-                  onChange={(e) => setNewMessage({...newMessage, channel: e.target.value as any})}
+                  onChange={(e) =>
+                    setNewMessage({ ...newMessage, channel: e.target.value as Channel })
+                  }
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="email">Email</option>
