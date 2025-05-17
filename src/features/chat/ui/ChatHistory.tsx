@@ -18,7 +18,10 @@ const ChatHistory: React.FC = () => {
   const getChatMessages = useChatStore((state) => state.getChatMessages)
 
   // Get messages for the current chat
-  const chatMessages = currentChatId ? getChatMessages(currentChatId) : []
+  const chatMessages = React.useMemo(
+    () => (currentChatId ? getChatMessages(currentChatId) : []),
+    [currentChatId, getChatMessages]
+  )
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
