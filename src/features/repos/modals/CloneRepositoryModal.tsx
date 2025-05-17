@@ -17,7 +17,7 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({
     if (!repoUrl.trim()) return
 
     setIsLoading(true)
-    
+
     try {
       // Extract repo name from URL
       const urlParts = repoUrl.trim().split('/')
@@ -25,8 +25,8 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({
         urlParts[urlParts.length - 1].replace('.git', '') || 'cloned-repo'
 
       // Simulate some async operation for cloning
-      await new Promise(resolve => setTimeout(resolve, 1000));
-  
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
       const newRepo = {
         name: repoName,
         description: `Cloned from ${repoUrl.trim()}`,
@@ -34,12 +34,12 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({
         lastUpdated: new Date().toISOString().split('T')[0],
         language: 'Unknown'
       }
-  
+
       const newRepoId = addRepository(newRepo)
       selectRepository(newRepoId)
       onClose()
     } catch (error) {
-      console.error('Error cloning repository:', error);
+      console.error('Error cloning repository:', error)
     } finally {
       setIsLoading(false)
     }
@@ -114,7 +114,7 @@ const CloneRepositoryModal: React.FC<CloneRepositoryModalProps> = ({
             )}
           </button>
         </div>
-        
+
         {isLoading && (
           <div className="mt-4 text-center text-sm text-gray-500">
             Cloning repository, please wait...

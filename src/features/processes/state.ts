@@ -1,5 +1,11 @@
 import { create } from 'zustand'
-import { Process, ProcessEnvironment, ProcessFile, ProcessLog, MessageQueue } from '@/shared/types'
+import {
+  Process,
+  ProcessEnvironment,
+  ProcessFile,
+  ProcessLog,
+  MessageQueue
+} from '@/shared/types'
 
 // Mock data for processes
 const mockProcesses: Process[] = [
@@ -133,7 +139,7 @@ const mockProcesses: Process[] = [
 
 // Mock process file data
 const mockProcessFiles: Record<string, ProcessFile[]> = {
-  'p4': [
+  p4: [
     {
       id: 'f1',
       name: 'stdout',
@@ -159,7 +165,7 @@ const mockProcessFiles: Record<string, ProcessFile[]> = {
       lastAccessed: '2023-06-16T10:00:00Z'
     }
   ],
-  'p5': [
+  p5: [
     {
       id: 'f4',
       name: 'postgres.log',
@@ -181,7 +187,7 @@ const mockProcessFiles: Record<string, ProcessFile[]> = {
 
 // Mock process logs
 const mockProcessLogs: Record<string, ProcessLog[]> = {
-  'p4': [
+  p4: [
     {
       id: 'l1',
       timestamp: '2023-06-16T15:30:00Z',
@@ -201,7 +207,7 @@ const mockProcessLogs: Record<string, ProcessLog[]> = {
       message: 'Loading configuration from config.json'
     }
   ],
-  'p5': [
+  p5: [
     {
       id: 'l4',
       timestamp: '2023-06-16T15:30:00Z',
@@ -219,14 +225,14 @@ const mockProcessLogs: Record<string, ProcessLog[]> = {
 
 // Mock process environment variables
 const mockProcessEnv: Record<string, ProcessEnvironment[]> = {
-  'p4': [
+  p4: [
     { key: 'NODE_ENV', value: 'production' },
     { key: 'PORT', value: '3000' },
     { key: 'DB_HOST', value: 'localhost' },
     { key: 'DB_PORT', value: '5432' },
     { key: 'LOG_LEVEL', value: 'info' }
   ],
-  'p5': [
+  p5: [
     { key: 'POSTGRES_USER', value: 'postgres' },
     { key: 'POSTGRES_PASSWORD', value: '********' },
     { key: 'POSTGRES_DB', value: 'main' },
@@ -236,7 +242,7 @@ const mockProcessEnv: Record<string, ProcessEnvironment[]> = {
 
 // Mock message queues for processes
 const mockMessageQueues: Record<string, MessageQueue> = {
-  'p4': {
+  p4: {
     input: [
       {
         id: 'in1',
@@ -260,7 +266,11 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       {
         id: 'in3',
         type: 'HTTP_REQUEST',
-        payload: { method: 'POST', path: '/api/users', body: { name: 'New User' } },
+        payload: {
+          method: 'POST',
+          path: '/api/users',
+          body: { name: 'New User' }
+        },
         timestamp: '2023-06-16T15:36:00Z',
         status: 'in-progress',
         source: 'external',
@@ -280,7 +290,15 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       {
         id: 'out1',
         type: 'HTTP_RESPONSE',
-        payload: { status: 200, body: { users: [/* array of 10 users */], total: 42 } },
+        payload: {
+          status: 200,
+          body: {
+            users: [
+              /* array of 10 users */
+            ],
+            total: 42
+          }
+        },
         timestamp: '2023-06-16T15:35:15Z',
         status: 'completed',
         source: 'p4',
@@ -289,7 +307,10 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       {
         id: 'out2',
         type: 'DATABASE_QUERY',
-        payload: { query: 'INSERT INTO users (name) VALUES ($1)', params: ['New User'] },
+        payload: {
+          query: 'INSERT INTO users (name) VALUES ($1)',
+          params: ['New User']
+        },
         timestamp: '2023-06-16T15:36:05Z',
         status: 'waiting',
         source: 'p4',
@@ -298,7 +319,7 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       }
     ]
   },
-  'p5': {
+  p5: {
     input: [
       {
         id: 'db-in1',
@@ -313,7 +334,10 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       {
         id: 'db-in2',
         type: 'DATABASE_QUERY',
-        payload: { query: 'INSERT INTO users (name) VALUES ($1)', params: ['New User'] },
+        payload: {
+          query: 'INSERT INTO users (name) VALUES ($1)',
+          params: ['New User']
+        },
         timestamp: '2023-06-16T15:36:05Z',
         status: 'in-progress',
         source: 'p4',
@@ -334,7 +358,12 @@ const mockMessageQueues: Record<string, MessageQueue> = {
       {
         id: 'db-out1',
         type: 'QUERY_RESULT',
-        payload: { rows: [/* array of 10 users */], rowCount: 10 },
+        payload: {
+          rows: [
+            /* array of 10 users */
+          ],
+          rowCount: 10
+        },
         timestamp: '2023-06-16T15:35:14Z',
         status: 'completed',
         source: 'p5',
@@ -378,7 +407,9 @@ interface ProcessesActions {
   toggleFileDetails: () => void
   toggleEnvVars: () => void
   toggleLogs: () => void
-  setCurrentTab: (tab: 'overview' | 'files' | 'env' | 'logs' | 'messages') => void
+  setCurrentTab: (
+    tab: 'overview' | 'files' | 'env' | 'logs' | 'messages'
+  ) => void
   getProcessById: (id: string) => Process | undefined
   getProcessFiles: (id: string) => ProcessFile[]
   getProcessLogs: (id: string) => ProcessLog[]
@@ -410,7 +441,7 @@ const findProcessById = (
 // Recursive function to get all process IDs for expanding
 const getAllProcessIds = (processes: Process[]): string[] => {
   let ids: string[] = []
-  processes.forEach(process => {
+  processes.forEach((process) => {
     ids.push(process.id)
     if (process.children && process.children.length > 0) {
       ids = [...ids, ...getAllProcessIds(process.children)]
@@ -422,7 +453,7 @@ const getAllProcessIds = (processes: Process[]): string[] => {
 // Recursive function to search processes
 const searchProcesses = (processes: Process[], term: string): Process[] => {
   return processes
-    .map(process => {
+    .map((process) => {
       // Check if this process matches the search term
       const matches =
         process.name.toLowerCase().includes(term.toLowerCase()) ||
@@ -436,7 +467,7 @@ const searchProcesses = (processes: Process[], term: string): Process[] => {
       if (process.children && process.children.length > 0) {
         // Recursively search children
         const matchingChildren = searchProcesses(process.children, term)
-        
+
         // If there are matching children, include them
         if (matchingChildren.length > 0) {
           processCopy.children = matchingChildren
@@ -451,83 +482,86 @@ const searchProcesses = (processes: Process[], term: string): Process[] => {
 }
 
 // Create the Zustand store
-export const useProcessesStore = create<ProcessesState & ProcessesActions>((set, get) => ({
-  // State
-  processes: mockProcesses,
-  selectedProcessId: null,
-  expandedProcessIds: new Set(getAllProcessIds(mockProcesses)),
-  searchTerm: '',
-  viewType: 'tree',
-  showFileDetails: false,
-  showEnvVars: false,
-  showLogs: false,
-  currentTabName: 'overview',
+export const useProcessesStore = create<ProcessesState & ProcessesActions>(
+  (set, get) => ({
+    // State
+    processes: mockProcesses,
+    selectedProcessId: null,
+    expandedProcessIds: new Set(getAllProcessIds(mockProcesses)),
+    searchTerm: '',
+    viewType: 'tree',
+    showFileDetails: false,
+    showEnvVars: false,
+    showLogs: false,
+    currentTabName: 'overview',
 
-  // Actions
-  selectProcess: (id) => set({ selectedProcessId: id }),
-  
-  toggleExpandProcess: (id) => {
-    set(state => {
-      const newSet = new Set(state.expandedProcessIds)
-      if (newSet.has(id)) {
-        newSet.delete(id)
-      } else {
-        newSet.add(id)
-      }
-      return { expandedProcessIds: newSet }
-    })
-  },
-  
-  expandAllProcesses: () => {
-    set(state => ({
-      expandedProcessIds: new Set(getAllProcessIds(state.processes))
-    }))
-  },
-  
-  collapseAllProcesses: () => {
-    set({ expandedProcessIds: new Set() })
-  },
-  
-  setSearchTerm: (term) => set({ searchTerm: term }),
-  
-  setViewType: (type) => set({ viewType: type }),
-  
-  toggleFileDetails: () => set(state => ({ showFileDetails: !state.showFileDetails })),
-  
-  toggleEnvVars: () => set(state => ({ showEnvVars: !state.showEnvVars })),
-  
-  toggleLogs: () => set(state => ({ showLogs: !state.showLogs })),
-  
-  setCurrentTab: (tab) => set({ currentTabName: tab }),
-  
-  getProcessById: (id) => {
-    return findProcessById(get().processes, id)
-  },
-  
-  getProcessFiles: (id) => {
-    return mockProcessFiles[id] || []
-  },
-  
-  getProcessLogs: (id) => {
-    return mockProcessLogs[id] || []
-  },
-  
-  getProcessEnv: (id) => {
-    return mockProcessEnv[id] || []
-  },
-  
-  getProcessMessageQueue: (id) => {
-    return mockMessageQueues[id]
-  },
-  
-  filterProcesses: (term) => {
-    if (!term.trim()) return mockProcesses
-    return searchProcesses(mockProcesses, term)
-  },
-  
-  getFilteredProcesses: () => {
-    const { searchTerm, processes } = get()
-    if (!searchTerm.trim()) return processes
-    return searchProcesses(processes, searchTerm)
-  }
-}))
+    // Actions
+    selectProcess: (id) => set({ selectedProcessId: id }),
+
+    toggleExpandProcess: (id) => {
+      set((state) => {
+        const newSet = new Set(state.expandedProcessIds)
+        if (newSet.has(id)) {
+          newSet.delete(id)
+        } else {
+          newSet.add(id)
+        }
+        return { expandedProcessIds: newSet }
+      })
+    },
+
+    expandAllProcesses: () => {
+      set((state) => ({
+        expandedProcessIds: new Set(getAllProcessIds(state.processes))
+      }))
+    },
+
+    collapseAllProcesses: () => {
+      set({ expandedProcessIds: new Set() })
+    },
+
+    setSearchTerm: (term) => set({ searchTerm: term }),
+
+    setViewType: (type) => set({ viewType: type }),
+
+    toggleFileDetails: () =>
+      set((state) => ({ showFileDetails: !state.showFileDetails })),
+
+    toggleEnvVars: () => set((state) => ({ showEnvVars: !state.showEnvVars })),
+
+    toggleLogs: () => set((state) => ({ showLogs: !state.showLogs })),
+
+    setCurrentTab: (tab) => set({ currentTabName: tab }),
+
+    getProcessById: (id) => {
+      return findProcessById(get().processes, id)
+    },
+
+    getProcessFiles: (id) => {
+      return mockProcessFiles[id] || []
+    },
+
+    getProcessLogs: (id) => {
+      return mockProcessLogs[id] || []
+    },
+
+    getProcessEnv: (id) => {
+      return mockProcessEnv[id] || []
+    },
+
+    getProcessMessageQueue: (id) => {
+      return mockMessageQueues[id]
+    },
+
+    filterProcesses: (term) => {
+      if (!term.trim()) return mockProcesses
+      return searchProcesses(mockProcesses, term)
+    },
+
+    getFilteredProcesses: () => {
+      const { searchTerm, processes } = get()
+      if (!searchTerm.trim()) return processes
+      return searchProcesses(processes, searchTerm)
+    }
+  })
+)

@@ -38,7 +38,6 @@ export const mockCustomers: Customer[] = [
   }
 ]
 
-
 export const mockRepositories: Repository[] = [
   {
     id: 'repo-1',

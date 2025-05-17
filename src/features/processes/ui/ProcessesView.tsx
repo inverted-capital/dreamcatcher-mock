@@ -1,12 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Cpu, Search, RefreshCw, Activity, List,
-  ChevronRight, ChevronDown, Play,
-  Square, X, Info, Terminal,
-  FileText, Settings, Eye, Code,
-  Filter, BarChart,
-  MessageSquare, ArrowDown, ArrowUp,
-  Check, Clock3, Loader, HelpCircle, BugPlay
+  Cpu,
+  Search,
+  RefreshCw,
+  Activity,
+  List,
+  ChevronRight,
+  ChevronDown,
+  Play,
+  Square,
+  X,
+  Info,
+  Terminal,
+  FileText,
+  Settings,
+  Eye,
+  Code,
+  Filter,
+  BarChart,
+  MessageSquare,
+  ArrowDown,
+  ArrowUp,
+  Check,
+  Clock3,
+  Loader,
+  HelpCircle,
+  BugPlay
 } from 'lucide-react'
 import { useProcessesStore } from '../state'
 import { Process, ProcessMessage } from '@/shared/types'
@@ -38,17 +57,27 @@ const ProcessesView: React.FC = () => {
   const [showFilterOptions, setShowFilterOptions] = useState(false)
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const [userFilter, setUserFilter] = useState<string | null>(null)
-  const [activeMessageTab, setActiveMessageTab] = useState<'input' | 'output'>('input')
-  const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null)
+  const [activeMessageTab, setActiveMessageTab] = useState<'input' | 'output'>(
+    'input'
+  )
+  const [expandedMessageId, setExpandedMessageId] = useState<string | null>(
+    null
+  )
 
   // Get the selected process
-  const selectedProcess = selectedProcessId ? getProcessById(selectedProcessId) : null
-  
+  const selectedProcess = selectedProcessId
+    ? getProcessById(selectedProcessId)
+    : null
+
   // Get files, logs, and environment variables for the selected process
-  const processFiles = selectedProcessId ? getProcessFiles(selectedProcessId) : []
+  const processFiles = selectedProcessId
+    ? getProcessFiles(selectedProcessId)
+    : []
   const processLogs = selectedProcessId ? getProcessLogs(selectedProcessId) : []
   const processEnv = selectedProcessId ? getProcessEnv(selectedProcessId) : []
-  const processMessageQueue = selectedProcessId ? getProcessMessageQueue(selectedProcessId) : undefined
+  const processMessageQueue = selectedProcessId
+    ? getProcessMessageQueue(selectedProcessId)
+    : undefined
 
   // Get filtered processes
   const filteredProcesses = getFilteredProcesses()
@@ -58,7 +87,7 @@ const ProcessesView: React.FC = () => {
     const interval = setInterval(() => {
       // In a real app, this would fetch fresh process data
     }, 5000)
-    
+
     return () => clearInterval(interval)
   }, [])
 
@@ -67,7 +96,7 @@ const ProcessesView: React.FC = () => {
     const date = new Date(dateString)
     const now = new Date()
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-    
+
     if (diffInSeconds < 60) return `${diffInSeconds}s ago`
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`
@@ -86,11 +115,11 @@ const ProcessesView: React.FC = () => {
     const date = new Date(dateString)
     const now = new Date()
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-    
+
     const days = Math.floor(diffInSeconds / 86400)
     const hours = Math.floor((diffInSeconds % 86400) / 3600)
     const minutes = Math.floor((diffInSeconds % 3600) / 60)
-    
+
     if (days > 0) return `${days}d ${hours}h ${minutes}m`
     if (hours > 0) return `${hours}h ${minutes}m`
     return `${minutes}m ${diffInSeconds % 60}s`
@@ -116,31 +145,31 @@ const ProcessesView: React.FC = () => {
   const getMessageStatusInfo = (status: string) => {
     switch (status) {
       case 'completed':
-        return { 
+        return {
           color: 'text-green-500',
           bgColor: 'bg-green-100',
           icon: <Check size={14} />
         }
       case 'in-progress':
-        return { 
+        return {
           color: 'text-blue-500',
           bgColor: 'bg-blue-100',
           icon: <Loader size={14} className="animate-spin" />
         }
       case 'pending':
-        return { 
+        return {
           color: 'text-gray-500',
           bgColor: 'bg-gray-100',
           icon: <Clock3 size={14} />
         }
       case 'waiting':
-        return { 
+        return {
           color: 'text-yellow-500',
           bgColor: 'bg-yellow-100',
           icon: <HelpCircle size={14} />
         }
       default:
-        return { 
+        return {
           color: 'text-gray-500',
           bgColor: 'bg-gray-100',
           icon: <Info size={14} />
@@ -207,10 +236,10 @@ const ProcessesView: React.FC = () => {
       const isExpanded = expandedProcessIds.has(process.id)
       const hasChildren = process.children && process.children.length > 0
       const isSelected = selectedProcessId === process.id
-      
+
       return (
         <React.Fragment key={process.id}>
-          <div 
+          <div
             className={`flex items-center py-2 px-2 hover:bg-gray-50 cursor-pointer transition-colors ${
               isSelected ? 'bg-blue-50' : ''
             }`}
@@ -234,9 +263,9 @@ const ProcessesView: React.FC = () => {
               ) : (
                 <div className="w-5 mr-2"></div>
               )}
-              
-              <div 
-                className="flex items-center flex-1 min-w-0" 
+
+              <div
+                className="flex items-center flex-1 min-w-0"
                 onClick={() => selectProcess(process.id)}
               >
                 <div className="flex-shrink-0 mr-3">
@@ -244,10 +273,12 @@ const ProcessesView: React.FC = () => {
                 </div>
                 <div className="truncate">
                   <div className="font-medium text-sm">{process.name}</div>
-                  <div className="text-xs text-gray-500">PID: {process.pid}</div>
+                  <div className="text-xs text-gray-500">
+                    PID: {process.pid}
+                  </div>
                 </div>
               </div>
-              
+
               <div className="flex items-center">
                 <div className="hidden sm:block">
                   <div className="w-20 text-right">
@@ -262,7 +293,7 @@ const ProcessesView: React.FC = () => {
                   </div>
                 </div>
                 <div className="ml-4">
-                  <span 
+                  <span
                     className={`inline-block px-2 py-1 rounded-full text-xs ${getStatusColor(process.status)}`}
                   >
                     {process.status}
@@ -271,11 +302,9 @@ const ProcessesView: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {isExpanded && hasChildren && (
-            <div>
-              {renderProcessTree(process.children!, level + 1)}
-            </div>
+            <div>{renderProcessTree(process.children!, level + 1)}</div>
           )}
         </React.Fragment>
       )
@@ -296,7 +325,7 @@ const ProcessesView: React.FC = () => {
     }
 
     const flatProcesses = flattenProcesses(processList)
-    
+
     // Apply sorting
     const sortedProcesses = [...flatProcesses].sort((a, b) => {
       let comparison = 0
@@ -309,17 +338,17 @@ const ProcessesView: React.FC = () => {
       } else if (sortBy === 'memory') {
         comparison = a.memory - b.memory
       }
-      
+
       return sortOrder === 'asc' ? comparison : -comparison
     })
 
     // Apply filters
-    const filteredByStatus = statusFilter 
-      ? sortedProcesses.filter(p => p.status === statusFilter)
+    const filteredByStatus = statusFilter
+      ? sortedProcesses.filter((p) => p.status === statusFilter)
       : sortedProcesses
-      
+
     const filteredByUser = userFilter
-      ? filteredByStatus.filter(p => p.user === userFilter)
+      ? filteredByStatus.filter((p) => p.user === userFilter)
       : filteredByStatus
 
     return (
@@ -334,7 +363,9 @@ const ProcessesView: React.FC = () => {
                 <div className="flex items-center">
                   <span>PID</span>
                   {sortBy === 'pid' && (
-                    <span className="ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    <span className="ml-1">
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
                   )}
                 </div>
               </th>
@@ -345,7 +376,9 @@ const ProcessesView: React.FC = () => {
                 <div className="flex items-center">
                   <span>Process</span>
                   {sortBy === 'name' && (
-                    <span className="ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    <span className="ml-1">
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
                   )}
                 </div>
               </th>
@@ -359,7 +392,9 @@ const ProcessesView: React.FC = () => {
                 <div className="flex items-center">
                   <span>CPU</span>
                   {sortBy === 'cpu' && (
-                    <span className="ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    <span className="ml-1">
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
                   )}
                 </div>
               </th>
@@ -370,7 +405,9 @@ const ProcessesView: React.FC = () => {
                 <div className="flex items-center">
                   <span>Memory</span>
                   {sortBy === 'memory' && (
-                    <span className="ml-1">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+                    <span className="ml-1">
+                      {sortOrder === 'asc' ? '↑' : '↓'}
+                    </span>
                   )}
                 </div>
               </th>
@@ -385,30 +422,38 @@ const ProcessesView: React.FC = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredByUser.map((process) => {
               const isSelected = selectedProcessId === process.id
-              
+
               return (
-                <tr 
-                  key={process.id} 
+                <tr
+                  key={process.id}
                   className={`hover:bg-gray-50 cursor-pointer ${isSelected ? 'bg-blue-50' : ''}`}
                   onClick={() => selectProcess(process.id)}
                 >
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{process.pid}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {process.pid}
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex items-center">
                       <Cpu size={16} className="text-gray-500 mr-2" />
-                      <div className="text-sm font-medium text-gray-900">{process.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {process.name}
+                      </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <div className="text-sm text-gray-500">{process.user}</div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{process.cpu.toFixed(1)}%</div>
+                    <div className="text-sm text-gray-900">
+                      {process.cpu.toFixed(1)}%
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{process.memory.toFixed(1)}%</div>
+                    <div className="text-sm text-gray-900">
+                      {process.memory.toFixed(1)}%
+                    </div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
@@ -418,7 +463,9 @@ const ProcessesView: React.FC = () => {
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{formatRelativeTime(process.startTime)}</div>
+                    <div className="text-sm text-gray-500">
+                      {formatRelativeTime(process.startTime)}
+                    </div>
                   </td>
                 </tr>
               )
@@ -430,7 +477,10 @@ const ProcessesView: React.FC = () => {
   }
 
   // Render message queue section
-  const renderMessageQueue = (messages: ProcessMessage[], direction: 'input' | 'output') => {
+  const renderMessageQueue = (
+    messages: ProcessMessage[],
+    direction: 'input' | 'output'
+  ) => {
     if (!messages || messages.length === 0) {
       return (
         <div className="text-center py-8 text-gray-500">
@@ -442,19 +492,26 @@ const ProcessesView: React.FC = () => {
 
     return (
       <div className="space-y-2">
-        {messages.map(message => {
+        {messages.map((message) => {
           const statusInfo = getMessageStatusInfo(message.status)
           const isExpanded = expandedMessageId === message.id
-          
+
           return (
-            <div key={message.id} className={`border rounded-lg overflow-hidden ${
-              message.status === 'completed' ? 'opacity-60 border-gray-200' : 'border-gray-300'
-            }`}>
-              <div 
+            <div
+              key={message.id}
+              className={`border rounded-lg overflow-hidden ${
+                message.status === 'completed'
+                  ? 'opacity-60 border-gray-200'
+                  : 'border-gray-300'
+              }`}
+            >
+              <div
                 className={`p-3 flex items-start justify-between cursor-pointer ${
-                  message.status === 'in-progress' ? 'bg-blue-50' : 
-                  message.status === 'waiting' ? 'bg-yellow-50' : 
-                  'bg-white'
+                  message.status === 'in-progress'
+                    ? 'bg-blue-50'
+                    : message.status === 'waiting'
+                      ? 'bg-yellow-50'
+                      : 'bg-white'
                 }`}
                 onClick={() => toggleMessageDetails(message.id)}
               >
@@ -464,7 +521,9 @@ const ProcessesView: React.FC = () => {
                       <span className={`mr-2 ${statusInfo.color}`}>
                         {statusInfo.icon}
                       </span>
-                      <span className="font-medium text-sm">{message.type}</span>
+                      <span className="font-medium text-sm">
+                        {message.type}
+                      </span>
                     </div>
                     <span className="mx-2 text-gray-300">|</span>
                     <span className="text-xs text-gray-500">
@@ -481,39 +540,55 @@ const ProcessesView: React.FC = () => {
                     {direction === 'input' ? (
                       <span className="flex items-center">
                         <span className="text-gray-500">From: </span>
-                        <span className="mx-1 font-medium">{message.source}</span>
+                        <span className="mx-1 font-medium">
+                          {message.source}
+                        </span>
                         <ArrowDown size={12} className="mx-1 text-blue-500" />
                         <span className="text-gray-500">To: </span>
-                        <span className="mx-1 font-medium">{message.target}</span>
+                        <span className="mx-1 font-medium">
+                          {message.target}
+                        </span>
                       </span>
                     ) : (
                       <span className="flex items-center">
                         <span className="text-gray-500">To: </span>
-                        <span className="mx-1 font-medium">{message.target}</span>
+                        <span className="mx-1 font-medium">
+                          {message.target}
+                        </span>
                         <ArrowUp size={12} className="mx-1 text-green-500" />
                         <span className="text-gray-500">From: </span>
-                        <span className="mx-1 font-medium">{message.source}</span>
+                        <span className="mx-1 font-medium">
+                          {message.source}
+                        </span>
                       </span>
                     )}
                   </div>
                 </div>
-                
+
                 <div className="text-gray-400">
-                  {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  {isExpanded ? (
+                    <ChevronDown size={16} />
+                  ) : (
+                    <ChevronRight size={16} />
+                  )}
                 </div>
               </div>
-              
+
               {isExpanded && (
                 <div className="border-t border-gray-200 p-3 bg-gray-50">
-                  <div className="text-xs font-medium mb-1 text-gray-600">Payload:</div>
+                  <div className="text-xs font-medium mb-1 text-gray-600">
+                    Payload:
+                  </div>
                   <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">
                     {JSON.stringify(message.payload, null, 2)}
                   </pre>
-                  
+
                   <div className="flex justify-between mt-2 text-xs text-gray-500">
                     <div>ID: {message.id}</div>
                     <div>
-                      <span className={`px-1.5 py-0.5 rounded-full ${statusInfo.bgColor}`}>
+                      <span
+                        className={`px-1.5 py-0.5 rounded-full ${statusInfo.bgColor}`}
+                      >
                         {message.status}
                       </span>
                     </div>
@@ -537,13 +612,15 @@ const ProcessesView: React.FC = () => {
 
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => {/* In a real app this would refresh process data */}}
+            onClick={() => {
+              /* In a real app this would refresh process data */
+            }}
             className="p-2 text-gray-500 hover:text-gray-700 bg-white border border-gray-200 rounded-md"
             title="Refresh Process List"
           >
             <RefreshCw size={16} />
           </button>
-          
+
           <div className="relative">
             <button
               onClick={() => setShowFilterOptions(!showFilterOptions)}
@@ -552,30 +629,34 @@ const ProcessesView: React.FC = () => {
             >
               <Filter size={16} />
             </button>
-            
+
             {showFilterOptions && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <div className="p-2">
-                  <div className="text-xs font-medium text-gray-500 mb-1">Status</div>
+                  <div className="text-xs font-medium text-gray-500 mb-1">
+                    Status
+                  </div>
                   <div className="space-y-1">
-                    {['running', 'stopped', 'sleeping', 'zombie'].map(status => (
-                      <div key={status} className="flex items-center">
-                        <input
-                          type="radio"
-                          id={`status-${status}`}
-                          name="status"
-                          checked={statusFilter === status}
-                          onChange={() => setStatusFilter(status)}
-                          className="mr-2"
-                        />
-                        <label
-                          htmlFor={`status-${status}`}
-                          className="text-sm cursor-pointer"
-                        >
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </label>
-                      </div>
-                    ))}
+                    {['running', 'stopped', 'sleeping', 'zombie'].map(
+                      (status) => (
+                        <div key={status} className="flex items-center">
+                          <input
+                            type="radio"
+                            id={`status-${status}`}
+                            name="status"
+                            checked={statusFilter === status}
+                            onChange={() => setStatusFilter(status)}
+                            className="mr-2"
+                          />
+                          <label
+                            htmlFor={`status-${status}`}
+                            className="text-sm cursor-pointer"
+                          >
+                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                          </label>
+                        </div>
+                      )
+                    )}
                     <div className="flex items-center">
                       <input
                         type="radio"
@@ -593,12 +674,14 @@ const ProcessesView: React.FC = () => {
                       </label>
                     </div>
                   </div>
-                  
+
                   <div className="border-t border-gray-200 my-2"></div>
-                  
-                  <div className="text-xs font-medium text-gray-500 mb-1">User</div>
+
+                  <div className="text-xs font-medium text-gray-500 mb-1">
+                    User
+                  </div>
                   <div className="space-y-1">
-                    {['root', 'www-data', 'node', 'postgres'].map(user => (
+                    {['root', 'www-data', 'node', 'postgres'].map((user) => (
                       <div key={user} className="flex items-center">
                         <input
                           type="radio"
@@ -637,7 +720,7 @@ const ProcessesView: React.FC = () => {
               </div>
             )}
           </div>
-          
+
           <div className="flex items-center bg-white border border-gray-200 rounded-md overflow-hidden">
             <button
               className={`p-2 ${viewType === 'tree' ? 'bg-blue-50 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
@@ -654,7 +737,7 @@ const ProcessesView: React.FC = () => {
               <List size={16} />
             </button>
           </div>
-          
+
           <div className="relative">
             <Search
               size={16}
@@ -672,10 +755,12 @@ const ProcessesView: React.FC = () => {
       </div>
 
       {/* Process List */}
-      <div className={`bg-white rounded-lg border border-gray-200 mb-6 ${selectedProcessId ? 'max-h-96' : 'flex-1'} overflow-auto`}>
+      <div
+        className={`bg-white rounded-lg border border-gray-200 mb-6 ${selectedProcessId ? 'max-h-96' : 'flex-1'} overflow-auto`}
+      >
         <div className="border-b border-gray-200 p-2 bg-gray-50 flex justify-between items-center">
           <h2 className="font-medium text-gray-700">Process List</h2>
-          
+
           {viewType === 'tree' && (
             <div className="flex space-x-2">
               <button
@@ -693,7 +778,7 @@ const ProcessesView: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         {filteredProcesses.length > 0 ? (
           viewType === 'tree' ? (
             <div>{renderProcessTree(filteredProcesses)}</div>
@@ -738,19 +823,20 @@ const ProcessesView: React.FC = () => {
               </div>
               <div className="flex items-center space-x-2">
                 {selectedProcess.status === 'running' ? (
-          <>
-          <button
-                    className="p-1.5 bg-purple-50 text-purple-500 rounded-md hover:bg-purple-100"
-                    title="Debug Process"
-                  >
-                    <BugPlay size={14} />
-                  </button>
-                  <button
-                    className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
-                    title="Stop Process"
-                  >
-                    <Square size={14} />
-                  </button></>
+                  <>
+                    <button
+                      className="p-1.5 bg-purple-50 text-purple-500 rounded-md hover:bg-purple-100"
+                      title="Debug Process"
+                    >
+                      <BugPlay size={14} />
+                    </button>
+                    <button
+                      className="p-1.5 bg-red-50 text-red-500 rounded-md hover:bg-red-100"
+                      title="Stop Process"
+                    >
+                      <Square size={14} />
+                    </button>
+                  </>
                 ) : (
                   <button
                     className="p-1.5 bg-green-50 text-green-500 rounded-md hover:bg-green-100"
@@ -773,12 +859,12 @@ const ProcessesView: React.FC = () => {
                 </button>
               </div>
             </div>
-            
+
             <div className="flex border-t border-gray-200">
               <button
                 className={`px-4 py-2 text-sm font-medium ${
-                  currentTabName === 'overview' 
-                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                  currentTabName === 'overview'
+                    ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
                 onClick={() => setCurrentTab('overview')}
@@ -787,8 +873,8 @@ const ProcessesView: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 text-sm font-medium ${
-                  currentTabName === 'messages' 
-                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                  currentTabName === 'messages'
+                    ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
                 onClick={() => setCurrentTab('messages')}
@@ -797,8 +883,8 @@ const ProcessesView: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 text-sm font-medium ${
-                  currentTabName === 'files' 
-                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                  currentTabName === 'files'
+                    ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
                 onClick={() => setCurrentTab('files')}
@@ -807,8 +893,8 @@ const ProcessesView: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 text-sm font-medium ${
-                  currentTabName === 'env' 
-                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                  currentTabName === 'env'
+                    ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
                 onClick={() => setCurrentTab('env')}
@@ -817,8 +903,8 @@ const ProcessesView: React.FC = () => {
               </button>
               <button
                 className={`px-4 py-2 text-sm font-medium ${
-                  currentTabName === 'logs' 
-                    ? 'text-blue-600 border-b-2 border-blue-500' 
+                  currentTabName === 'logs'
+                    ? 'text-blue-600 border-b-2 border-blue-500'
                     : 'text-gray-600 hover:text-gray-800'
                 }`}
                 onClick={() => setCurrentTab('logs')}
@@ -827,8 +913,11 @@ const ProcessesView: React.FC = () => {
               </button>
             </div>
           </div>
-          
-          <div className="p-4 overflow-auto" style={{ maxHeight: 'calc(100% - 100px)' }}>
+
+          <div
+            className="p-4 overflow-auto"
+            style={{ maxHeight: 'calc(100% - 100px)' }}
+          >
             {currentTabName === 'overview' && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border border-gray-200 rounded-lg p-4">
@@ -836,27 +925,39 @@ const ProcessesView: React.FC = () => {
                     <Info size={16} className="text-gray-500 mr-2" />
                     General Information
                   </h4>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Process Name:</span>
-                      <span className="text-sm font-medium">{selectedProcess.name}</span>
+                      <span className="text-sm text-gray-500">
+                        Process Name:
+                      </span>
+                      <span className="text-sm font-medium">
+                        {selectedProcess.name}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">PID:</span>
-                      <span className="text-sm font-medium">{selectedProcess.pid}</span>
+                      <span className="text-sm font-medium">
+                        {selectedProcess.pid}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">User:</span>
-                      <span className="text-sm font-medium">{selectedProcess.user}</span>
+                      <span className="text-sm font-medium">
+                        {selectedProcess.user}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Status:</span>
-                      <span className={`text-sm font-medium ${
-                        selectedProcess.status === 'running' ? 'text-green-600' : 
-                        selectedProcess.status === 'stopped' ? 'text-red-600' : 
-                        'text-gray-600'
-                      }`}>
+                      <span
+                        className={`text-sm font-medium ${
+                          selectedProcess.status === 'running'
+                            ? 'text-green-600'
+                            : selectedProcess.status === 'stopped'
+                              ? 'text-red-600'
+                              : 'text-gray-600'
+                        }`}
+                      >
                         {selectedProcess.status}
                       </span>
                     </div>
@@ -874,109 +975,141 @@ const ProcessesView: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="border border-gray-200 rounded-lg p-4">
                   <h4 className="font-medium mb-3 flex items-center">
                     <Terminal size={16} className="text-gray-500 mr-2" />
                     Command
                   </h4>
-                  
+
                   <div className="bg-gray-50 p-3 rounded font-mono text-sm text-gray-800 break-all">
-                    {selectedProcess.command || <span className="text-gray-400">No command</span>}
+                    {selectedProcess.command || (
+                      <span className="text-gray-400">No command</span>
+                    )}
                   </div>
                 </div>
-                
+
                 <div className="border border-gray-200 rounded-lg p-4 md:col-span-2">
                   <h4 className="font-medium mb-3 flex items-center">
                     <BarChart size={16} className="text-gray-500 mr-2" />
                     Resource Usage
                   </h4>
-                  
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <div className="flex justify-between mb-1">
-                        <span className="text-sm text-gray-500">CPU Usage:</span>
-                        <span className="text-sm font-medium">{selectedProcess.cpu.toFixed(1)}%</span>
+                        <span className="text-sm text-gray-500">
+                          CPU Usage:
+                        </span>
+                        <span className="text-sm font-medium">
+                          {selectedProcess.cpu.toFixed(1)}%
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-500 h-2 rounded-full" 
-                          style={{ width: `${Math.min(selectedProcess.cpu, 100)}%` }}
+                        <div
+                          className="bg-blue-500 h-2 rounded-full"
+                          style={{
+                            width: `${Math.min(selectedProcess.cpu, 100)}%`
+                          }}
                         ></div>
                       </div>
                     </div>
-                    
+
                     <div>
                       <div className="flex justify-between mb-1">
-                        <span className="text-sm text-gray-500">Memory Usage:</span>
-                        <span className="text-sm font-medium">{selectedProcess.memory.toFixed(1)}%</span>
+                        <span className="text-sm text-gray-500">
+                          Memory Usage:
+                        </span>
+                        <span className="text-sm font-medium">
+                          {selectedProcess.memory.toFixed(1)}%
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full" 
-                          style={{ width: `${Math.min(selectedProcess.memory, 100)}%` }}
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
+                          style={{
+                            width: `${Math.min(selectedProcess.memory, 100)}%`
+                          }}
                         ></div>
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="border border-gray-200 rounded-lg p-4 md:col-span-2">
                   <h4 className="font-medium mb-3 flex items-center">
                     <Activity size={16} className="text-gray-500 mr-2" />
                     Process Hierarchy
                   </h4>
-                  
+
                   <div className="bg-gray-50 p-3 rounded">
                     {selectedProcess.parentId ? (
                       <div className="flex items-center mb-2">
                         <Cpu size={14} className="text-gray-500 mr-2" />
-                        <span className="text-sm text-gray-500 mr-2">Parent:</span>
-                        <button 
+                        <span className="text-sm text-gray-500 mr-2">
+                          Parent:
+                        </span>
+                        <button
                           className="text-sm text-blue-500 hover:underline"
-                          onClick={() => selectProcess(selectedProcess.parentId!)}
+                          onClick={() =>
+                            selectProcess(selectedProcess.parentId!)
+                          }
                         >
-                          PID {getProcessById(selectedProcess.parentId!)?.pid || '?'} ({getProcessById(selectedProcess.parentId!)?.name || 'Unknown'})
+                          PID{' '}
+                          {getProcessById(selectedProcess.parentId!)?.pid ||
+                            '?'}{' '}
+                          (
+                          {getProcessById(selectedProcess.parentId!)?.name ||
+                            'Unknown'}
+                          )
                         </button>
                       </div>
                     ) : (
                       <div className="flex items-center mb-2">
-                        <span className="text-sm text-gray-500">Root process (no parent)</span>
+                        <span className="text-sm text-gray-500">
+                          Root process (no parent)
+                        </span>
                       </div>
                     )}
-                    
-                    {selectedProcess.children && selectedProcess.children.length > 0 && (
-                      <div>
-                        <div className="text-sm text-gray-500 mb-2">Children ({selectedProcess.children.length}):</div>
-                        <div className="space-y-1 ml-4">
-                          {selectedProcess.children.map(child => (
-                            <button 
-                              key={child.id}
-                              className="text-sm text-blue-500 hover:underline block"
-                              onClick={() => selectProcess(child.id)}
-                            >
-                              PID {child.pid} ({child.name})
-                            </button>
-                          ))}
+
+                    {selectedProcess.children &&
+                      selectedProcess.children.length > 0 && (
+                        <div>
+                          <div className="text-sm text-gray-500 mb-2">
+                            Children ({selectedProcess.children.length}):
+                          </div>
+                          <div className="space-y-1 ml-4">
+                            {selectedProcess.children.map((child) => (
+                              <button
+                                key={child.id}
+                                className="text-sm text-blue-500 hover:underline block"
+                                onClick={() => selectProcess(child.id)}
+                              >
+                                PID {child.pid} ({child.name})
+                              </button>
+                            ))}
+                          </div>
                         </div>
+                      )}
+
+                    {(!selectedProcess.children ||
+                      selectedProcess.children.length === 0) && (
+                      <div className="text-sm text-gray-500">
+                        No child processes
                       </div>
-                    )}
-                    
-                    {(!selectedProcess.children || selectedProcess.children.length === 0) && (
-                      <div className="text-sm text-gray-500">No child processes</div>
                     )}
                   </div>
                 </div>
               </div>
             )}
-            
+
             {currentTabName === 'messages' && (
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <div className="inline-flex rounded-lg overflow-hidden border border-gray-200">
                     <button
                       className={`px-4 py-2 text-sm ${
-                        activeMessageTab === 'input' 
+                        activeMessageTab === 'input'
                           ? 'bg-blue-50 text-blue-600'
                           : 'bg-white text-gray-600'
                       }`}
@@ -989,7 +1122,7 @@ const ProcessesView: React.FC = () => {
                     </button>
                     <button
                       className={`px-4 py-2 text-sm ${
-                        activeMessageTab === 'output' 
+                        activeMessageTab === 'output'
                           ? 'bg-blue-50 text-blue-600'
                           : 'bg-white text-gray-600'
                       }`}
@@ -1024,33 +1157,41 @@ const ProcessesView: React.FC = () => {
 
                 {processMessageQueue ? (
                   <div className="border border-gray-200 rounded-lg overflow-hidden p-4">
-                    {activeMessageTab === 'input' ? (
-                      renderMessageQueue(processMessageQueue.input, 'input')
-                    ) : (
-                      renderMessageQueue(processMessageQueue.output, 'output')
-                    )}
+                    {activeMessageTab === 'input'
+                      ? renderMessageQueue(processMessageQueue.input, 'input')
+                      : renderMessageQueue(
+                          processMessageQueue.output,
+                          'output'
+                        )}
                   </div>
                 ) : (
                   <div className="text-center py-12 text-gray-500 border border-gray-200 rounded-lg">
-                    <MessageSquare size={40} className="mx-auto mb-2 text-gray-300" />
-                    <p className="font-medium text-gray-700 mb-1">No Message Queue Available</p>
+                    <MessageSquare
+                      size={40}
+                      className="mx-auto mb-2 text-gray-300"
+                    />
+                    <p className="font-medium text-gray-700 mb-1">
+                      No Message Queue Available
+                    </p>
                     <p className="text-sm text-gray-500">
-                      This process doesn't have a message queue or is not message-driven
+                      This process doesn't have a message queue or is not
+                      message-driven
                     </p>
                   </div>
                 )}
               </div>
             )}
-            
+
             {currentTabName === 'files' && (
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="font-medium">Process Files</h4>
                   <div className="text-sm text-gray-500">
-                    {processFiles.length} files in <code>/proc/{selectedProcess.pid}/</code>
+                    {processFiles.length} files in{' '}
+                    <code>/proc/{selectedProcess.pid}/</code>
                   </div>
                 </div>
-                
+
                 {processFiles.length > 0 ? (
                   <div className="border border-gray-200 rounded-lg overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -1080,19 +1221,29 @@ const ProcessesView: React.FC = () => {
                               <div className="flex items-center">
                                 {getFileTypeIcon(file.type)}
                                 <div className="ml-2">
-                                  <div className="text-sm font-medium text-gray-900">{file.name}</div>
-                                  <div className="text-xs text-gray-500">{file.path}</div>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    {file.name}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {file.path}
+                                  </div>
                                 </div>
                               </div>
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
-                              <span className={`inline-block px-2 py-1 text-xs rounded-full ${
-                                file.type === 'out' ? 'bg-green-100 text-green-800' :
-                                file.type === 'err' ? 'bg-red-100 text-red-800' :
-                                file.type === 'in' ? 'bg-blue-100 text-blue-800' :
-                                file.type === 'config' ? 'bg-purple-100 text-purple-800' :
-                                'bg-gray-100 text-gray-800'
-                              }`}>
+                              <span
+                                className={`inline-block px-2 py-1 text-xs rounded-full ${
+                                  file.type === 'out'
+                                    ? 'bg-green-100 text-green-800'
+                                    : file.type === 'err'
+                                      ? 'bg-red-100 text-red-800'
+                                      : file.type === 'in'
+                                        ? 'bg-blue-100 text-blue-800'
+                                        : file.type === 'config'
+                                          ? 'bg-purple-100 text-purple-800'
+                                          : 'bg-gray-100 text-gray-800'
+                                }`}
+                              >
                                 {file.type}
                               </span>
                             </td>
@@ -1100,7 +1251,9 @@ const ProcessesView: React.FC = () => {
                               {formatFileSize(file.size)}
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-                              {file.lastAccessed ? formatRelativeTime(file.lastAccessed) : '-'}
+                              {file.lastAccessed
+                                ? formatRelativeTime(file.lastAccessed)
+                                : '-'}
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-sm">
                               <button className="text-blue-500 hover:text-blue-700 mr-2">
@@ -1117,13 +1270,16 @@ const ProcessesView: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8 text-gray-500 border border-gray-200 rounded-lg">
-                    <FileText size={32} className="mx-auto mb-2 text-gray-300" />
+                    <FileText
+                      size={32}
+                      className="mx-auto mb-2 text-gray-300"
+                    />
                     <p>No files available for this process</p>
                   </div>
                 )}
               </div>
             )}
-            
+
             {currentTabName === 'env' && (
               <div>
                 <div className="flex justify-between items-center mb-4">
@@ -1132,7 +1288,7 @@ const ProcessesView: React.FC = () => {
                     {processEnv.length} variables
                   </div>
                 </div>
-                
+
                 {processEnv.length > 0 ? (
                   <div className="border border-gray-200 rounded-lg overflow-hidden">
                     <table className="min-w-full divide-y divide-gray-200">
@@ -1150,14 +1306,17 @@ const ProcessesView: React.FC = () => {
                         {processEnv.map((env, index) => (
                           <tr key={index} className="hover:bg-gray-50">
                             <td className="px-4 py-3 whitespace-nowrap">
-                              <div className="text-sm font-mono text-gray-900">{env.key}</div>
+                              <div className="text-sm font-mono text-gray-900">
+                                {env.key}
+                              </div>
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap">
                               <div className="text-sm font-mono text-gray-500">
-                                {env.value.includes('*') ? env.value : env.value.length > 40 
-                                  ? `${env.value.substring(0, 40)}...` 
-                                  : env.value
-                                }
+                                {env.value.includes('*')
+                                  ? env.value
+                                  : env.value.length > 40
+                                    ? `${env.value.substring(0, 40)}...`
+                                    : env.value}
                               </div>
                             </td>
                           </tr>
@@ -1173,7 +1332,7 @@ const ProcessesView: React.FC = () => {
                 )}
               </div>
             )}
-            
+
             {currentTabName === 'logs' && (
               <div>
                 <div className="flex justify-between items-center mb-4">
@@ -1183,7 +1342,7 @@ const ProcessesView: React.FC = () => {
                     Tail Logs
                   </button>
                 </div>
-                
+
                 {processLogs.length > 0 ? (
                   <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 p-4">
                     <div className="font-mono text-sm space-y-2">
@@ -1192,7 +1351,9 @@ const ProcessesView: React.FC = () => {
                           <div className="text-gray-400 mr-3">
                             {new Date(log.timestamp).toLocaleTimeString()}
                           </div>
-                          <div className={`${getLogLevelColor(log.level)} uppercase mr-3`}>
+                          <div
+                            className={`${getLogLevelColor(log.level)} uppercase mr-3`}
+                          >
                             [{log.level}]
                           </div>
                           <div>{log.message}</div>
@@ -1202,7 +1363,10 @@ const ProcessesView: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8 text-gray-500 border border-gray-200 rounded-lg">
-                    <Terminal size={32} className="mx-auto mb-2 text-gray-300" />
+                    <Terminal
+                      size={32}
+                      className="mx-auto mb-2 text-gray-300"
+                    />
                     <p>No logs available for this process</p>
                   </div>
                 )}

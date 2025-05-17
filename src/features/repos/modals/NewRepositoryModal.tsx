@@ -18,13 +18,13 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
 
   const handleCreateRepo = async () => {
     if (!newRepoName.trim() || !artifact) return
-    
+
     setIsLoading(true)
-    
+
     try {
       // Initialize the repository in Artifact
       await artifact.tree.init(newRepoName.trim())
-      
+
       // Create the repository in our local state
       const newRepo = {
         name: newRepoName.trim(),
@@ -33,7 +33,7 @@ const NewRepositoryModal: React.FC<NewRepositoryModalProps> = ({ onClose }) => {
         lastUpdated: new Date().toISOString().split('T')[0],
         language: newRepoLang
       }
-      
+
       const newRepoId = addRepository(newRepo)
       selectRepository(newRepoId)
       onClose()

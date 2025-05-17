@@ -93,43 +93,46 @@ interface BranchActions {
   filterCommitsByBranch: (branchName: string | null) => void
 }
 
-export const useBranchStore = create<BranchState & BranchActions>((set, get) => ({
-  // State
-  commits: mockCommits,
-  selectedCommit: null,
-  filteredCommits: mockCommits,
-  searchTerm: '',
+export const useBranchStore = create<BranchState & BranchActions>(
+  (set, get) => ({
+    // State
+    commits: mockCommits,
+    selectedCommit: null,
+    filteredCommits: mockCommits,
+    searchTerm: '',
 
-  // Actions
-  setSelectedCommit: (commitId) => {
-    set({ selectedCommit: commitId })
-  },
+    // Actions
+    setSelectedCommit: (commitId) => {
+      set({ selectedCommit: commitId })
+    },
 
-  setSearchTerm: (term) => {
-    set((state) => {
-      const newFilteredCommits = state.commits.filter(commit => 
-        commit.message.toLowerCase().includes(term.toLowerCase()) ||
-        commit.author.toLowerCase().includes(term.toLowerCase()) ||
-        commit.shortHash.toLowerCase().includes(term.toLowerCase())
-      )
-      return { searchTerm: term, filteredCommits: newFilteredCommits }
-    })
-  },
+    setSearchTerm: (term) => {
+      set((state) => {
+        const newFilteredCommits = state.commits.filter(
+          (commit) =>
+            commit.message.toLowerCase().includes(term.toLowerCase()) ||
+            commit.author.toLowerCase().includes(term.toLowerCase()) ||
+            commit.shortHash.toLowerCase().includes(term.toLowerCase())
+        )
+        return { searchTerm: term, filteredCommits: newFilteredCommits }
+      })
+    },
 
-  getCommitById: (commitId) => {
-    return get().commits.find(commit => commit.id === commitId)
-  },
+    getCommitById: (commitId) => {
+      return get().commits.find((commit) => commit.id === commitId)
+    },
 
-  filterCommitsByBranch: (branchName) => {
-    set((state) => {
-      if (!branchName) {
-        return { filteredCommits: state.commits }
-      }
-      
-      const newFilteredCommits = state.commits.filter(commit => 
-        commit.branch === branchName
-      )
-      return { filteredCommits: newFilteredCommits }
-    })
-  }
-}))
+    filterCommitsByBranch: (branchName) => {
+      set((state) => {
+        if (!branchName) {
+          return { filteredCommits: state.commits }
+        }
+
+        const newFilteredCommits = state.commits.filter(
+          (commit) => commit.branch === branchName
+        )
+        return { filteredCommits: newFilteredCommits }
+      })
+    }
+  })
+)

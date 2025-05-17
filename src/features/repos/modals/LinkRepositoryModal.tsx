@@ -21,11 +21,11 @@ const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({
     if (!linkRepoName.trim()) return
 
     setIsLoading(true)
-    
+
     try {
       // Simulate some async operation for linking
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
+      await new Promise((resolve) => setTimeout(resolve, 800))
+
       const newRepo = {
         name: linkRepoName.trim(),
         description:
@@ -35,12 +35,12 @@ const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({
         lastUpdated: new Date().toISOString().split('T')[0],
         language: linkRepoLang
       }
-  
+
       const newRepoId = linkRepository(newRepo)
       selectRepository(newRepoId)
       onClose()
     } catch (error) {
-      console.error('Error linking repository:', error);
+      console.error('Error linking repository:', error)
     } finally {
       setIsLoading(false)
     }
@@ -157,7 +157,7 @@ const LinkRepositoryModal: React.FC<LinkRepositoryModalProps> = ({
             )}
           </button>
         </div>
-        
+
         {isLoading && (
           <div className="mt-4 text-center text-sm text-gray-500">
             Connecting to repository, please wait...

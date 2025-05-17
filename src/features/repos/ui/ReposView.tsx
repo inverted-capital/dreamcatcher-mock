@@ -32,14 +32,12 @@ const ReposView: React.FC = () => {
   const [showCloneRepoModal, setShowCloneRepoModal] = useState(false)
   const [showLinkRepoModal, setShowLinkRepoModal] = useState(false)
 
-
   // Always ensure we have a repository selected, defaulting to home
   useEffect(() => {
     if (!currentRepoId) {
       selectRepository('home-repo')
     }
   }, [currentRepoId, selectRepository])
-
 
   const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null
   const repoPath = currentRepoId ? getRepositoryPath(currentRepoId) : []
@@ -102,8 +100,8 @@ const ReposView: React.FC = () => {
       {/* Current Repository Card */}
       {currentRepo && (
         <div className="mb-6">
-          <RepositoryCard 
-            repo={currentRepo} 
+          <RepositoryCard
+            repo={currentRepo}
             isSelected={true}
             onSettingsClick={() => viewRepositorySettings(currentRepo.id)}
           />

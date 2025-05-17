@@ -1,4 +1,3 @@
-
 type Role = 'user' | 'assistant' | 'system'
 type MessageType = 'text' | 'navigation' | 'file' | 'code'
 export type View =
@@ -150,7 +149,6 @@ export interface Chat {
   timestamp: string
   messageIds: string[]
 }
-
 
 export interface Napp {
   id: string

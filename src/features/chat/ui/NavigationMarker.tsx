@@ -89,13 +89,12 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
       case 'home':
         selectHomeRepository()
         break
-      case 'repo':
-        {
-          // Find the repo by name in a real app
-          const repoId = `repo-${part.value.replace('Repository ', '')}`
-          selectRepository(repoId)
-          break
-        }
+      case 'repo': {
+        // Find the repo by name in a real app
+        const repoId = `repo-${part.value.replace('Repository ', '')}`
+        selectRepository(repoId)
+        break
+      }
       case 'branch':
         switchBranch(part.value)
         break
