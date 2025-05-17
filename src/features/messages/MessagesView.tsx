@@ -25,9 +25,8 @@ const MessagesView: React.FC = () => {
       message.recipient.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesType = filterType === 'all' || message.type === filterType;
-    const matchesChannel = true;
-    
-    return matchesSearch && matchesType && matchesChannel;
+
+    return matchesSearch && matchesType;
   });
 
   const currentMessage = selectedMessage 
