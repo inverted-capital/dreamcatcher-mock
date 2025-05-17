@@ -6,7 +6,12 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react']
+    exclude: ['lucide-react', '@privy-io/react-auth']
+  },
+  build: {
+    rollupOptions: {
+      external: ['lucide-react', '@privy-io/react-auth']
+    }
   },
   resolve: {
     alias: {
