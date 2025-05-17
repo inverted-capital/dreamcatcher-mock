@@ -19,7 +19,7 @@ declare global {
   var artifact: Artifact | undefined
 }
 
-function AuthenticatedApp() {
+export function AuthenticatedApp() {
   const { ready, authenticated, user, login } = usePrivy()
   const { identityToken } = useIdentityToken()
   const [error, onError] = useState<unknown>()
@@ -88,7 +88,7 @@ function AuthenticatedApp() {
   )
 }
 
-function LoadingArtifact() {
+export function LoadingArtifact() {
   const ready = useIsArtifactReady()
   if (!ready) {
     return <div>Loading Artifact...</div>
@@ -96,7 +96,7 @@ function LoadingArtifact() {
   return <App />
 }
 
-function Boot() {
+export function Boot() {
   return (
     <PrivyProvider
       appId="cma4m3v6400dkl10ld7792jm2"
