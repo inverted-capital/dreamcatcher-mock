@@ -10,6 +10,8 @@ const cdnImports: Record<string, string> = {
   '@privy-io/react-auth':
     'https://esm.sh/@privy-io/react-auth?external=react,react-dom',
   '@artifact/client': 'https://esm.sh/jsr/@artifact/client?external=react',
+  '@artifact/client/api':
+    'https://esm.sh/jsr/@artifact/client@0.0.57/api?external=react',
   react: 'https://esm.sh/react',
   'react-dom': 'https://esm.sh/react-dom',
   'react-dom/client': 'https://esm.sh/react-dom/client',
@@ -22,7 +24,7 @@ function esmImportMapPlugin(): Plugin {
   return {
     name: 'esm-import-map',
     enforce: 'pre',
-    resolveId(id) {
+    resolveId(id: string) {
       const url = cdnImports[id]
       if (url) {
         return { id: url, external: true }

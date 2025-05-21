@@ -1,12 +1,7 @@
 import React, { useState } from 'react'
 import { ChevronDown, ChevronRight, FolderGit2, Home, Link } from 'lucide-react'
-import {
-  useTree,
-  ArtifactScope,
-  RepoScope,
-  useScope,
-  isRepoScope
-} from '@artifact/client'
+import { useTree, ArtifactScope, useScope } from '@artifact/client'
+import { isRepoScope, RepoScope } from '@artifact/client/api'
 import { useRepoStore } from '../state'
 
 const RepositoryTreeRoot: React.FC = () => {

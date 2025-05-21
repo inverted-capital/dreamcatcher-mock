@@ -2,12 +2,8 @@ import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './app/App'
 import './index.css'
-
-import {
-  type Artifact,
-  ArtifactBase,
-  useIsArtifactReady
-} from '@artifact/client'
+import { ArtifactBase, useIsArtifactReady } from '@artifact/client'
+import { type Artifact } from '@artifact/client/api'
 import Debug from 'debug'
 import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
 Debug.enable('artifact:client:*')
