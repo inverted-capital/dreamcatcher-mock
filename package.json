@@ -17,19 +17,18 @@
   },
   "dependencies": {
     "@open-iframe-resizer/react": "^1.6.0",
-    "@privy-io/react-auth": "^2.13.2",
+    "@privy-io/react-auth": "2.13.2",
     "debug": "^4.4.1",
     "lucide-react": "^0.511.0",
     "react": "^19",
     "react-dom": "^19",
-    "vite-plugin-jspm": "^0.6.1",
-    "zustand": "^5.0.4"
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "@artifact/client": "npm:@jsr/artifact__client@^0.0.60",
+    "@artifact/client": "jsr:@jsr/artifact__client@^0.0.64",
     "@eslint/js": "^9.27.0",
     "@tailwindcss/postcss": "^4.1.7",
-    "@types/react": "^19.1.4",
+    "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
     "@vitejs/plugin-react": "^4.4.1",
     "autoprefixer": "^10.4.21",
@@ -38,7 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.1.0",
     "jsr": "^0.13.4",
-    "knip": "^5.57.0",
+    "knip": "^5.57.1",
     "postcss": "^8.5.3",
     "prettier": "3.5.3",
     "tailwindcss": "^4.1.7",
