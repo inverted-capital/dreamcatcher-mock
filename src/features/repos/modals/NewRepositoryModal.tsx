@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { X, Loader } from 'lucide-react'
 import { useRepoStore } from '../state'
-import { useArtifact } from '@artifact/client'
+import { useArtifact } from '@artifact/client/hooks'
 
 interface NewRepositoryModalProps {
   onClose: () => void

@@ -2,7 +2,8 @@ import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './app/App'
 import './index.css'
-import { ArtifactBase, useIsArtifactReady } from '@artifact/client'
+import { ArtifactWeb } from '@artifact/client/react'
+import { useIsArtifactReady } from '@artifact/client/hooks'
 import { type Artifact } from '@artifact/client/api'
 import Debug from 'debug'
 import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
@@ -72,7 +73,7 @@ export function AuthenticatedApp() {
   }
 
   return (
-    <ArtifactBase
+    <ArtifactWeb
       did={user.id}
       server={url}
       secureToken={identityToken}
@@ -80,7 +81,7 @@ export function AuthenticatedApp() {
       global
     >
       <LoadingArtifact />
-    </ArtifactBase>
+    </ArtifactWeb>
   )
 }
 

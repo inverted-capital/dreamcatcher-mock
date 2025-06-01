@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ChevronDown, ChevronRight, FolderGit2, Home, Link } from 'lucide-react'
-import { useTree, ArtifactScope, useScope } from '@artifact/client'
+import { useTree, useScope } from '@artifact/client/hooks'
+import { ArtifactSyncer } from '@artifact/client/react'
 import { isRepoScope, RepoScope } from '@artifact/client/api'
 import { useRepoStore } from '../state'
 
@@ -18,7 +19,7 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
   const children = useTree() // children of *this* scope
   const { currentRepoId, selectRepository } = useRepoStore()
 
-  const isSelected = currentRepoId === scope.repo.publicKey
+  const isSelected = currentRepoId === scope.repo
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -29,7 +30,7 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
 
   const handleSelect = (e: React.MouseEvent) => {
     e.stopPropagation()
-    selectRepository(scope.repo.publicKey)
+    selectRepository(scope.repo)
   }
 
   return (
@@ -55,7 +56,7 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
           <div className="mr-2 text-gray-500">
             {home ? <Home size={16} /> : <FolderGit2 size={16} />}
           </div>
-          <div className="truncate font-medium text-sm">{scope.repo.name}</div>
+          <div className="truncate font-medium text-sm">{scope.repo}</div>
           <Link size={14} className="ml-2 text-purple-500" />
         </div>
       </div>
@@ -65,9 +66,9 @@ const RepositoryNode: React.FC<{ scope: RepoScope; home?: boolean }> = ({
           className={`pl-4 border-l border-gray-200 ml-2 ${isOpen ? '' : 'hidden'}`}
         >
           {children.map((child) => (
-            <ArtifactScope key={child.repo.publicKey} {...child}>
+            <ArtifactSyncer key={child.repo} {...child}>
               <RepositoryNode scope={child} />
-            </ArtifactScope>
+            </ArtifactSyncer>
           ))}
         </div>
       )}
