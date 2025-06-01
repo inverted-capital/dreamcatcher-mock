@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import App from './app/App'
 import './index.css'
 import { ArtifactWeb } from '@artifact/client/react'
-import { useIsArtifactReady } from '@artifact/client/hooks'
 import { type Artifact } from '@artifact/client/api'
 import Debug from 'debug'
 import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
@@ -79,18 +78,15 @@ export function AuthenticatedApp() {
       secureToken={identityToken}
       onError={onError}
       global
+      placeholder={<LoadingArtifact />}
     >
-      <LoadingArtifact />
+      <App />
     </ArtifactWeb>
   )
 }
 
 export function LoadingArtifact() {
-  const ready = useIsArtifactReady()
-  if (!ready) {
-    return <div>Loading Artifact...</div>
-  }
-  return <App />
+  return <div>Loading Artifact...</div>
 }
 
 export function Boot() {
