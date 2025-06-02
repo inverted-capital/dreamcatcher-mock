@@ -15,7 +15,6 @@ const AccountView: React.FC = () => {
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}
       title="Account Panel"
-      scrolling="no"
       className="w-full h-[calc(100vh-48px)]"
     />
   )
