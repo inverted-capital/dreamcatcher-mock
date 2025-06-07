@@ -1,11 +1,11 @@
 import React from 'react'
-import { ArtifactFrameHolder } from '@artifact/client/react'
+import { ArtifactHolder } from '@artifact/client/react'
 import { useScope } from '@artifact/client/hooks'
 
 const AccountView: React.FC = () => {
   const scope = useScope()
   return (
-    <ArtifactFrameHolder
+    <ArtifactHolder
       src="https://inverted-capital.github.io/widget-account-panel/"
       target={scope}
       diffs={[]}
