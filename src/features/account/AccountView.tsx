@@ -6,7 +6,7 @@ const AccountView: React.FC = () => {
   const scope = useScope()
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/widget-account-panel/"
+      src="https://inverted-capital.github.io/frame-account-panel/"
       target={scope}
       diffs={[]}
       access={[]}
