@@ -3,7 +3,6 @@ import { Send, Paperclip, Mic } from 'lucide-react'
 import { View } from '@/shared/types'
 import { useChatStore } from '../state'
 import { useRepoStore } from '@/features/repos/state'
-import { useFilesStore } from '@/features/files/state'
 import { useNavigationStore } from '@/features/navigation/state'
 
 const ChatInput: React.FC = () => {
@@ -16,12 +15,9 @@ const ChatInput: React.FC = () => {
   const { currentRepoId, currentBranch, getRepositoryById, isHomeRepository } =
     useRepoStore()
 
-  const { currentFileId, getCurrentFile } = useFilesStore()
-
   const currentView = useNavigationStore((state) => state.currentView)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const currentFile = getCurrentFile()
   const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null
 
   // Auto-resize the textarea based on content
@@ -46,9 +42,6 @@ const ChatInput: React.FC = () => {
       }
       if (currentBranch) {
         contextParts.push({ type: 'branch', value: currentBranch })
-      }
-      if (currentFile) {
-        contextParts.push({ type: 'file', value: currentFile.name })
       }
 
       // Add user message
@@ -88,7 +81,6 @@ const ChatInput: React.FC = () => {
 
   // Helper to get the current view
   const getCurrentView = (): View => {
-    if (currentFileId) return 'files'
     if (currentRepoId) return 'repos'
     return currentView
   }

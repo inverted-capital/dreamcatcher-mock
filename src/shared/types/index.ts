@@ -75,16 +75,6 @@ export interface Customer {
   status: 'active' | 'inactive' | 'pending'
 }
 
-export interface FileItem {
-  id: string
-  name: string
-  type: string
-  size: number
-  modified: string
-  path: string
-  isFolder?: boolean
-  parentId?: string
-}
 
 export interface Repository {
   id: string

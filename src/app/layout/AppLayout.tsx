@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Sidebar from './Sidebar'
 import ChatContainer from '@/features/chat/ui/ChatContainer'
-import { Home, FileText, Code, GitBranch } from 'lucide-react'
+import { Home, Code, GitBranch } from 'lucide-react'
 import { useRepoStore } from '@/features/repos/state'
-import { useFilesStore } from '@/features/files/state'
 import { useNavigationStore } from '@/features/navigation/state'
 import { useChatStore } from '@/features/chat/state'
 
@@ -19,7 +18,6 @@ const AppLayout: React.FC = () => {
     selectHomeRepository
   } = useRepoStore()
 
-  const { currentFileId, selectFile, getCurrentFile } = useFilesStore()
 
   const currentView = useNavigationStore((state) => state.currentView)
   const navigateTo = useChatStore((state) => state.navigateTo)
@@ -27,13 +25,11 @@ const AppLayout: React.FC = () => {
   const [showBranchDropdown, setShowBranchDropdown] = useState(false)
   const branchDropdownRef = useRef<HTMLDivElement>(null)
 
-  const currentFile = getCurrentFile()
   const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null
 
   // Keep track of previous state values to detect changes
   const prevRepoIdRef = useRef<string | null>(currentRepoId)
   const prevBranchRef = useRef<string>(currentBranch)
-  const prevFileIdRef = useRef<string | null>(currentFileId)
   const prevViewRef = useRef<string>(currentView)
 
   // Handle click outside to close dropdown
@@ -61,21 +57,15 @@ const AppLayout: React.FC = () => {
   // Close dropdown when changing views or selections
   useEffect(() => {
     setShowBranchDropdown(false)
-  }, [currentView, currentRepoId, currentFileId])
+  }, [currentView, currentRepoId])
 
   // Create navigation marker when state changes (repo, branch, file, or view)
   useEffect(() => {
     const hasRepoChanged = currentRepoId !== prevRepoIdRef.current
     const hasBranchChanged = currentBranch !== prevBranchRef.current
-    const hasFileChanged = currentFileId !== prevFileIdRef.current
     const hasViewChanged = currentView !== prevViewRef.current
 
-    if (
-      hasRepoChanged ||
-      hasBranchChanged ||
-      hasFileChanged ||
-      hasViewChanged
-    ) {
+    if (hasRepoChanged || hasBranchChanged || hasViewChanged) {
       // Create context parts for navigation
       const contextParts = []
 
@@ -90,9 +80,6 @@ const AppLayout: React.FC = () => {
         contextParts.push({ type: 'branch', value: currentBranch })
       }
 
-      if (currentFile) {
-        contextParts.push({ type: 'file', value: currentFile.name })
-      }
 
       // Only create navigation marker if we have a view and at least one context item
       if (currentView && contextParts.length > 0) {
@@ -144,15 +131,12 @@ const AppLayout: React.FC = () => {
     // Update refs with current values
     prevRepoIdRef.current = currentRepoId
     prevBranchRef.current = currentBranch
-    prevFileIdRef.current = currentFileId
     prevViewRef.current = currentView
   }, [
     currentRepoId,
     currentBranch,
-    currentFileId,
     currentView,
     currentRepo,
-    currentFile,
     isHomeRepository,
     navigateTo
   ])
@@ -182,26 +166,13 @@ const AppLayout: React.FC = () => {
     setShowBranchDropdown(false)
   }
 
-  const handleFileClick = () => {
-    if (currentFileId) {
-      // Toggle file selection if clicking the same file
-      selectFile(null)
-    } else if (currentFile) {
-      navigateTo({
-        title: 'Files',
-        icon: 'Folder',
-        view: 'files'
-      })
-    }
-    setShowBranchDropdown(false)
-  }
 
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Status bar showing current selection context */}
-        {(currentRepoId || currentBranch || currentFileId) && (
+        {(currentRepoId || currentBranch) && (
           <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-sm flex items-center">
             <div className="flex items-center">
               <div
@@ -260,18 +231,6 @@ const AppLayout: React.FC = () => {
                 </>
               )}
 
-              {currentFile && (
-                <>
-                  <span className="mx-1 text-gray-400">/</span>
-                  <div
-                    onClick={handleFileClick}
-                    className="text-green-600 font-medium flex items-center hover:text-green-700 cursor-pointer"
-                  >
-                    <FileText size={14} className="mr-1" />
-                    <span className="hover:underline">{currentFile.name}</span>
-                  </div>
-                </>
-              )}
             </div>
           </div>
         )}
