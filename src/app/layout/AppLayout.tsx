@@ -18,7 +18,6 @@ const AppLayout: React.FC = () => {
     selectHomeRepository
   } = useRepoStore()
 
-
   const currentView = useNavigationStore((state) => state.currentView)
   const navigateTo = useChatStore((state) => state.navigateTo)
 
@@ -79,7 +78,6 @@ const AppLayout: React.FC = () => {
       if (currentBranch) {
         contextParts.push({ type: 'branch', value: currentBranch })
       }
-
 
       // Only create navigation marker if we have a view and at least one context item
       if (currentView && contextParts.length > 0) {
@@ -166,7 +164,6 @@ const AppLayout: React.FC = () => {
     setShowBranchDropdown(false)
   }
 
-
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar />
@@ -230,7 +227,6 @@ const AppLayout: React.FC = () => {
                   </div>
                 </>
               )}
-
             </div>
           </div>
         )}

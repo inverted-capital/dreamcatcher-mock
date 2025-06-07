@@ -75,7 +75,6 @@ export interface Customer {
   status: 'active' | 'inactive' | 'pending'
 }
 
-
 export interface Repository {
   id: string
   name: string
