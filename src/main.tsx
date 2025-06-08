@@ -6,7 +6,7 @@ import { ArtifactWeb } from '@artifact/client/react'
 import { type Artifact } from '@artifact/client/api'
 import Debug from 'debug'
 import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
-Debug.enable('artifact:client:*')
+Debug.enable('artifact:*')
 
 const url = 'https://web-client-shy-dawn-4057.fly.dev'
 
