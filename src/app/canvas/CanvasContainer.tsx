@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigationStore } from '@/features/navigation/state'
+import type { View } from '@/shared/types'
 import ChatsView from '@/features/chat/ui/ChatsView'
 import FilesView from '@/features/files/ui/FilesView'
 import ReposView from '@/features/repos/ui/ReposView'
@@ -19,8 +20,16 @@ import ProcessesView from '@/features/processes/ui/ProcessesView'
 const CanvasContainer: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
 
-  const renderView = () => {
-    switch (currentView) {
+  const [visitedViews, setVisitedViews] = useState<View[]>([currentView])
+
+  useEffect(() => {
+    setVisitedViews((prev) =>
+      prev.includes(currentView) ? prev : [...prev, currentView]
+    )
+  }, [currentView])
+
+  const renderView = (view: View) => {
+    switch (view) {
       case 'chats':
         return <ChatsView />
       case 'files':
@@ -55,7 +64,15 @@ const CanvasContainer: React.FC = () => {
     }
   }
 
-  return <div className="h-full overflow-y-auto p-6">{renderView()}</div>
+  return (
+    <div className="h-full overflow-y-auto p-6">
+      {visitedViews.map((view) => (
+        <div key={view} className={view === currentView ? 'block' : 'hidden'}>
+          {renderView(view)}
+        </div>
+      ))}
+    </div>
+  )
 }
 
 export default CanvasContainer
