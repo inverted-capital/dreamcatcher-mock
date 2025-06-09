@@ -1,24 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Send, Paperclip, Mic } from 'lucide-react'
-import { View } from '@/shared/types'
 import { useChatStore } from '../state'
-import { useRepoStore } from '@/features/repos/state'
-import { useNavigationStore } from '@/features/navigation/state'
 
 const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('')
   const [isRecording, setIsRecording] = useState(false)
 
   // Get state and actions from Zustand stores
-  const { addMessage, navigateTo } = useChatStore()
-
-  const { currentRepoId, currentBranch, getRepositoryById, isHomeRepository } =
-    useRepoStore()
-
-  const currentView = useNavigationStore((state) => state.currentView)
+  const { addMessage } = useChatStore()
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  const currentRepo = currentRepoId ? getRepositoryById(currentRepoId) : null
 
   // Auto-resize the textarea based on content
   useEffect(() => {
@@ -32,36 +23,11 @@ const ChatInput: React.FC = () => {
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      // Add context to navigation item instead of message content
-      const contextParts = []
-      if (currentRepoId && currentRepo) {
-        const repoName = isHomeRepository(currentRepoId)
-          ? 'Home'
-          : currentRepo.name
-        contextParts.push({ type: 'repo', value: repoName })
-      }
-      if (currentBranch) {
-        contextParts.push({ type: 'branch', value: currentBranch })
-      }
-
-      // Add user message
       addMessage({
         content: message,
         role: 'user',
         type: 'text'
       })
-
-      // If we have context, add a navigation marker with the context
-      if (contextParts.length > 0) {
-        navigateTo({
-          title: getCurrentView() || 'Chat',
-          icon: getCurrentView()
-            ? getIconForView(getCurrentView())
-            : 'MessageSquare',
-          view: getCurrentView() || 'chats',
-          context: contextParts
-        })
-      }
 
       setMessage('')
 
@@ -76,26 +42,6 @@ const ChatInput: React.FC = () => {
           type: 'text'
         })
       }, 1000)
-    }
-  }
-
-  // Helper to get the current view
-  const getCurrentView = (): View => {
-    if (currentRepoId) return 'repos'
-    return currentView
-  }
-
-  // Helper to get icon name for view
-  const getIconForView = (view: View): string => {
-    switch (view) {
-      case 'files':
-        return 'Folder'
-      case 'repos':
-        return 'GitBranch'
-      case 'chats':
-        return 'MessageSquare'
-      default:
-        return 'MessageSquare'
     }
   }
 
