@@ -10,7 +10,6 @@ import {
 import { NavigationItem } from '@/shared/types'
 import { useChatStore } from '../state'
 import { useNavigationStore } from '@/features/navigation/state'
-import { useRepoStore } from '@/features/repos/state'
 
 interface NavigationMarkerProps {
   item: NavigationItem
@@ -22,9 +21,6 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
 
   const currentView = useNavigationStore((state) => state.currentView)
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
-
-  const { selectRepository, switchBranch, selectHomeRepository } =
-    useRepoStore()
 
   const isActive = currentView === item.view
 
@@ -85,29 +81,9 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
   }
 
   const handleContextItemClick = (part: { type: string; value: string }) => {
-    switch (part.type) {
-      case 'home':
-        selectHomeRepository()
-        break
-      case 'repo': {
-        // Find the repo by name in a real app
-        const repoId = `repo-${part.value.replace('Repository ', '')}`
-        selectRepository(repoId)
-        break
-      }
-      case 'branch':
-        switchBranch(part.value)
-        break
-      case 'file':
-        // In a real app, you'd need to find the file ID based on name
-        // For now, just navigate to the files view
-        setCurrentView('files')
-        navigateTo({
-          title: 'Files',
-          icon: 'Folder',
-          view: 'files'
-        })
-        break
+    if (part.type === 'file') {
+      setCurrentView('files')
+      navigateTo({ title: 'Files', icon: 'Folder', view: 'files' })
     }
   }
 

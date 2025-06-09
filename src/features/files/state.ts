@@ -1,7 +1,44 @@
 import { create } from 'zustand'
-import { FileItem } from '@/shared/types'
-import { mockFilesForRepos } from '@/shared/mock-data/mockFilesForRepos'
-import { useRepoStore } from '@/features/repos/state'
+
+interface FileItem {
+  id: string
+  name: string
+  type: string
+  size: number
+  modified: string
+  path: string
+  isFolder?: boolean
+  parentId?: string
+}
+
+const mockFiles: FileItem[] = [
+  {
+    id: 'file-1',
+    name: 'README.md',
+    type: 'md',
+    size: 1200,
+    modified: '2023-06-10',
+    path: '/'
+  },
+  {
+    id: 'folder-1',
+    name: 'src',
+    type: 'folder',
+    size: 0,
+    modified: '2023-06-10',
+    path: '/',
+    isFolder: true
+  },
+  {
+    id: 'file-2',
+    name: 'index.ts',
+    type: 'ts',
+    size: 600,
+    modified: '2023-06-10',
+    path: '/src/',
+    parentId: 'folder-1'
+  }
+]
 
 interface FilesState {
   currentFileId: string | null
@@ -78,29 +115,15 @@ export const useFilesStore = create<FilesState & FilesActions>()(
     },
 
     getRepositoryFiles: () => {
-      const currentRepoId = useRepoStore.getState().currentRepoId
-
-      if (!currentRepoId) return []
-
-      // Get files for the current repository
-      const repoFiles =
-        currentRepoId === 'home-repo'
-          ? mockFilesForRepos['home-repo'] || [] // Home repo files
-          : mockFilesForRepos[currentRepoId] || []
-
-      // Filter files by branch if needed
-      // In a real app, this would query different files based on the branch
-      return repoFiles
+      return mockFiles
     },
 
     getCurrentFile: () => {
       const { currentFileId } = get()
-      const currentRepoId = useRepoStore.getState().currentRepoId
 
-      if (!currentFileId || !currentRepoId) return null
+      if (!currentFileId) return null
 
-      const repoFiles = mockFilesForRepos[currentRepoId] || []
-      return repoFiles.find((file) => file.id === currentFileId) || null
+      return mockFiles.find((file) => file.id === currentFileId) || null
     },
 
     getCurrentFolderContents: () => {

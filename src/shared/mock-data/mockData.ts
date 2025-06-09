@@ -1,4 +1,4 @@
-import { Customer, Repository, WeatherData } from '@/shared/types'
+import { Customer, WeatherData } from '@/shared/types'
 
 export const mockCustomers: Customer[] = [
   {
@@ -35,51 +35,6 @@ export const mockCustomers: Customer[] = [
     email: 'carol.williams@example.com',
     lastContact: '2023-06-05',
     status: 'active'
-  }
-]
-
-export const mockRepositories: Repository[] = [
-  {
-    id: 'repo-1',
-    name: 'frontend-app',
-    description: 'Main frontend application',
-    stars: 24,
-    lastUpdated: '2023-06-12',
-    language: 'TypeScript'
-  },
-  {
-    id: 'repo-2',
-    name: 'api-server',
-    description: 'Backend API server',
-    stars: 16,
-    lastUpdated: '2023-06-05',
-    language: 'Python'
-  },
-  {
-    id: 'repo-3',
-    name: 'documentation',
-    description: 'Project documentation',
-    stars: 8,
-    lastUpdated: '2023-05-22',
-    language: 'Markdown',
-    isLinked: true
-  },
-  {
-    id: 'repo-4',
-    name: 'design-system',
-    description: 'UI component library',
-    stars: 32,
-    lastUpdated: '2023-06-10',
-    language: 'TypeScript'
-  },
-  {
-    id: 'repo-5',
-    name: 'mobile-app',
-    description: 'Native mobile application',
-    stars: 19,
-    lastUpdated: '2023-06-08',
-    language: 'Swift',
-    isLinked: true
   }
 ]
 
