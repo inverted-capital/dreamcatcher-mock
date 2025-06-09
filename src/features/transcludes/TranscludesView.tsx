@@ -2,11 +2,11 @@ import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import { useScope } from '@artifact/client/hooks'
 
-const HelpView: React.FC = () => {
+const TranscludesView: React.FC = () => {
   const scope = useScope()
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/frame-help-panel/"
+      src="https://inverted-capital.github.io/frame-transcludes-panel/"
       target={scope}
       diffs={[]}
       access={[]}
@@ -14,10 +14,10 @@ const HelpView: React.FC = () => {
       onMessage={() => {}}
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}
-      title="Help Panel"
+      title="Transcludes Panel"
       className="w-full h-[calc(100vh-48px)]"
     />
   )
 }
 
-export default HelpView
+export default TranscludesView

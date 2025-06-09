@@ -32,7 +32,7 @@ const Sidebar: React.FC = () => {
   const sidebarItems: SidebarItem[] = [
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
-    { icon: 'Clipboard', label: 'Context', view: 'context' },
+    { icon: 'Clipboard', label: 'Transcludes', view: 'transcludes' },
     { icon: 'Mail', label: 'Agentic Messages', view: 'messages' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
     { icon: 'GitBranch', label: 'Branches', view: 'branches' },
@@ -98,10 +98,10 @@ const Sidebar: React.FC = () => {
     return currentView === item.view && !item.action
   }
 
-  // Group 1: User-specific items (Home, Chats, Context, Messages)
+  // Group 1: User-specific items (Home, Chats, Transcludes, Messages)
   const userGroup = sidebarItems.slice(0, 4)
-  // Group 2: Context/scope selection items (Repos, Branches, Files, Napps, Processes, Settings)
-  const contextSelectorGroup = sidebarItems.slice(4, 11)
+  // Group 2: Transclude/scope selection items (Repos, Branches, Files, Napps, Processes, Settings)
+  const transcludeSelectorGroup = sidebarItems.slice(4, 11)
   // Group 3: Account and help items
   const accountGroup = sidebarItems.slice(11)
 
@@ -133,13 +133,13 @@ const Sidebar: React.FC = () => {
         {/* Visual separator */}
         <div className="w-8 border-t border-gray-700 mx-auto mb-6"></div>
 
-        {/* Context selector group with enhanced background indicator */}
+        {/* Transclude selector group with enhanced background indicator */}
         <div className="relative mb-6">
-          {/* Enhanced background indicator for the context selector group */}
+          {/* Enhanced background indicator for the transclude selector group */}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-12 h-full rounded-xl bg-gray-700 border border-gray-600 -z-10"></div>
 
           <div className="space-y-3 relative z-0 py-3">
-            {contextSelectorGroup.map((item) => (
+            {transcludeSelectorGroup.map((item) => (
               <div key={item.label} className="relative group">
                 <button
                   className={`flex flex-col items-center justify-center w-10 h-10 rounded-lg transition-colors ${
@@ -160,7 +160,7 @@ const Sidebar: React.FC = () => {
           </div>
         </div>
 
-        {/* Second visual separator after context group */}
+        {/* Second visual separator after transclude group */}
         <div className="w-8 border-t border-gray-700 mx-auto mb-6"></div>
       </div>
 
