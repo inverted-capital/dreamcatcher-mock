@@ -13,7 +13,7 @@ import InnovationsView from '@/features/innovations/InnovationsView'
 import SettingsView from '@/features/settings/SettingsView'
 import AccountView from '@/features/account/AccountView'
 import NappsView from '@/features/napps/ui/NappsView'
-import ContextView from '@/features/context/ContextView'
+import TranscludesView from '@/features/transcludes/TranscludesView'
 import MessagesView from '@/features/messages/MessagesView'
 import ProcessesView from '@/features/processes/ui/ProcessesView'
 
@@ -40,8 +40,8 @@ const CanvasContainer: React.FC = () => {
         return <BranchesView />
       case 'napps':
         return <NappsView />
-      case 'context':
-        return <ContextView />
+      case 'transcludes':
+        return <TranscludesView />
       case 'messages':
         return <MessagesView />
       case 'processes':

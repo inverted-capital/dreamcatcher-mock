@@ -1,14 +1,22 @@
 import React from 'react'
-import { Settings } from 'lucide-react'
+import { ArtifactHolder } from '@artifact/client/react'
+import { useScope } from '@artifact/client/hooks'
+
 const SettingsView: React.FC = () => {
+  const scope = useScope()
   return (
-    <div className="animate-fadeIn p-4">
-      <h1 className="text-2xl font-bold mb-6 flex items-center">
-        <Settings className="mr-2" size={24} />
-        Repository Settings
-      </h1>
-      <p>Settings management is not available.</p>
-    </div>
+    <ArtifactHolder
+      src="https://inverted-capital.github.io/frame-settings-panel/"
+      target={scope}
+      diffs={[]}
+      access={[]}
+      onSelection={() => {}}
+      onMessage={() => {}}
+      onAccessRequest={() => {}}
+      onNavigateTo={() => {}}
+      title="Settings Panel"
+      className="w-full h-[calc(100vh-48px)]"
+    />
   )
 }
 

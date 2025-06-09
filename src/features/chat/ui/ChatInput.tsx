@@ -37,7 +37,7 @@ const ChatInput: React.FC = () => {
       // Simulate AI response with a fixed message after a short delay
       setTimeout(() => {
         addMessage({
-          content: `I've processed your request about "${userMessageContent.substring(0, 20)}${userMessageContent.length > 20 ? '...' : ''}" within the current context. Here's what I found:`,
+          content: `I've processed your request about "${userMessageContent.substring(0, 20)}${userMessageContent.length > 20 ? '...' : ''}" within the current transclude. Here's what I found:`,
           role: 'assistant',
           type: 'text'
         })

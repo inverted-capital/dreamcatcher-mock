@@ -11,8 +11,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   // Get actions from Zustand stores
 
-  // Extract context information from the message if it exists
-  const hasContext = isUser && message.content.startsWith('Context:')
+  // Extract transclude information from the message if it exists
+  const hasContext = isUser && message.content.startsWith('Transclude:')
   let messageContent = message.content
 
   if (hasContext) {

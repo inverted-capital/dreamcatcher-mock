@@ -13,7 +13,7 @@ export type View =
   | 'settings'
   | 'account'
   | 'napps'
-  | 'context'
+  | 'transcludes'
   | 'messages'
   | 'processes'
 
@@ -43,7 +43,7 @@ export interface AppSnapshot {
   description?: string
 }
 
-interface ContextPart {
+interface TranscludePart {
   type: string
   value: string
 }
@@ -57,7 +57,7 @@ export interface NavigationItem {
   collapsed?: boolean
   parentId?: string
   children: NavigationItem[]
-  context?: ContextPart[] // Context information
+  transcludes?: TranscludePart[] // Transclude information
 }
 
 export interface SidebarItem {

@@ -24,9 +24,9 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
 
   const isActive = currentView === item.view
 
-  // Context parts from messages
-  const contextParts = item.context
-    ? item.context.map((context) => ({
+  // Transclude parts from messages
+  const transcludeParts = item.transcludes
+    ? item.transcludes.map((context) => ({
         type: context.type,
         value: context.value
       }))
@@ -80,7 +80,7 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
     }
   }
 
-  const handleContextItemClick = (part: { type: string; value: string }) => {
+  const handleTranscludeItemClick = (part: { type: string; value: string }) => {
     if (part.type === 'file') {
       setCurrentView('files')
       navigateTo({ title: 'Files', icon: 'Folder', view: 'files' })
@@ -112,15 +112,15 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
           <div className="text-sm font-medium text-gray-700">{item.title}</div>
         </div>
 
-        {/* Context decorators on the right */}
-        {contextParts.length > 0 && (
+        {/* Transclude decorators on the right */}
+        {transcludeParts.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 ml-auto">
-            {contextParts.map((part, idx) => (
+            {transcludeParts.map((part, idx) => (
               <button
                 key={idx}
                 onClick={(e) => {
                   e.stopPropagation()
-                  handleContextItemClick(part)
+                  handleTranscludeItemClick(part)
                 }}
                 className="inline-flex items-center text-xs px-2 py-0.5 bg-gray-100 rounded hover:bg-gray-200"
               >

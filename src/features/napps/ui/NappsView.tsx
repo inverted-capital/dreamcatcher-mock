@@ -1,15 +1,22 @@
 import React from 'react'
-import { Package } from 'lucide-react'
+import { ArtifactHolder } from '@artifact/client/react'
+import { useScope } from '@artifact/client/hooks'
 
 const NappsView: React.FC = () => {
+  const scope = useScope()
   return (
-    <div className="animate-fadeIn p-4">
-      <h1 className="text-2xl font-bold mb-6 flex items-center">
-        <Package className="mr-2" size={24} />
-        Natural Applications
-      </h1>
-      <p>Napp management is not available.</p>
-    </div>
+    <ArtifactHolder
+      src="https://inverted-capital.github.io/frame-napps-panel/"
+      target={scope}
+      diffs={[]}
+      access={[]}
+      onSelection={() => {}}
+      onMessage={() => {}}
+      onAccessRequest={() => {}}
+      onNavigateTo={() => {}}
+      title="Napps Panel"
+      className="w-full h-[calc(100vh-48px)]"
+    />
   )
 }
 
