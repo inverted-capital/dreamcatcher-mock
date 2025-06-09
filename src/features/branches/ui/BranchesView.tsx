@@ -1,15 +1,22 @@
 import React from 'react'
-import { Github as Git } from 'lucide-react'
+import { ArtifactHolder } from '@artifact/client/react'
+import { useScope } from '@artifact/client/hooks'
 
 const BranchesView: React.FC = () => {
+  const scope = useScope()
   return (
-    <div className="animate-fadeIn p-4">
-      <h1 className="text-2xl font-bold mb-6 flex items-center">
-        <Git className="mr-2" size={24} />
-        Git History
-      </h1>
-      <p>Branch information is not available.</p>
-    </div>
+    <ArtifactHolder
+      src="https://inverted-capital.github.io/frame-branches-panel/"
+      target={scope}
+      diffs={[]}
+      access={[]}
+      onSelection={() => {}}
+      onMessage={() => {}}
+      onAccessRequest={() => {}}
+      onNavigateTo={() => {}}
+      title="Branches Panel"
+      className="w-full h-[calc(100vh-48px)]"
+    />
   )
 }
 
