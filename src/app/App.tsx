@@ -1,4 +1,4 @@
-import AppLayout from './layout/AppLayout'
+import AppLayout from './AppLayout'
 import useHashRouter from './useHashRouter'
 
 function App() {
