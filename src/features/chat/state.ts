@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { ChatMessage, Chat, NavigationItem } from '@/shared/types'
-import { mockMessages } from '@/shared/mock-data/mockMessages'
-import { mockChats } from '@/shared/mock-data/mockChats'
+import { mockMessages } from '@/shared/mockMessages'
+import { mockChats } from '@/shared/mockChats'
 
 interface ChatState {
   messages: ChatMessage[]
