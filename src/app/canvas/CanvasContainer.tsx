@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigationStore } from '@/features/navigation/state'
 import type { View } from '@/shared/types'
-import ChatsView from '@/features/chat/ui/ChatsView'
+import ChatsView from '@/features/chat/ChatsView'
 import FilesView from '@/features/files/ui/FilesView'
 import ReposView from '@/features/repos/ui/ReposView'
 import BranchesView from '@/features/branches/ui/BranchesView'
