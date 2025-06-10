@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Send, Paperclip, Mic } from 'lucide-react'
-import { useChatStore } from '../state'
+import { useChatStore } from './state'
 
 const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('')
