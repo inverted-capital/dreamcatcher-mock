@@ -1,7 +1,7 @@
 import React from 'react'
 import ChatHistory from './ChatHistory'
 import ChatInput from './ChatInput'
-import CanvasContainer from '@/app/canvas/CanvasContainer'
+import CanvasContainer from '@/app/CanvasContainer'
 
 const ChatContainer: React.FC = () => {
   // The chat window should always be visible per requirement
