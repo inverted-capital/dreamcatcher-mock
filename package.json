@@ -20,7 +20,7 @@
     "@open-iframe-resizer/react": "^1.6.0",
     "@privy-io/react-auth": "2.14.1",
     "debug": "^4.4.1",
-    "lucide-react": "^0.513.0",
+    "lucide-react": "^0.514.0",
     "react": "^19",
     "react-dom": "^19",
     "zustand": "^5.0.5"
@@ -30,7 +30,7 @@
     "@tailwindcss/postcss": "^4.1.8",
     "@types/react": "^19.1.7",
     "@types/react-dom": "^19.1.6",
-    "@vitejs/plugin-react": "^4.5.1",
+    "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.28.0",
     "eslint-plugin-react-hooks": "^5.2.0",
