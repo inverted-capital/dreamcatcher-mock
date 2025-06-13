@@ -1,9 +1,11 @@
 import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import { useScope } from '@artifact/client/hooks'
+import { useTargetScopeStore } from '@/shared/targetScope'
 
 const CustomersView: React.FC = () => {
-  const scope = useScope()
+  const artifactScope = useScope()
+  const scope = useTargetScopeStore((s) => s.scope) ?? artifactScope
   return (
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-customers-panel/"
