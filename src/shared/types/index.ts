@@ -1,7 +1,9 @@
 type Role = 'user' | 'assistant' | 'system'
 type MessageType = 'text' | 'navigation' | 'file' | 'code'
 export type View =
+  | 'agents'
   | 'chats'
+  | 'events'
   | 'files'
   | 'repos'
   | 'branches'
