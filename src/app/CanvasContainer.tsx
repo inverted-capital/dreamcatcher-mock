@@ -16,6 +16,8 @@ import NappsView from '@/features/napps/NappsView'
 import TranscludesView from '@/features/transcludes/TranscludesView'
 import MessagesView from '@/features/messages/MessagesView'
 import ProcessesView from '@/features/processes/ProcessesView'
+import AgentsView from '@/features/agents/AgentsView'
+import EventsView from '@/features/events/EventsView'
 
 const CanvasContainer: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
@@ -32,6 +34,10 @@ const CanvasContainer: React.FC = () => {
     switch (view) {
       case 'chats':
         return <ChatsView />
+      case 'agents':
+        return <AgentsView />
+      case 'events':
+        return <EventsView />
       case 'files':
         return <FilesView />
       case 'repos':
