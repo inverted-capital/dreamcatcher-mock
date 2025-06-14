@@ -3,6 +3,7 @@ type MessageType = 'text' | 'navigation' | 'file' | 'code'
 export type View =
   | 'agents'
   | 'chats'
+  | 'home-events'
   | 'events'
   | 'files'
   | 'repos'

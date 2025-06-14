@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import ChatsView from '@/frames/ChatsView'
@@ -21,6 +21,7 @@ import EventsView from '@/frames/EventsView'
 const allViews: View[] = [
   'agents',
   'chats',
+  'home-events',
   'events',
   'files',
   'repos',
@@ -51,6 +52,8 @@ const CanvasContainer: React.FC = () => {
         return <ChatsView />
       case 'agents':
         return <AgentsView />
+      case 'home-events':
+        return <EventsView />
       case 'events':
         return <EventsView />
       case 'files':
