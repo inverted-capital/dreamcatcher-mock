@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useBaseArtifact } from '@artifact/client/hooks'
 import type { Scope } from '@artifact/client/api'
-
-export const HomeScopeContext = createContext<Scope | null>(null)
+import HomeScopeContext from './homeScopeContext'
 
 export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
@@ -26,10 +25,6 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
     </HomeScopeContext.Provider>
   )
-}
-
-export function useHomeScope(): Scope | null {
-  return useContext(HomeScopeContext)
 }
 
 export default HomeScopeProvider
