@@ -3,17 +3,11 @@ import { createRoot } from 'react-dom/client'
 import App from './app/App'
 import './index.css'
 import { ArtifactWeb } from '@artifact/client/react'
-import { type Artifact } from '@artifact/client/api'
 import Debug from 'debug'
 import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
 Debug.enable('artifact:*')
 
 const url = 'https://web-client-shy-dawn-4057.fly.dev'
-
-declare global {
-  // eslint-disable-next-line no-var
-  var artifact: Artifact | undefined
-}
 
 export function AuthenticatedApp() {
   const { ready, authenticated, user, login } = usePrivy()

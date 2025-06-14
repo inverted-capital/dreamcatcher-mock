@@ -16,7 +16,6 @@ export type View =
   | 'account'
   | 'napps'
   | 'transcludes'
-  | 'messages'
   | 'processes'
 
 export interface ChatMessage {
@@ -54,4 +53,17 @@ export interface Chat {
   lastMessage?: string
   timestamp: string
   messageIds: string[]
+}
+
+interface TranscludePart {
+  type: string
+  value: string
+}
+
+interface Attachment {
+  id: string
+  name: string
+  type: string
+  url: string
+  size?: number
 }

@@ -14,7 +14,6 @@ import SettingsView from '@/frames/SettingsView'
 import AccountView from '@/frames/AccountView'
 import NappsView from '@/frames/NappsView'
 import TranscludesView from '@/frames/TranscludesView'
-import MessagesView from '@/frames/MessagesView'
 import ProcessesView from '@/frames/ProcessesView'
 import AgentsView from '@/frames/AgentsView'
 import EventsView from '@/frames/EventsView'
@@ -48,8 +47,6 @@ const CanvasContainer: React.FC = () => {
         return <NappsView />
       case 'transcludes':
         return <TranscludesView />
-      case 'messages':
-        return <MessagesView />
       case 'processes':
         return <ProcessesView />
       case 'help':

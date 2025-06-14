@@ -6,7 +6,7 @@ on:
       - main
   workflow_run:
     # without this, the deploy workflow will not run after the auto-merge workflow completes
-    workflows: ["Auto-merge"]
+    workflows: ['Auto-merge']
     types: [completed]
   workflow_dispatch:
 

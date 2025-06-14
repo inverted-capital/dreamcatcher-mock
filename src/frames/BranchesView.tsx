@@ -11,14 +11,10 @@ const BranchesView: React.FC = () => {
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-branches-panel/"
       target={scope}
-      diffs={[]}
-      access={[]}
       onSelection={(sel) => {
         const next = sel.scopes[sel.primary]
         if (next) setScope(next)
       }}
-      onMessage={() => {}}
-      onAccessRequest={() => {}}
       onNavigateTo={() => {}}
       title="Branches Panel"
       className="w-full h-[calc(100vh-48px)]"
