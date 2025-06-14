@@ -1,12 +1,27 @@
 import React from 'react'
+import { ArtifactHolder } from '@artifact/client/react'
+import useHomeScope from '@/shared/useHomeScope'
 
-const AgentsView: React.FC = () => {
+const BranchesView: React.FC = () => {
+  const scope = useHomeScope()
+  if (!scope) return <div>Loading home scope...</div>
+
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-2">Agents</h2>
-      <p>Placeholder for Agents frame.</p>
-    </div>
+    <ArtifactHolder
+      src="https://inverted-capital.github.io/frame-agents-panel/"
+      target={scope}
+      diffs={[]}
+      access={[]}
+      onSelection={(sel) => {
+        console.log(sel)
+      }}
+      onMessage={() => {}}
+      onAccessRequest={() => {}}
+      onNavigateTo={() => {}}
+      title="Agents Panel"
+      className="w-full h-[calc(100vh-48px)]"
+    />
   )
 }
 
-export default AgentsView
+export default BranchesView
