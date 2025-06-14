@@ -1,23 +1,14 @@
 import { useEffect } from 'react'
-import { useBaseArtifact } from '@artifact/client/hooks'
 import { useTargetScopeStore } from './targetScope'
+import useHomeScope from './useHomeScope'
 
 export default function useInitTargetScope() {
-  const artifact = useBaseArtifact()
   const scope = useTargetScopeStore((s) => s.scope)
   const setScope = useTargetScopeStore((s) => s.setScope)
+  const homeScope = useHomeScope()
 
   useEffect(() => {
-    if (scope) return
-    let cancelled = false
-    ;(async () => {
-      const [first] = await artifact.super.ls()
-      if (!cancelled && first) {
-        setScope(first)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [artifact, scope, setScope])
+    if (scope || !homeScope) return
+    setScope(homeScope)
+  }, [scope, setScope, homeScope])
 }
