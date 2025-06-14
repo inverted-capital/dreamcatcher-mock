@@ -22,7 +22,9 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [artifact])
 
   return (
-    <HomeScopeContext.Provider value={scope}>{children}</HomeScopeContext.Provider>
+    <HomeScopeContext.Provider value={scope}>
+      {children}
+    </HomeScopeContext.Provider>
   )
 }
 
