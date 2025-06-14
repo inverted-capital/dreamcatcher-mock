@@ -1,6 +1,5 @@
 import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
-import { useScope } from '@artifact/client/hooks'
 import { useTargetScopeStore } from '@/shared/targetScope'
 import useHomeScope from '@/shared/useHomeScope'
 
@@ -10,12 +9,15 @@ interface EventsViewProps {
 
 const EventsView: React.FC<EventsViewProps> = ({ home }) => {
   const homeScope = useHomeScope()
-  const artifactScope = useScope()
   const targetScope = useTargetScopeStore((s) => s.scope)
 
-  const scope = home ? homeScope : targetScope ?? artifactScope
+  const scope = home ? homeScope : targetScope
 
   if (home && !homeScope) return <div>Loading home scope...</div>
+
+  if (!home && !targetScope) return <div>No target scope</div>
+
+  if (!scope) return <div>No scope</div>
 
   return (
     <ArtifactHolder
