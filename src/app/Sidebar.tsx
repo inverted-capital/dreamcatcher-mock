@@ -10,12 +10,12 @@ import {
   Lightbulb,
   Settings,
   Package,
-  Clipboard,
+  CloudUpload,
   GitBranch,
   Mail,
   Cpu,
-  Bot,
-  Calendar
+  UsersRound,
+  Zap
 } from 'lucide-react'
 import { SidebarItem } from '@/shared/types'
 import { useChatStore } from '@/features/chat/state'
@@ -34,15 +34,15 @@ const Sidebar: React.FC = () => {
   const sidebarItems: SidebarItem[] = [
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
-    { icon: 'Bot', label: 'Agents', view: 'agents' },
-    { icon: 'Clipboard', label: 'Transcludes', view: 'transcludes' },
-    { icon: 'Calendar', label: 'Events', view: 'events' },
+    { icon: 'UsersRound', label: 'Agents', view: 'agents' },
+    { icon: 'CloudUpload', label: 'Transcludes', view: 'transcludes' },
+    { icon: 'Zap', label: 'Events', view: 'events' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
     { icon: 'GitBranch', label: 'Branches', view: 'branches' },
     { icon: 'Folder', label: 'Files', view: 'files' },
     { icon: 'Package', label: 'Napps', view: 'napps' },
     { icon: 'Cpu', label: 'Processes', view: 'processes' },
-    { icon: 'Calendar', label: 'Events', view: 'events' },
+    { icon: 'Zap', label: 'Events', view: 'events' },
     { icon: 'Settings', label: 'Settings', view: 'settings' },
     { icon: 'Lightbulb', label: 'Innovations', view: 'innovations' },
     { icon: 'User', label: 'Account', view: 'account' },
@@ -74,16 +74,16 @@ const Sidebar: React.FC = () => {
         return <HelpCircle size={20} />
       case 'User':
         return <User size={20} />
-      case 'Clipboard':
-        return <Clipboard size={20} />
+      case 'CloudUpload':
+        return <CloudUpload size={20} />
       case 'Mail':
         return <Mail size={20} />
       case 'Cpu':
         return <Cpu size={20} />
-      case 'Bot':
-        return <Bot size={20} />
-      case 'Calendar':
-        return <Calendar size={20} />
+      case 'UsersRound':
+        return <UsersRound size={20} />
+      case 'Zap':
+        return <Zap size={20} />
       default:
         return <MessageSquare size={20} />
     }
