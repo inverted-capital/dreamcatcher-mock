@@ -9,7 +9,7 @@ import {
 } from 'lucide-react'
 import { NavigationItem } from '@/shared/types'
 import { useChatStore } from './chatState'
-import { useNavigationStore } from '@/frames/navigationState'
+import { useNavigationStore } from '@/shared/navigationState'
 
 interface NavigationMarkerProps {
   item: NavigationItem
