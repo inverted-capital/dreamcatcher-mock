@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
     { icon: 'UsersRound', label: 'Agents', view: 'agents' },
     { icon: 'CloudUpload', label: 'Transcludes', view: 'transcludes' },
-    { icon: 'Zap', label: 'Events', view: 'events' },
+    { icon: 'Zap', label: 'Events', view: 'home-events' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
     { icon: 'GitBranch', label: 'Branches', view: 'branches' },
     { icon: 'Folder', label: 'Files', view: 'files' },
