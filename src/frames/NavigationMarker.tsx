@@ -8,8 +8,8 @@ import {
   GitBranch
 } from 'lucide-react'
 import { NavigationItem } from '@/shared/types'
-import { useChatStore } from './state'
-import { useNavigationStore } from '@/features/navigation/state'
+import { useChatStore } from './chatState'
+import { useNavigationStore } from '@/frames/navigationState'
 
 interface NavigationMarkerProps {
   item: NavigationItem

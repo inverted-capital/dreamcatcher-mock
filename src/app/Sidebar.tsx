@@ -18,8 +18,8 @@ import {
   Zap
 } from 'lucide-react'
 import { SidebarItem } from '@/shared/types'
-import { useChatStore } from '@/features/chat/state'
-import { useNavigationStore } from '@/features/navigation/state'
+import { useChatStore } from '@/frames/chatState'
+import { useNavigationStore } from '@/frames/navigationState'
 import { usePrivy } from '@privy-io/react-auth'
 
 const Sidebar: React.FC = () => {
