@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigationStore } from '@/frames/navigationState'
 import type { View } from '@/shared/types'
 import ChatsView from '@/frames/ChatsView'
@@ -18,16 +18,32 @@ import ProcessesView from '@/frames/ProcessesView'
 import AgentsView from '@/frames/AgentsView'
 import EventsView from '@/frames/EventsView'
 
+const allViews: View[] = [
+  'agents',
+  'chats',
+  'events',
+  'files',
+  'repos',
+  'branches',
+  'help',
+  'weather',
+  'customers',
+  'home',
+  'innovations',
+  'settings',
+  'account',
+  'napps',
+  'transcludes',
+  'processes'
+]
+
 const CanvasContainer: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
 
-  const [visitedViews, setVisitedViews] = useState<View[]>([currentView])
-
-  useEffect(() => {
-    setVisitedViews((prev) =>
-      prev.includes(currentView) ? prev : [...prev, currentView]
-    )
-  }, [currentView])
+  const [visitedViews] = useState<View[]>(() => {
+    const others = allViews.filter((v) => v !== currentView)
+    return [currentView, ...others]
+  })
 
   const renderView = (view: View) => {
     switch (view) {
