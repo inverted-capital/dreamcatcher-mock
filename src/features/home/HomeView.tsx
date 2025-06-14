@@ -1,11 +1,11 @@
 import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
-import { useScope } from '@artifact/client/hooks'
-import { useTargetScopeStore } from '@/shared/targetScope'
+import useHomeScope from '@/shared/useHomeScope'
 
 const HomeView: React.FC = () => {
-  const artifactScope = useScope()
-  const scope = useTargetScopeStore((s) => s.scope) ?? artifactScope
+  const scope = useHomeScope()
+  if (!scope) return <div>Loading home scope...</div>
+
   return (
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-home-panel/"

@@ -1,10 +1,10 @@
 import AppLayout from './AppLayout'
 import useHashRouter from './useHashRouter'
-import useInitTargetScope from '@/shared/useInitTargetScope'
+import useHomeScope from '@/shared/useHomeScope'
 
 function App() {
   useHashRouter()
-  useInitTargetScope()
+  useHomeScope()
   return <AppLayout />
 }
 
