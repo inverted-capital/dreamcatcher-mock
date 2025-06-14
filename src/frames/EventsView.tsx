@@ -1,11 +1,35 @@
 import React from 'react'
+import { ArtifactHolder } from '@artifact/client/react'
+import { useScope } from '@artifact/client/hooks'
+import { useTargetScopeStore } from '@/shared/targetScope'
+import useHomeScope from '@/shared/useHomeScope'
 
-const EventsView: React.FC = () => {
+interface EventsViewProps {
+  home?: boolean
+}
+
+const EventsView: React.FC<EventsViewProps> = ({ home }) => {
+  const homeScope = useHomeScope()
+  const artifactScope = useScope()
+  const targetScope = useTargetScopeStore((s) => s.scope)
+
+  const scope = home ? homeScope : targetScope ?? artifactScope
+
+  if (home && !homeScope) return <div>Loading home scope...</div>
+
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-2">Events</h2>
-      <p>Placeholder for Events frame.</p>
-    </div>
+    <ArtifactHolder
+      src="https://inverted-capital.github.io/frame-events-panel/"
+      target={scope}
+      diffs={[]}
+      access={[]}
+      onSelection={() => {}}
+      onMessage={() => {}}
+      onAccessRequest={() => {}}
+      onNavigateTo={() => {}}
+      title="Events Panel"
+      className="w-full h-[calc(100vh-48px)]"
+    />
   )
 }
 
