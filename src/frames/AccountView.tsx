@@ -11,7 +11,7 @@ const AccountView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-account-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

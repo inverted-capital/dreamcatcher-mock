@@ -11,7 +11,7 @@ const BranchesView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-agents-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={(sel) => {
         console.log(sel)
       }}

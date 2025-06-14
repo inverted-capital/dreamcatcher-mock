@@ -11,7 +11,7 @@ const HomeView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-home-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

@@ -11,7 +11,7 @@ const SettingsView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-settings-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}
