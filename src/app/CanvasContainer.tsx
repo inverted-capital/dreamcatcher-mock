@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigationStore } from '@/frames/navigationState'
+import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'

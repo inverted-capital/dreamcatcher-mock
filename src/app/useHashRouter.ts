@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import { useNavigationStore } from '@/frames/navigationState'
+import { useNavigationStore } from '@/shared/navigationState'
 import { View } from '@/shared/types'
-import { useChatStore } from '@/frames/chatState'
+import { useChatStore } from '@/chat/chatState'
 
 export default function useHashRouter() {
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)

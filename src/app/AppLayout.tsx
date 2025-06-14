@@ -1,6 +1,6 @@
 import React from 'react'
 import Sidebar from './Sidebar'
-import ChatContainer from '@/frames/ChatContainer'
+import ChatContainer from '@/chat/ChatContainer'
 
 const AppLayout: React.FC = () => {
   return (
