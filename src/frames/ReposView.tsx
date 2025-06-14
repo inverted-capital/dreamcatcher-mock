@@ -12,7 +12,7 @@ const ReposView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-repos-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={(sel) => {
         const next = sel.scopes[sel.primary]
         if (next) setScope(next)

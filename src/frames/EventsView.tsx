@@ -22,7 +22,7 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
       src="https://inverted-capital.github.io/frame-events-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

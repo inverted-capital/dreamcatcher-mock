@@ -11,7 +11,7 @@ const ChatsView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-chats-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

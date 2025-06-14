@@ -11,7 +11,7 @@ const WeatherView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-weather-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

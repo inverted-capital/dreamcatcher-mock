@@ -11,7 +11,7 @@ const TranscludesView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-transcludes-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

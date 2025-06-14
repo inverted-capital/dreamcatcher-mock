@@ -11,7 +11,7 @@ const CustomersView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-customers-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}

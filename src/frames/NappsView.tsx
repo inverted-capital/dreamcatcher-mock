@@ -11,7 +11,7 @@ const NappsView: React.FC = () => {
       src="https://inverted-capital.github.io/frame-napps-panel/"
       target={scope}
       diffs={[]}
-      access={[]}
+      expandedAccess={[]}
       onSelection={() => {}}
       onMessage={() => {}}
       onAccessRequest={() => {}}
