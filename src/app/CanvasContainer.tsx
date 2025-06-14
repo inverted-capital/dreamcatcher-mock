@@ -53,7 +53,7 @@ const CanvasContainer: React.FC = () => {
       case 'agents':
         return <AgentsView />
       case 'home-events':
-        return <EventsView />
+        return <EventsView home />
       case 'events':
         return <EventsView />
       case 'files':
