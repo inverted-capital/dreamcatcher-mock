@@ -1,6 +1,7 @@
 import { StrictMode, useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './app/App'
+import HomeScopeProvider from '@/shared/HomeScopeProvider'
 import './index.css'
 import { ArtifactWeb } from '@artifact/client/react'
 import Debug from 'debug'
@@ -74,7 +75,9 @@ export function AuthenticatedApp() {
       global
       placeholder={<LoadingArtifact />}
     >
-      <App />
+      <HomeScopeProvider>
+        <App />
+      </HomeScopeProvider>
     </ArtifactWeb>
   )
 }
