@@ -1,5 +1,5 @@
 import React from 'react'
-import { useChatStore } from './state'
+import { useChatStore } from './chatState'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
 import { MessageSquare } from 'lucide-react'
