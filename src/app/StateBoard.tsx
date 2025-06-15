@@ -145,10 +145,13 @@ const StateBoard: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* StateBoard Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      {/* StateBoard Header - Window Title Bar Style */}
+      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-900">
+          <h1 className="text-xl font-semibold text-gray-900 flex items-center">
+            <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+            <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
             {getViewTitle(currentView)}
           </h1>
           
@@ -157,29 +160,29 @@ const StateBoard: React.FC = () => {
             <div className="relative">
               <button
                 onClick={() => setShowScopeDropdown(!showScopeDropdown)}
-                className="flex items-center space-x-2 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors"
+                className="flex items-center space-x-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 shadow-sm"
               >
                 <Target size={16} className="text-gray-500" />
-                <span className="text-gray-700 max-w-xs truncate">
+                <span className="text-gray-700 max-w-xs truncate font-medium">
                   {formatScope(targetScope)}
                 </span>
                 <ChevronDown size={14} className="text-gray-400" />
               </button>
               
               {showScopeDropdown && (
-                <div className="absolute right-0 mt-1 w-80 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                  <div className="p-3 border-b border-gray-100">
-                    <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
+                  <div className="p-4 border-b border-gray-100">
+                    <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                       Current Target Scope
                     </div>
-                    <div className="text-sm text-gray-900 break-all">
+                    <div className="text-sm text-gray-900 break-all font-mono bg-gray-50 p-2 rounded">
                       {formatScope(targetScope)}
                     </div>
                   </div>
                   <div className="p-2">
                     <button
                       onClick={() => setShowScopeDropdown(false)}
-                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded"
+                      className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded transition-colors"
                     >
                       Close
                     </button>
@@ -189,7 +192,7 @@ const StateBoard: React.FC = () => {
             </div>
 
             {/* View Settings */}
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150">
               <Settings size={16} />
             </button>
           </div>
@@ -197,7 +200,7 @@ const StateBoard: React.FC = () => {
       </div>
 
       {/* View Content */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto bg-gray-50">
         {visitedViews.map((view) => (
           <div key={view} className={view === currentView ? 'block' : 'hidden'}>
             <div className="p-6">
