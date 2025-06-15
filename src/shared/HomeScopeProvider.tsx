@@ -12,8 +12,12 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     let cancelled = false
     ;(async () => {
-      const [first] = await artifact.super.ls()
-      if (!cancelled) setScope(first ?? null)
+      const [repo] = await artifact.super.ls()
+      if (cancelled) return
+      const repoArtifact = artifact.checkout(repo)
+      const { scope } = await repoArtifact.repo.branches.default()
+      if (cancelled) return
+      setScope(scope)
     })()
     return () => {
       cancelled = true
