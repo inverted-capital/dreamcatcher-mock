@@ -17,7 +17,20 @@ function App() {
       <Sidebar />
       
       {/* Main Content Area */}
-      <main className="flex-1 flex overflow-hidden">
+      <main className="flex-1 flex overflow-hidden relative">
+        {/* Chat Toggle Button - Fixed Position on Left */}
+        <button
+          onClick={() => setShowChat(!showChat)}
+          className="absolute top-2 left-2 z-20 p-2 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+          title={showChat ? 'Hide chat' : 'Show chat'}
+        >
+          {showChat ? (
+            <ChevronLeft size={16} className="text-gray-600" />
+          ) : (
+            <ChevronRight size={16} className="text-gray-600" />
+          )}
+        </button>
+
         {/* Chat Section - Left Side */}
         <div className={`${
           chatFullscreen 
@@ -39,20 +52,7 @@ function App() {
 
         {/* StateBoard Section - Right Side with Inset Window Effect */}
         {!chatFullscreen && (
-          <div className="flex-1 p-4 bg-gray-100 relative">
-            {/* Chat Toggle Button */}
-            <button
-              onClick={() => setShowChat(!showChat)}
-              className="absolute top-4 left-4 z-10 p-2 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 hover:shadow-md transition-all duration-200"
-              title={showChat ? 'Hide chat' : 'Show chat'}
-            >
-              {showChat ? (
-                <ChevronLeft size={16} className="text-gray-600" />
-              ) : (
-                <ChevronRight size={16} className="text-gray-600" />
-              )}
-            </button>
-
+          <div className="flex-1 p-4 bg-gray-100">
             {/* Inset Window Container */}
             <div className="h-full bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden">
               <StateBoard />

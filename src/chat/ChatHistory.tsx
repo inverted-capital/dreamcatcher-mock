@@ -114,8 +114,8 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscr
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Chat Header - Made Slimmer */}
-      <div className="bg-white border-b border-gray-200 px-4 py-2">
+      {/* Chat Header - Made Slimmer with Space for Toggle Button */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2 pl-12">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <MessageSquare size={18} className="text-blue-600" />

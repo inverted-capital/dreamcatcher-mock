@@ -3,7 +3,7 @@ import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import type { Scope } from '@artifact/client/api'
 import { useTargetScopeStore } from '@/shared/targetScope'
-import { Target, Settings, ChevronDown } from 'lucide-react'
+import { Target, Settings, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'
@@ -57,6 +57,7 @@ const StateBoard: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
   const targetScope = useTargetScopeStore((s) => s.scope)
   const [showScopeDropdown, setShowScopeDropdown] = useState(false)
+  const [showStateBoard, setShowStateBoard] = useState(true)
 
   const [visitedViews] = useState<View[]>(() => {
     const others = allViews.filter((v) => v !== currentView)
@@ -145,15 +146,27 @@ const StateBoard: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* StateBoard Header - Window Title Bar Style - Made Slimmer */}
+      {/* StateBoard Header - Clean Design Without Window Dots */}
       <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-4 py-2.5 shadow-sm">
         <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-gray-900 flex items-center">
-            <div className="w-2.5 h-2.5 bg-red-500 rounded-full mr-1.5"></div>
-            <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5"></div>
-            <div className="w-2.5 h-2.5 bg-green-500 rounded-full mr-3"></div>
-            {getViewTitle(currentView)}
-          </h1>
+          <div className="flex items-center space-x-3">
+            {/* StateBoard Toggle Button */}
+            <button
+              onClick={() => setShowStateBoard(!showStateBoard)}
+              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150"
+              title={showStateBoard ? 'Minimize panel' : 'Expand panel'}
+            >
+              {showStateBoard ? (
+                <ChevronLeft size={14} />
+              ) : (
+                <ChevronRight size={14} />
+              )}
+            </button>
+            
+            <h1 className="text-lg font-semibold text-gray-900">
+              {getViewTitle(currentView)}
+            </h1>
+          </div>
           
           <div className="flex items-center space-x-2">
             {/* Target Scope Selector */}
@@ -200,15 +213,17 @@ const StateBoard: React.FC = () => {
       </div>
 
       {/* View Content */}
-      <div className="flex-1 overflow-y-auto bg-gray-50">
-        {visitedViews.map((view) => (
-          <div key={view} className={view === currentView ? 'block' : 'hidden'}>
-            <div className="p-6">
-              {renderView(view)}
+      {showStateBoard && (
+        <div className="flex-1 overflow-y-auto bg-gray-50">
+          {visitedViews.map((view) => (
+            <div key={view} className={view === currentView ? 'block' : 'hidden'}>
+              <div className="p-6">
+                {renderView(view)}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
