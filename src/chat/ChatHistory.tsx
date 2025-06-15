@@ -2,7 +2,7 @@ import React from 'react'
 import { useChatStore } from './chatState'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
-import { MessageSquare } from 'lucide-react'
+import { MessageSquare, Settings, Search, Plus } from 'lucide-react'
 import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 
 type TimelineItem =
@@ -16,6 +16,13 @@ const ChatHistory: React.FC = () => {
   const navigationHistory = useChatStore((state) => state.navigationHistory)
   const currentChatId = useChatStore((state) => state.currentChatId)
   const getChatMessages = useChatStore((state) => state.getChatMessages)
+  const createNewChat = useChatStore((state) => state.createNewChat)
+  const chats = useChatStore((state) => state.chats)
+
+  // Get current chat info
+  const currentChat = currentChatId 
+    ? chats.find(chat => chat.id === currentChatId)
+    : null
 
   // Get messages for the current chat
   const chatMessages = React.useMemo(
@@ -100,34 +107,70 @@ const ChatHistory: React.FC = () => {
 
   const timelineItems = getTimelineItems()
 
-  // If no current chat is selected or the chat has no messages
-  if (!currentChatId || timelineItems.length === 0) {
-    return (
-      <div className="flex-1 flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <MessageSquare size={40} className="mx-auto text-gray-300 mb-2" />
-          <p className="text-gray-500">
-            {!currentChatId
-              ? 'Select a chat or start a new one'
-              : 'No messages yet'}
-          </p>
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      {/* Chat Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <MessageSquare size={20} className="text-blue-600" />
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                {currentChat?.title || 'Agentic Messages'}
+              </h2>
+              {currentChat && (
+                <p className="text-sm text-gray-500">
+                  {chatMessages.length} messages
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Search size={16} />
+            </button>
+            <button 
+              onClick={createNewChat}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+            >
+              <Plus size={16} />
+            </button>
+            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Settings size={16} />
+            </button>
+          </div>
         </div>
       </div>
-    )
-  }
 
-  return (
-    <div className="flex-1 overflow-y-auto py-4 px-6 bg-gray-50">
-      <div className="space-y-4">
-        {timelineItems.map((item) =>
-          item.type === 'message' ? (
-            <ChatMessage key={`msg-${item.data.id}`} message={item.data} />
-          ) : (
-            <NavigationMarker key={`nav-${item.data.id}`} item={item.data} />
-          )
+      {/* Chat Messages */}
+      <div className="flex-1 overflow-y-auto">
+        {!currentChatId || timelineItems.length === 0 ? (
+          <div className="flex-1 flex items-center justify-center h-full">
+            <div className="text-center">
+              <MessageSquare size={40} className="mx-auto text-gray-300 mb-2" />
+              <p className="text-gray-500">
+                {!currentChatId
+                  ? 'Select a chat or start a new one'
+                  : 'No messages yet'}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="py-4 px-6">
+            <div className="space-y-4">
+              {timelineItems.map((item) =>
+                item.type === 'message' ? (
+                  <ChatMessage key={`msg-${item.data.id}`} message={item.data} />
+                ) : (
+                  <NavigationMarker key={`nav-${item.data.id}`} item={item.data} />
+                )
+              )}
+            </div>
+            <div ref={messagesEndRef} />
+          </div>
         )}
       </div>
-      <div ref={messagesEndRef} />
     </div>
   )
 }
