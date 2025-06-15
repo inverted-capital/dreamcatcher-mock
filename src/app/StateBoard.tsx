@@ -145,28 +145,28 @@ const StateBoard: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* StateBoard Header - Window Title Bar Style */}
-      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-6 py-4 shadow-sm">
+      {/* StateBoard Header - Window Title Bar Style - Made Slimmer */}
+      <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200 px-4 py-2.5 shadow-sm">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-900 flex items-center">
-            <div className="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-            <div className="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-            <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
+          <h1 className="text-lg font-semibold text-gray-900 flex items-center">
+            <div className="w-2.5 h-2.5 bg-red-500 rounded-full mr-1.5"></div>
+            <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5"></div>
+            <div className="w-2.5 h-2.5 bg-green-500 rounded-full mr-3"></div>
             {getViewTitle(currentView)}
           </h1>
           
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             {/* Target Scope Selector */}
             <div className="relative">
               <button
                 onClick={() => setShowScopeDropdown(!showScopeDropdown)}
-                className="flex items-center space-x-2 px-3 py-2 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 shadow-sm"
+                className="flex items-center space-x-2 px-2.5 py-1.5 text-sm bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:border-gray-400 transition-all duration-150 shadow-sm"
               >
-                <Target size={16} className="text-gray-500" />
-                <span className="text-gray-700 max-w-xs truncate font-medium">
+                <Target size={14} className="text-gray-500" />
+                <span className="text-gray-700 max-w-xs truncate font-medium text-xs">
                   {formatScope(targetScope)}
                 </span>
-                <ChevronDown size={14} className="text-gray-400" />
+                <ChevronDown size={12} className="text-gray-400" />
               </button>
               
               {showScopeDropdown && (
@@ -192,8 +192,8 @@ const StateBoard: React.FC = () => {
             </div>
 
             {/* View Settings */}
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150">
-              <Settings size={16} />
+            <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150">
+              <Settings size={14} />
             </button>
           </div>
         </div>

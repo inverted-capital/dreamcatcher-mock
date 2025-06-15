@@ -2,14 +2,19 @@ import React from 'react'
 import { useChatStore } from './chatState'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
-import { MessageSquare, Settings, Search, Plus } from 'lucide-react'
+import { MessageSquare, Settings, Search, Plus, Maximize2, Minimize2 } from 'lucide-react'
 import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 
 type TimelineItem =
   | { type: 'message'; data: ChatMessageType; time: number }
   | { type: 'navigation'; data: NavigationItem; time: number }
 
-const ChatHistory: React.FC = () => {
+interface ChatHistoryProps {
+  onToggleFullscreen: () => void
+  isFullscreen: boolean
+}
+
+const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscreen }) => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
 
   // Get state from Zustand store
@@ -109,35 +114,42 @@ const ChatHistory: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Chat Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      {/* Chat Header - Made Slimmer */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <MessageSquare size={20} className="text-blue-600" />
+            <MessageSquare size={18} className="text-blue-600" />
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-base font-semibold text-gray-900">
                 {currentChat?.title || 'Agentic Messages'}
               </h2>
               {currentChat && (
-                <p className="text-sm text-gray-500">
+                <p className="text-xs text-gray-500">
                   {chatMessages.length} messages
                 </p>
               )}
             </div>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
-              <Search size={16} />
+          <div className="flex items-center space-x-1">
+            <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Search size={14} />
             </button>
             <button 
               onClick={createNewChat}
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
             >
-              <Plus size={16} />
+              <Plus size={14} />
             </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
-              <Settings size={16} />
+            <button 
+              onClick={onToggleFullscreen}
+              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
+              title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen chat'}
+            >
+              {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+            </button>
+            <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
+              <Settings size={14} />
             </button>
           </div>
         </div>
