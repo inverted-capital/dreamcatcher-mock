@@ -1,7 +1,7 @@
 import useHashRouter from './useHashRouter'
 import useHomeScope from '@/shared/useHomeScope'
 import Sidebar from './Sidebar'
-import CanvasContainer from './CanvasContainer'
+import StateBoard from './StateBoard'
 import { ChatHistory, ChatInput } from '@/chat'
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
             <ChatInput />
           </div>
           <div className="w-3/5 overflow-hidden">
-            <CanvasContainer />
+            <StateBoard />
           </div>
         </div>
       </main>
