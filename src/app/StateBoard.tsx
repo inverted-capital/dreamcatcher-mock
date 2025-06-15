@@ -3,7 +3,13 @@ import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import type { Scope } from '@artifact/client/api'
 import { useTargetScopeStore } from '@/shared/targetScope'
-import { Target, Settings, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Target,
+  Settings,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-react'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'
@@ -162,12 +168,12 @@ const StateBoard: React.FC = () => {
                 <ChevronRight size={14} />
               )}
             </button>
-            
+
             <h1 className="text-lg font-semibold text-gray-900">
               {getViewTitle(currentView)}
             </h1>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             {/* Target Scope Selector */}
             <div className="relative">
@@ -181,7 +187,7 @@ const StateBoard: React.FC = () => {
                 </span>
                 <ChevronDown size={12} className="text-gray-400" />
               </button>
-              
+
               {showScopeDropdown && (
                 <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
                   <div className="p-4 border-b border-gray-100">
@@ -216,10 +222,11 @@ const StateBoard: React.FC = () => {
       {showStateBoard && (
         <div className="flex-1 overflow-y-auto bg-gray-50">
           {visitedViews.map((view) => (
-            <div key={view} className={view === currentView ? 'block' : 'hidden'}>
-              <div className="p-6">
-                {renderView(view)}
-              </div>
+            <div
+              key={view}
+              className={view === currentView ? 'block' : 'hidden'}
+            >
+              <div className="p-6">{renderView(view)}</div>
             </div>
           ))}
         </div>

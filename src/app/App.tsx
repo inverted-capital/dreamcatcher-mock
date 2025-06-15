@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
-      
+
       {/* Main Content Area */}
       <main className="flex-1 flex overflow-hidden relative">
         {/* Chat Toggle Button - Fixed Position on Left */}
@@ -32,16 +32,14 @@ function App() {
         </button>
 
         {/* Chat Section - Left Side */}
-        <div className={`${
-          chatFullscreen 
-            ? 'w-full' 
-            : showChat 
-              ? 'w-2/5' 
-              : 'w-0'
-        } flex flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out ${showChat ? 'border-r border-gray-200' : ''}`}>
+        <div
+          className={`${
+            chatFullscreen ? 'w-full' : showChat ? 'w-2/5' : 'w-0'
+          } flex flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out ${showChat ? 'border-r border-gray-200' : ''}`}
+        >
           {showChat && (
             <>
-              <ChatHistory 
+              <ChatHistory
                 onToggleFullscreen={() => setChatFullscreen(!chatFullscreen)}
                 isFullscreen={chatFullscreen}
               />

@@ -2,7 +2,14 @@ import React from 'react'
 import { useChatStore } from './chatState'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
-import { MessageSquare, Settings, Search, Plus, Maximize2, Minimize2 } from 'lucide-react'
+import {
+  MessageSquare,
+  Settings,
+  Search,
+  Plus,
+  Maximize2,
+  Minimize2
+} from 'lucide-react'
 import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 
 type TimelineItem =
@@ -14,7 +21,10 @@ interface ChatHistoryProps {
   isFullscreen: boolean
 }
 
-const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscreen }) => {
+const ChatHistory: React.FC<ChatHistoryProps> = ({
+  onToggleFullscreen,
+  isFullscreen
+}) => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
 
   // Get state from Zustand store
@@ -25,8 +35,8 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscr
   const chats = useChatStore((state) => state.chats)
 
   // Get current chat info
-  const currentChat = currentChatId 
-    ? chats.find(chat => chat.id === currentChatId)
+  const currentChat = currentChatId
+    ? chats.find((chat) => chat.id === currentChatId)
     : null
 
   // Get messages for the current chat
@@ -130,18 +140,18 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscr
               )}
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-1">
             <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors">
               <Search size={14} />
             </button>
-            <button 
+            <button
               onClick={createNewChat}
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
             >
               <Plus size={14} />
             </button>
-            <button 
+            <button
               onClick={onToggleFullscreen}
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
               title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen chat'}
@@ -173,9 +183,15 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ onToggleFullscreen, isFullscr
             <div className="space-y-4">
               {timelineItems.map((item) =>
                 item.type === 'message' ? (
-                  <ChatMessage key={`msg-${item.data.id}`} message={item.data} />
+                  <ChatMessage
+                    key={`msg-${item.data.id}`}
+                    message={item.data}
+                  />
                 ) : (
-                  <NavigationMarker key={`nav-${item.data.id}`} item={item.data} />
+                  <NavigationMarker
+                    key={`nav-${item.data.id}`}
+                    item={item.data}
+                  />
                 )
               )}
             </div>
