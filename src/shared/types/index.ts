@@ -68,3 +68,14 @@ interface Attachment {
   url: string
   size?: number
 }
+
+export interface FileItem {
+  id: string
+  name: string
+  type: string
+  size?: number
+  modified: string
+  path: string
+  parentId?: string
+  isFolder?: boolean
+}
