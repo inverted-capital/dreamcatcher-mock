@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
+import type { Scope } from '@artifact/client/api'
+import { useTargetScopeStore } from '@/shared/targetScope'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'
@@ -38,8 +40,21 @@ const allViews: View[] = [
   'processes'
 ]
 
-const CanvasContainer: React.FC = () => {
+const formatScope = (scope: Scope | null): string => {
+  if (!scope) return 'No target'
+  const parts = [] as string[]
+  const anyScope = scope as Record<string, string>
+  if (anyScope.did) parts.push(anyScope.did)
+  if (anyScope.repo) parts.push(anyScope.repo)
+  if (anyScope.branch) parts.push(anyScope.branch)
+  if (anyScope.commit) parts.push(anyScope.commit)
+  if (anyScope.fiber) parts.push(anyScope.fiber)
+  return parts.join(' / ')
+}
+
+const StateBoard: React.FC = () => {
   const currentView = useNavigationStore((state) => state.currentView)
+  const targetScope = useTargetScopeStore((s) => s.scope)
 
   const [visitedViews] = useState<View[]>(() => {
     const others = allViews.filter((v) => v !== currentView)
@@ -87,14 +102,19 @@ const CanvasContainer: React.FC = () => {
   }
 
   return (
-    <div className="h-full overflow-y-auto p-6">
-      {visitedViews.map((view) => (
-        <div key={view} className={view === currentView ? 'block' : 'hidden'}>
-          {renderView(view)}
-        </div>
-      ))}
+    <div className="h-full flex flex-col">
+      <div className="h-12 flex items-center px-4 border-b bg-gray-100 text-sm text-gray-700">
+        Target Scope: {formatScope(targetScope)}
+      </div>
+      <div className="flex-1 overflow-y-auto p-6">
+        {visitedViews.map((view) => (
+          <div key={view} className={view === currentView ? 'block' : 'hidden'}>
+            {renderView(view)}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
 
-export default CanvasContainer
+export default StateBoard
