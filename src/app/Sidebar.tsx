@@ -34,7 +34,7 @@ const Sidebar: React.FC = () => {
   const sidebarItems: SidebarItem[] = [
     { icon: 'Home', label: 'Home', view: 'home' },
     { icon: 'MessageSquare', label: 'Chats', view: 'chats' },
-    { icon: 'UsersRound', label: 'Agents', view: 'agents' },
+    { icon: 'UsersRound', label: 'Contacts', view: 'contacts' },
     { icon: 'CloudUpload', label: 'Transcludes', view: 'transcludes' },
     { icon: 'Zap', label: 'Events', view: 'home-events' },
     { icon: 'FolderGit2', label: 'Repos', view: 'repos' },
@@ -106,7 +106,7 @@ const Sidebar: React.FC = () => {
     return currentView === item.view && !item.action
   }
 
-  // Group 1: User-specific items (Home, Chats, Agents, Transcludes, Events)
+  // Group 1: User-specific items (Home, Chats, Contacts, Transcludes, Events)
   const userGroup = sidebarItems.slice(0, 5)
   // Group 2: Transclude/scope selection items (Repos, Branches, Files, Napps, Processes, Events, Settings, Innovations)
   const transcludeSelectorGroup = sidebarItems.slice(5, 13)

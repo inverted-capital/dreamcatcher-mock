@@ -15,11 +15,11 @@ import AccountView from '@/frames/AccountView'
 import NappsView from '@/frames/NappsView'
 import TranscludesView from '@/frames/TranscludesView'
 import ProcessesView from '@/frames/ProcessesView'
-import AgentsView from '@/frames/AgentsView'
+import ContactsView from '@/frames/ContactsView'
 import EventsView from '@/frames/EventsView'
 
 const allViews: View[] = [
-  'agents',
+  'contacts',
   'chats',
   'home-events',
   'events',
@@ -50,8 +50,8 @@ const CanvasContainer: React.FC = () => {
     switch (view) {
       case 'chats':
         return <ChatsView />
-      case 'agents':
-        return <AgentsView />
+      case 'contacts':
+        return <ContactsView />
       case 'home-events':
         return <EventsView home />
       case 'events':

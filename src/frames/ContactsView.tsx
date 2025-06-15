@@ -2,13 +2,13 @@ import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import useHomeScope from '@/shared/useHomeScope'
 
-const BranchesView: React.FC = () => {
+const ContactsView: React.FC = () => {
   const scope = useHomeScope()
   if (!scope) return <div>Loading home scope...</div>
 
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/frame-agents-panel/"
+      src="https://inverted-capital.github.io/frame-contacts-panel/"
       target={scope}
       diffs={[]}
       expandedAccess={[]}
@@ -18,10 +18,10 @@ const BranchesView: React.FC = () => {
       onMessage={() => {}}
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}
-      title="Agents Panel"
+      title="Contacts Panel"
       className="w-full h-[calc(100vh-48px)]"
     />
   )
 }
 
-export default BranchesView
+export default ContactsView
