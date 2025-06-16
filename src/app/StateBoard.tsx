@@ -3,13 +3,11 @@ import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import type { Scope } from '@artifact/client/api'
 import { useTargetScopeStore } from '@/shared/targetScope'
-import {
-  Target,
-  Settings,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react'
+import Target from 'lucide-react/dist/esm/icons/target'
+import Settings from 'lucide-react/dist/esm/icons/settings'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down'
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'

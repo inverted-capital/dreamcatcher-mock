@@ -1,22 +1,20 @@
 import React from 'react'
-import {
-  Home,
-  MessageSquare,
-  Folder,
-  FolderGit2,
-  LogOut,
-  HelpCircle,
-  User,
-  Lightbulb,
-  Settings,
-  Package,
-  CloudUpload,
-  GitBranch,
-  Mail,
-  Cpu,
-  UsersRound,
-  Zap
-} from 'lucide-react'
+import Home from 'lucide-react/dist/esm/icons/home'
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square'
+import Folder from 'lucide-react/dist/esm/icons/folder'
+import FolderGit2 from 'lucide-react/dist/esm/icons/folder-git-2'
+import LogOut from 'lucide-react/dist/esm/icons/log-out'
+import HelpCircle from 'lucide-react/dist/esm/icons/help-circle'
+import User from 'lucide-react/dist/esm/icons/user'
+import Lightbulb from 'lucide-react/dist/esm/icons/lightbulb'
+import Settings from 'lucide-react/dist/esm/icons/settings'
+import Package from 'lucide-react/dist/esm/icons/package'
+import CloudUpload from 'lucide-react/dist/esm/icons/cloud-upload'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch'
+import Mail from 'lucide-react/dist/esm/icons/mail'
+import Cpu from 'lucide-react/dist/esm/icons/cpu'
+import UsersRound from 'lucide-react/dist/esm/icons/users-round'
+import Zap from 'lucide-react/dist/esm/icons/zap'
 import { SidebarItem } from '@/shared/types'
 import { useChatStore } from '@/chat/chatState'
 import { useNavigationStore } from '@/shared/navigationState'
