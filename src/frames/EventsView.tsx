@@ -13,7 +13,8 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
 
   const scope = home ? homeScope : targetScope
 
-  if (home && !homeScope) return <div className="p-6">Loading home scope...</div>
+  if (home && !homeScope)
+    return <div className="p-6">Loading home scope...</div>
 
   if (!home && !targetScope) return <div className="p-6">No target scope</div>
 
