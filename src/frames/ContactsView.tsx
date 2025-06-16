@@ -4,7 +4,7 @@ import useHomeScope from '@/shared/useHomeScope'
 
 const ContactsView: React.FC = () => {
   const scope = useHomeScope()
-  if (!scope) return <div>Loading home scope...</div>
+  if (!scope) return <div className="p-6">Loading home scope...</div>
 
   return (
     <ArtifactHolder
