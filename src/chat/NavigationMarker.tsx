@@ -1,12 +1,10 @@
 import React from 'react'
-import {
-  ChevronDown,
-  ChevronRight,
-  Code,
-  FileText,
-  Home,
-  GitBranch
-} from 'lucide-react'
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
+import Code from 'lucide-react/dist/esm/icons/code'
+import FileText from 'lucide-react/dist/esm/icons/file-text'
+import Home from 'lucide-react/dist/esm/icons/home'
+import GitBranch from 'lucide-react/dist/esm/icons/git-branch'
 import { NavigationItem } from '@/shared/types'
 import { useChatStore } from './chatState'
 import { useNavigationStore } from '@/shared/navigationState'

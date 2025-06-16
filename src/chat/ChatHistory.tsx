@@ -2,14 +2,12 @@ import React from 'react'
 import { useChatStore } from './chatState'
 import ChatMessage from './ChatMessage'
 import NavigationMarker from './NavigationMarker'
-import {
-  MessageSquare,
-  Settings,
-  Search,
-  Plus,
-  Maximize2,
-  Minimize2
-} from 'lucide-react'
+import MessageSquare from 'lucide-react/dist/esm/icons/message-square'
+import Settings from 'lucide-react/dist/esm/icons/settings'
+import Search from 'lucide-react/dist/esm/icons/search'
+import Plus from 'lucide-react/dist/esm/icons/plus'
+import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2'
+import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2'
 import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 
 type TimelineItem =

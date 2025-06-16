@@ -4,7 +4,8 @@ import Sidebar from './Sidebar'
 import StateBoard from './StateBoard'
 import { ChatHistory, ChatInput } from '@/chat'
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
+import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
 
 function App() {
   useHashRouter()

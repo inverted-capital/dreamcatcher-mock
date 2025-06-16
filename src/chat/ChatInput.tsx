@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Send, Paperclip, Mic } from 'lucide-react'
+import Send from 'lucide-react/dist/esm/icons/send'
+import Paperclip from 'lucide-react/dist/esm/icons/paperclip'
+import Mic from 'lucide-react/dist/esm/icons/mic'
 import { useChatStore } from './chatState'
 
 const ChatInput: React.FC = () => {
