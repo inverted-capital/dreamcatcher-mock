@@ -224,7 +224,7 @@ const StateBoard: React.FC = () => {
               key={view}
               className={view === currentView ? 'block' : 'hidden'}
             >
-              {renderView(view)}
+              <div>{renderView(view)}</div>
             </div>
           ))}
         </div>
