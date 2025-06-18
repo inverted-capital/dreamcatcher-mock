@@ -2,21 +2,19 @@ import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import { useScope } from '@artifact/client/hooks'
 import { useTargetScopeStore } from '@/shared/targetScope'
+import useSelectionUpdater from '@/shared/useSelectionUpdater'
 
 const FilesView: React.FC = () => {
   const artifactScope = useScope()
   const scope = useTargetScopeStore((s) => s.scope) ?? artifactScope
-  const setScope = useTargetScopeStore((s) => s.setScope)
+  const onSelection = useSelectionUpdater()
   return (
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-files-panel/"
       target={scope}
       diffs={[]}
       expandedAccess={[]}
-      onSelection={(sel) => {
-        const next = sel.scopes[sel.primary]
-        if (next) setScope(next)
-      }}
+      onSelection={onSelection}
       onMessage={() => {}}
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}

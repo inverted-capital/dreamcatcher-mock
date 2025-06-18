@@ -1,9 +1,11 @@
 import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import useHomeScope from '@/shared/useHomeScope'
+import useSelectionUpdater from '@/shared/useSelectionUpdater'
 
 const ContactsView: React.FC = () => {
   const scope = useHomeScope()
+  const onSelection = useSelectionUpdater()
   if (!scope) return <div className="p-6">Loading home scope...</div>
 
   return (
@@ -12,9 +14,7 @@ const ContactsView: React.FC = () => {
       target={scope}
       diffs={[]}
       expandedAccess={[]}
-      onSelection={(sel) => {
-        console.log(sel)
-      }}
+      onSelection={onSelection}
       onMessage={() => {}}
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}
