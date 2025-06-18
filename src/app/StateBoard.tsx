@@ -25,26 +25,6 @@ import ProcessesView from '@/frames/ProcessesView'
 import ContactsView from '@/frames/ContactsView'
 import EventsView from '@/frames/EventsView'
 
-const allViews: View[] = [
-  'contacts',
-  'chats',
-  'home-events',
-  'events',
-  'files',
-  'repos',
-  'branches',
-  'help',
-  'weather',
-  'customers',
-  'home',
-  'innovations',
-  'settings',
-  'account',
-  'napps',
-  'transcludes',
-  'processes'
-]
-
 const formatScope = (scope: Scope | null): string => {
   if (!scope) return 'No target'
   const parts = [] as string[]
