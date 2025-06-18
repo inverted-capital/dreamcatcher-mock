@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { useBaseArtifact } from '@artifact/client/hooks'
 import type { Scope } from '@artifact/client/api'
 import HomeScopeContext from './homeScopeContext'
+import { useTargetScopeStore } from './targetScope'
 
 export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const artifact = useBaseArtifact()
   const [scope, setScope] = useState<Scope | null>(null)
+  const setTargetScope = useTargetScopeStore((s) => s.setScope)
 
   useEffect(() => {
     let cancelled = false
@@ -18,6 +20,7 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
       const { scope } = await repoArtifact.repo.branches.default()
       if (cancelled) return
       setScope(scope)
+      setTargetScope(scope)
     })()
     return () => {
       cancelled = true

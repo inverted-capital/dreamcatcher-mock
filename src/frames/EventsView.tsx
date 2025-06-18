@@ -2,6 +2,7 @@ import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import { useTargetScopeStore } from '@/shared/targetScope'
 import useHomeScope from '@/shared/useHomeScope'
+import useSelectionUpdater from '@/shared/useSelectionUpdater'
 
 interface EventsViewProps {
   home?: boolean
@@ -10,6 +11,7 @@ interface EventsViewProps {
 const EventsView: React.FC<EventsViewProps> = ({ home }) => {
   const homeScope = useHomeScope()
   const targetScope = useTargetScopeStore((s) => s.scope)
+  const onSelection = useSelectionUpdater()
 
   const scope = home ? homeScope : targetScope
 
@@ -26,7 +28,7 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
       target={scope}
       diffs={[]}
       expandedAccess={[]}
-      onSelection={() => {}}
+      onSelection={onSelection}
       onMessage={() => {}}
       onAccessRequest={() => {}}
       onNavigateTo={() => {}}
