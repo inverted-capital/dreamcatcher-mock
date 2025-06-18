@@ -12,6 +12,7 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   const setTargetScope = useTargetScopeStore((s) => s.setScope)
 
   useEffect(() => {
+    if (!artifact) return
     let cancelled = false
     ;(async () => {
       const [repo] = await artifact.super.ls()
@@ -26,6 +27,8 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
       cancelled = true
     }
   }, [artifact])
+
+  if (!artifact) return null
 
   return (
     <HomeScopeContext.Provider value={scope}>
