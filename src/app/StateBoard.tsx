@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigationStore } from '@/shared/navigationState'
 import type { View } from '@/shared/types'
 import type { Scope } from '@artifact/client/api'
@@ -63,10 +63,16 @@ const StateBoard: React.FC = () => {
   const [showScopeDropdown, setShowScopeDropdown] = useState(false)
   const [showStateBoard, setShowStateBoard] = useState(true)
 
-  const [visitedViews] = useState<View[]>(() => {
-    const others = allViews.filter((v) => v !== currentView)
-    return [currentView, ...others]
-  })
+  const [visitedViews, setVisitedViews] = useState<View[]>([currentView])
+
+  useEffect(() => {
+    setVisitedViews((prev) => {
+      if (prev.includes(currentView)) {
+        return prev
+      }
+      return [currentView, ...prev]
+    })
+  }, [currentView])
 
   const getViewTitle = (view: View): string => {
     switch (view) {
