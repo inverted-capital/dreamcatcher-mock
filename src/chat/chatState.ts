@@ -3,6 +3,19 @@ import { ChatMessage, Chat, NavigationItem } from '@/shared/types'
 import { mockMessages } from '@/shared/mockMessages'
 import { mockChats } from '@/shared/mockChats'
 
+function getInitialChatId(): string {
+  if (typeof window === 'undefined') return 'chat-1'
+  const hash = window.location.hash.slice(1)
+  if (!hash) return 'chat-1'
+  const [, query] = hash.split('?')
+  if (!query) return 'chat-1'
+  const params = new URLSearchParams(query)
+  return params.get('chat') || 'chat-1'
+}
+
+const initialChatId = getInitialChatId()
+const initialChat = mockChats.find((chat) => chat.id === initialChatId)
+
 interface ChatState {
   messages: ChatMessage[]
   navigationHistory: NavigationItem[]
@@ -34,9 +47,9 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
     chatId: msg.chatId || 'chat-1' // Default to first chat if not specified
   })),
   chats: mockChats,
-  currentChatId: 'chat-1',
+  currentChatId: initialChatId,
   searchQuery: '',
-  isNewEmptyChat: false,
+  isNewEmptyChat: initialChat?.messageIds.length === 0 || false,
   navigationHistory: [
     {
       id: '1',
