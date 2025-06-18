@@ -12,11 +12,7 @@ const AccountView: React.FC = () => {
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-account-panel/"
       target={scope}
-      diffs={[]}
-      expandedAccess={[]}
       onSelection={onSelection}
-      onMessage={() => {}}
-      onAccessRequest={() => {}}
       onNavigateTo={() => {}}
       title="Account Panel"
       className="w-full h-[calc(100vh-48px)]"
