@@ -8,6 +8,7 @@ const ChatsView: React.FC = () => {
   const artifactScope = useScope()
   const scope = useTargetScopeStore((s) => s.scope) ?? artifactScope
   const onSelection = useSelectionUpdater()
+  if (!scope) return <div className="p-6">No target scope</div>
   return (
     <ArtifactHolder
       src="https://inverted-capital.github.io/frame-chats-panel/"
