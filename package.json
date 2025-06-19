@@ -16,11 +16,11 @@
     "knip": "knip --production --fix --allow-remove-files --format --exports"
   },
   "dependencies": {
-    "@artifact/client": "npm:@jsr/artifact__client@^0.0.130",
+    "@artifact/client": "npm:@jsr/artifact__client@^0.0.132",
     "@open-iframe-resizer/react": "^1.6.0",
     "@privy-io/react-auth": "2.15.1",
     "debug": "^4.4.1",
-    "lucide-react": "^0.517.0",
+    "lucide-react": "^0.518.0",
     "react": "^19",
     "react-dom": "^19",
     "zustand": "^5.0.5"
