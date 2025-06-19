@@ -26,7 +26,7 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       cancelled = true
     }
-  }, [artifact])
+  }, [artifact, setTargetScope])
 
   if (!artifact) return null
 
