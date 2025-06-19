@@ -2,15 +2,17 @@ import React from 'react'
 import { ArtifactHolder } from '@artifact/client/react'
 import useHomeScope from '@/shared/useHomeScope'
 import useSelectionUpdater from '@/shared/useSelectionUpdater'
+import { useFrameSrcStore } from '@/shared/frameSrc'
 
 const AccountView: React.FC = () => {
   const scope = useHomeScope()
   const onSelection = useSelectionUpdater()
+  const src = useFrameSrcStore((s) => s.getSrc('account'))
   if (!scope) return <div className="p-6">Loading home scope...</div>
 
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/frame-account-panel/"
+      src={src}
       target={scope}
       onSelection={onSelection}
       onNavigateTo={() => {}}
