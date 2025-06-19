@@ -3,6 +3,7 @@ import { ArtifactHolder } from '@artifact/client/react'
 import { useTargetScopeStore } from '@/shared/targetScope'
 import useHomeScope from '@/shared/useHomeScope'
 import useSelectionUpdater from '@/shared/useSelectionUpdater'
+import { useFrameSrcStore } from '@/shared/frameSrc'
 
 interface EventsViewProps {
   home?: boolean
@@ -12,6 +13,7 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
   const homeScope = useHomeScope()
   const targetScope = useTargetScopeStore((s) => s.scope)
   const onSelection = useSelectionUpdater()
+  const src = useFrameSrcStore((s) => s.getSrc(home ? 'home-events' : 'events'))
 
   const scope = home ? homeScope : targetScope
 
@@ -24,7 +26,7 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
 
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/frame-events-panel/"
+      src={src}
       target={scope}
       diffs={[]}
       expandedAccess={[]}

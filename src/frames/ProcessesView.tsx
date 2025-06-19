@@ -3,15 +3,17 @@ import { ArtifactHolder } from '@artifact/client/react'
 import { useScope } from '@artifact/client/hooks'
 import { useTargetScopeStore } from '@/shared/targetScope'
 import useSelectionUpdater from '@/shared/useSelectionUpdater'
+import { useFrameSrcStore } from '@/shared/frameSrc'
 
 const ProcessesView: React.FC = () => {
   const artifactScope = useScope()
   const scope = useTargetScopeStore((s) => s.scope) ?? artifactScope
   const onSelection = useSelectionUpdater()
+  const src = useFrameSrcStore((s) => s.getSrc('processes'))
   if (!scope) return <div className="p-6">No target scope</div>
   return (
     <ArtifactHolder
-      src="https://inverted-capital.github.io/frame-processes-panel/"
+      src={src}
       target={scope}
       diffs={[]}
       expandedAccess={[]}

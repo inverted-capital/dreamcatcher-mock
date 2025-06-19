@@ -18,6 +18,7 @@ import WeatherView from '@/frames/WeatherView'
 import HomeView from '@/frames/HomeView'
 import InnovationsView from '@/frames/InnovationsView'
 import SettingsView from '@/frames/SettingsView'
+import { useFrameSrcStore } from '@/shared/frameSrc'
 import AccountView from '@/frames/AccountView'
 import NappsView from '@/frames/NappsView'
 import TranscludesView from '@/frames/TranscludesView'
@@ -42,6 +43,10 @@ const StateBoard: React.FC = () => {
   const targetScope = useTargetScopeStore((s) => s.scope)
   const [showScopeDropdown, setShowScopeDropdown] = useState(false)
   const [showStateBoard, setShowStateBoard] = useState(true)
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false)
+  const [reloadKeys, setReloadKeys] = useState<Partial<Record<View, number>>>(
+    {}
+  )
 
   const [visitedViews, setVisitedViews] = useState<View[]>([currentView])
 
@@ -134,6 +139,26 @@ const StateBoard: React.FC = () => {
     }
   }
 
+  const setFrameSrc = useFrameSrcStore((s) => s.setSrc)
+  const getFrameSrc = useFrameSrcStore((s) => s.getSrc)
+
+  const reloadCurrentView = () => {
+    setReloadKeys((prev) => ({
+      ...prev,
+      [currentView]: (prev[currentView] ?? 0) + 1
+    }))
+  }
+
+  const handleEditSrc = () => {
+    const current = getFrameSrc(currentView)
+    const next = window.prompt('Enter frame source URL', current)
+    if (next) {
+      setFrameSrc(currentView, next)
+      reloadCurrentView()
+    }
+    setShowSettingsMenu(false)
+  }
+
   return (
     <div className="h-full flex flex-col bg-white">
       {/* StateBoard Header - Clean Design Without Window Dots */}
@@ -195,9 +220,33 @@ const StateBoard: React.FC = () => {
             </div>
 
             {/* View Settings */}
-            <button className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150">
-              <Settings size={14} />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+                className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150"
+              >
+                <Settings size={14} />
+              </button>
+              {showSettingsMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                  <button
+                    onClick={() => {
+                      reloadCurrentView()
+                      setShowSettingsMenu(false)
+                    }}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    Reload Frame
+                  </button>
+                  <button
+                    onClick={handleEditSrc}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    Edit Frame Source
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -207,10 +256,10 @@ const StateBoard: React.FC = () => {
         <div className="flex-1 overflow-y-auto bg-gray-50">
           {visitedViews.map((view) => (
             <div
-              key={view}
+              key={`${view}-${reloadKeys[view] ?? 0}`}
               className={view === currentView ? 'block' : 'hidden'}
             >
-              <div>{renderView(view)}</div>
+              {renderView(view)}
             </div>
           ))}
         </div>
