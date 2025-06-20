@@ -1,61 +1,24 @@
-import { StrictMode, useEffect, useState } from 'react'
+import { StrictMode, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArtifactFrame } from '@artifact/client/react'
-import { useFrame, useArtifact } from '@artifact/client/hooks'
-import { isCommitScope, isRepoScope } from '@artifact/client/api'
-
-interface FileMeta {
-  path: string
-}
+import {
+  useFrame,
+  useArtifact,
+  useTree,
+  useDir,
+  useBranches,
+  useRemotes
+} from '@artifact/client/hooks'
+import { isCommitScope } from '@artifact/client/api'
 
 function Diagnostic() {
   const frame = useFrame()
   const artifact = useArtifact()
-  const [files, setFiles] = useState<FileMeta[]>()
-  const [branches, setBranches] = useState<string[]>()
+  const tree = useTree()
+  const rootDir = useDir('.')
+  const branches = useBranches()
+  const remotes = useRemotes()
   const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!artifact || !isCommitScope(artifact.scope)) return
-    let active = true
-    const updateFiles = async () => {
-      const list = await artifact.files.read.ls('.')
-      if (active) setFiles(list)
-    }
-    const watchFiles = async () => {
-      for await (const event of artifact.files.read.watch('.')) {
-        void event
-        if (!active) break
-        await updateFiles()
-      }
-    }
-    updateFiles()
-    watchFiles()
-    return () => {
-      active = false
-    }
-  }, [artifact])
-
-  useEffect(() => {
-    if (!artifact || !isRepoScope(artifact.scope)) return
-    let active = true
-    const updateBranches = async () => {
-      const list = await artifact.repo.branches.ls()
-      if (active) setBranches(list)
-    }
-    const watchBranches = async () => {
-      for await (const ev of artifact.repo.branches.watch()) {
-        void ev
-        if (!active) break
-        await updateBranches()
-      }
-    }
-    updateBranches()
-    watchBranches()
-    return () => {
-      active = false
-    }
-  }, [artifact])
 
   const addFile = () => {
     if (!artifact || !isCommitScope(artifact.scope)) return
@@ -82,10 +45,14 @@ function Diagnostic() {
       </pre>
       <h3>Scope</h3>
       <pre>{JSON.stringify(artifact?.scope, null, 2)}</pre>
+      <h3>Tree</h3>
+      <pre>{JSON.stringify(tree, null, 2)}</pre>
       <h3>Branches</h3>
       <pre>{JSON.stringify(branches, null, 2)}</pre>
+      <h3>Remotes</h3>
+      <pre>{JSON.stringify(remotes, null, 2)}</pre>
       <h3>Files</h3>
-      <pre>{JSON.stringify(files, null, 2)}</pre>
+      <pre>{JSON.stringify(rootDir, null, 2)}</pre>
       <div style={{ marginTop: 10 }}>
         <button onClick={() => frame.onSelection?.(frame.target)}>
           onSelection
