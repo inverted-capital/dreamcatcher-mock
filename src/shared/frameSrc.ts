@@ -23,14 +23,14 @@ const DEFAULT_SRCS: Record<View, string> = {
 
 interface FrameSrcState {
   srcs: Partial<Record<View, string>>
-  diagnostic: Partial<Record<View, boolean>>
+  diagnostic: boolean
   setSrc: (view: View, src: string) => void
   /**
    * Reset a frame source back to its default value
    */
   resetSrc: (view: View) => void
-  setDiagnostic: (view: View, enabled: boolean) => void
-  toggleDiagnostic: (view: View) => void
+  setDiagnostic: (enabled: boolean) => void
+  toggleDiagnostic: () => void
   getSrc: (view: View) => string
 }
 
@@ -38,9 +38,7 @@ const DIAGNOSTIC_PATH = `${import.meta.env.BASE_URL}diagnotic.html`
 
 export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
   srcs: {},
-  diagnostic: Object.fromEntries(
-    Object.keys(DEFAULT_SRCS).map((k) => [k, true])
-  ) as Partial<Record<View, boolean>>,
+  diagnostic: true,
   setSrc: (view, src) =>
     set((state) => ({ srcs: { ...state.srcs, [view]: src } })),
   resetSrc: (view) =>
@@ -49,14 +47,10 @@ export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
       delete next[view]
       return { srcs: next }
     }),
-  setDiagnostic: (view, enabled) =>
-    set((state) => ({ diagnostic: { ...state.diagnostic, [view]: enabled } })),
-  toggleDiagnostic: (view) =>
-    set((state) => ({
-      diagnostic: { ...state.diagnostic, [view]: !state.diagnostic[view] }
-    })),
+  setDiagnostic: (enabled) => set({ diagnostic: enabled }),
+  toggleDiagnostic: () => set((state) => ({ diagnostic: !state.diagnostic })),
   getSrc: (view) =>
-    get().diagnostic[view]
+    get().diagnostic
       ? DIAGNOSTIC_PATH
       : (get().srcs[view] ?? DEFAULT_SRCS[view])
 }))
