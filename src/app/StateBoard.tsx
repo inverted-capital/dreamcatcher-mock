@@ -8,6 +8,7 @@ import Settings from 'lucide-react/dist/esm/icons/settings'
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down'
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
+import Bug from 'lucide-react/dist/esm/icons/bug'
 import ChatsView from '@/frames/ChatsView'
 import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'
@@ -143,13 +144,23 @@ const StateBoard: React.FC = () => {
   const getFrameSrc = useFrameSrcStore((s) => s.getSrc)
   const resetFrameSrc = useFrameSrcStore((s) => s.resetSrc)
   const toggleDiagnostic = useFrameSrcStore((s) => s.toggleDiagnostic)
-  const diagnosticEnabled = useFrameSrcStore((s) => s.diagnostic[currentView])
+  const diagnosticEnabled = useFrameSrcStore((s) => s.diagnostic)
 
   const reloadCurrentView = () => {
     setReloadKeys((prev) => ({
       ...prev,
       [currentView]: (prev[currentView] ?? 0) + 1
     }))
+  }
+
+  const reloadAllViews = () => {
+    setReloadKeys((prev) => {
+      const next = { ...prev }
+      visitedViews.forEach((view) => {
+        next[view] = (next[view] ?? 0) + 1
+      })
+      return next
+    })
   }
 
   const handleEditSrc = () => {
@@ -257,21 +268,21 @@ const StateBoard: React.FC = () => {
                   >
                     Reset Frame Source
                   </button>
-                  <button
-                    onClick={() => {
-                      toggleDiagnostic(currentView)
-                      reloadCurrentView()
-                      setShowSettingsMenu(false)
-                    }}
-                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                  >
-                    {diagnosticEnabled
-                      ? 'Disable Diagnostic'
-                      : 'Enable Diagnostic'}
-                  </button>
                 </div>
               )}
             </div>
+            <button
+              onClick={() => {
+                toggleDiagnostic()
+                reloadAllViews()
+              }}
+              className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150"
+              title={
+                diagnosticEnabled ? 'Disable Diagnostic' : 'Enable Diagnostic'
+              }
+            >
+              <Bug size={14} />
+            </button>
           </div>
         </div>
       </div>
