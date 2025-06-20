@@ -16,7 +16,6 @@ const BranchesView: React.FC = () => {
       src={src}
       target={scope}
       onSelection={onSelection}
-      onNavigateTo={() => {}}
       title="Branches Panel"
       className="w-full h-[calc(100vh-48px)]"
     />

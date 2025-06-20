@@ -15,12 +15,7 @@ const WeatherView: React.FC = () => {
     <ArtifactHolder
       src={src}
       target={scope}
-      diffs={[]}
-      expandedAccess={[]}
       onSelection={onSelection}
-      onMessage={() => {}}
-      onAccessRequest={() => {}}
-      onNavigateTo={() => {}}
       title="Weather Panel"
       className="w-full h-[calc(100vh-48px)]"
     />

@@ -28,12 +28,7 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
     <ArtifactHolder
       src={src}
       target={scope}
-      diffs={[]}
-      expandedAccess={[]}
       onSelection={onSelection}
-      onMessage={() => {}}
-      onAccessRequest={() => {}}
-      onNavigateTo={() => {}}
       title="Events Panel"
       className="w-full h-[calc(100vh-48px)]"
     />
