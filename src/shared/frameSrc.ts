@@ -30,6 +30,8 @@ interface FrameSrcState {
   getSrc: (view: View) => string
 }
 
+const DIAGNOSTIC_PATH = `${import.meta.env.BASE_URL}diagnotic.html`
+
 export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
   srcs: {},
   diagnostic: {},
@@ -43,7 +45,7 @@ export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
     })),
   getSrc: (view) =>
     get().diagnostic[view]
-      ? '/diagnotic.html'
+      ? DIAGNOSTIC_PATH
       : (get().srcs[view] ?? DEFAULT_SRCS[view])
 }))
 
