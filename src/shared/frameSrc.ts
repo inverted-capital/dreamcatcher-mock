@@ -23,15 +23,28 @@ const DEFAULT_SRCS: Record<View, string> = {
 
 interface FrameSrcState {
   srcs: Partial<Record<View, string>>
+  diagnostic: Partial<Record<View, boolean>>
   setSrc: (view: View, src: string) => void
+  setDiagnostic: (view: View, enabled: boolean) => void
+  toggleDiagnostic: (view: View) => void
   getSrc: (view: View) => string
 }
 
 export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
   srcs: {},
+  diagnostic: {},
   setSrc: (view, src) =>
     set((state) => ({ srcs: { ...state.srcs, [view]: src } })),
-  getSrc: (view) => get().srcs[view] ?? DEFAULT_SRCS[view]
+  setDiagnostic: (view, enabled) =>
+    set((state) => ({ diagnostic: { ...state.diagnostic, [view]: enabled } })),
+  toggleDiagnostic: (view) =>
+    set((state) => ({
+      diagnostic: { ...state.diagnostic, [view]: !state.diagnostic[view] }
+    })),
+  getSrc: (view) =>
+    get().diagnostic[view]
+      ? '/diagnotic.html'
+      : (get().srcs[view] ?? DEFAULT_SRCS[view])
 }))
 
 export function defaultSrcFor(view: View): string {
