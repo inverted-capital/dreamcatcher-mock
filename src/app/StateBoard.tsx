@@ -141,6 +141,8 @@ const StateBoard: React.FC = () => {
 
   const setFrameSrc = useFrameSrcStore((s) => s.setSrc)
   const getFrameSrc = useFrameSrcStore((s) => s.getSrc)
+  const toggleDiagnostic = useFrameSrcStore((s) => s.toggleDiagnostic)
+  const diagnosticEnabled = useFrameSrcStore((s) => s.diagnostic[currentView])
 
   const reloadCurrentView = () => {
     setReloadKeys((prev) => ({
@@ -243,6 +245,18 @@ const StateBoard: React.FC = () => {
                     className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                   >
                     Edit Frame Source
+                  </button>
+                  <button
+                    onClick={() => {
+                      toggleDiagnostic(currentView)
+                      reloadCurrentView()
+                      setShowSettingsMenu(false)
+                    }}
+                    className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    {diagnosticEnabled
+                      ? 'Disable Diagnostic'
+                      : 'Enable Diagnostic'}
                   </button>
                 </div>
               )}

@@ -19,6 +19,12 @@ export default defineConfig({
   base: './',
   build: {
     sourcemap: true,
-    minify: false
+    minify: false,
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        diagnotic: path.resolve(__dirname, 'diagnotic.html')
+      }
+    }
   }
 })
