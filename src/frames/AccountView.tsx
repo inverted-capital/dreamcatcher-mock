@@ -15,7 +15,6 @@ const AccountView: React.FC = () => {
       src={src}
       target={scope}
       onSelection={onSelection}
-      onNavigateTo={() => {}}
       title="Account Panel"
       className="w-full h-[calc(100vh-48px)]"
     />

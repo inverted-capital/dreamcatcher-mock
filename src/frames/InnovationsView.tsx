@@ -15,12 +15,7 @@ const InnovationsView: React.FC = () => {
     <ArtifactHolder
       src={src}
       target={scope}
-      diffs={[]}
-      expandedAccess={[]}
       onSelection={onSelection}
-      onMessage={() => {}}
-      onAccessRequest={() => {}}
-      onNavigateTo={() => {}}
       title="Innovations Panel"
       className="w-full h-[calc(100vh-48px)]"
     />
