@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArtifactFrame } from '@artifact/client/react'
 import { useFrame, useArtifact } from '@artifact/client/hooks'
+import { isCommitScope, isRepoScope } from '@artifact/client/api'
 
 interface FileMeta {
   path: string
@@ -15,7 +16,7 @@ function Diagnostic() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (!artifact) return
+    if (!artifact || !isCommitScope(artifact.scope)) return
     let active = true
     const updateFiles = async () => {
       const list = await artifact.files.read.ls('.')
@@ -36,7 +37,7 @@ function Diagnostic() {
   }, [artifact])
 
   useEffect(() => {
-    if (!artifact) return
+    if (!artifact || !isRepoScope(artifact.scope)) return
     let active = true
     const updateBranches = async () => {
       const list = await artifact.repo.branches.ls()
@@ -57,7 +58,7 @@ function Diagnostic() {
   }, [artifact])
 
   const addFile = () => {
-    if (!artifact) return
+    if (!artifact || !isCommitScope(artifact.scope)) return
     const path = `diagnostic-${Date.now()}-${count}.txt`
     setCount((c) => c + 1)
     artifact.files.write.text(path, 'diagnostic file')
