@@ -153,16 +153,6 @@ const StateBoard: React.FC = () => {
     }))
   }
 
-  const reloadAllViews = () => {
-    setReloadKeys((prev) => {
-      const next = { ...prev }
-      visitedViews.forEach((view) => {
-        next[view] = (next[view] ?? 0) + 1
-      })
-      return next
-    })
-  }
-
   const handleEditSrc = () => {
     const current = getFrameSrc(currentView)
     const next = window.prompt('Enter frame source URL', current)
@@ -274,7 +264,6 @@ const StateBoard: React.FC = () => {
             <button
               onClick={() => {
                 toggleDiagnostic()
-                reloadAllViews()
               }}
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-white hover:shadow-sm rounded-md border border-transparent hover:border-gray-200 transition-all duration-150"
               title={

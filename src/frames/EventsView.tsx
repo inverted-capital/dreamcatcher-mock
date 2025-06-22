@@ -1,9 +1,7 @@
 import React from 'react'
-import { ArtifactHolder } from '@artifact/client/react'
 import { useTargetScopeStore } from '@/shared/targetScope'
 import useHomeScope from '@/shared/useHomeScope'
-import useSelectionUpdater from '@/shared/useSelectionUpdater'
-import { useFrameSrcStore } from '@/shared/frameSrc'
+import FrameWithDiagnostic from '@/shared/FrameWithDiagnostic'
 
 interface EventsViewProps {
   home?: boolean
@@ -12,8 +10,6 @@ interface EventsViewProps {
 const EventsView: React.FC<EventsViewProps> = ({ home }) => {
   const homeScope = useHomeScope()
   const targetScope = useTargetScopeStore((s) => s.scope)
-  const onSelection = useSelectionUpdater()
-  const src = useFrameSrcStore((s) => s.getSrc(home ? 'home-events' : 'events'))
 
   const scope = home ? homeScope : targetScope
 
@@ -25,12 +21,10 @@ const EventsView: React.FC<EventsViewProps> = ({ home }) => {
   if (!scope) return <div className="p-6">No scope</div>
 
   return (
-    <ArtifactHolder
-      src={src}
-      target={scope}
-      onSelection={onSelection}
+    <FrameWithDiagnostic
+      view={home ? 'home-events' : 'events'}
+      scope={scope}
       title="Events Panel"
-      className="w-full h-[calc(100vh-48px)]"
     />
   )
 }
