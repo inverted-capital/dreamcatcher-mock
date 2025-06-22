@@ -1,24 +1,12 @@
 import React from 'react'
-import { ArtifactHolder } from '@artifact/client/react'
 import useHomeScope from '@/shared/useHomeScope'
-import useSelectionUpdater from '@/shared/useSelectionUpdater'
-import { useFrameSrcStore } from '@/shared/frameSrc'
+import FrameWithDiagnostic from '@/shared/FrameWithDiagnostic'
 
 const HomeView: React.FC = () => {
   const scope = useHomeScope()
-  const onSelection = useSelectionUpdater()
-  const src = useFrameSrcStore((s) => s.getSrc('home'))
   if (!scope) return <div className="p-6">Loading home scope...</div>
 
-  return (
-    <ArtifactHolder
-      src={src}
-      target={scope}
-      onSelection={onSelection}
-      title="Home Panel"
-      className="w-full h-[calc(100vh-48px)]"
-    />
-  )
+  return <FrameWithDiagnostic view="home" scope={scope} title="Home Panel" />
 }
 
 export default HomeView
