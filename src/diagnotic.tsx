@@ -1,4 +1,4 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ArtifactFrame } from '@artifact/client/react'
 import {
@@ -19,6 +19,28 @@ function Diagnostic() {
   const branches = useBranches()
   const remotes = useRemotes()
   const [count, setCount] = useState(0)
+  const [windowInfo, setWindowInfo] = useState(() => ({
+    innerWidth: window.innerWidth,
+    innerHeight: window.innerHeight,
+    outerWidth: window.outerWidth,
+    outerHeight: window.outerHeight,
+    clientWidth: document.documentElement.clientWidth,
+    clientHeight: document.documentElement.clientHeight
+  }))
+
+  useEffect(() => {
+    const handler = () =>
+      setWindowInfo({
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        outerWidth: window.outerWidth,
+        outerHeight: window.outerHeight,
+        clientWidth: document.documentElement.clientWidth,
+        clientHeight: document.documentElement.clientHeight
+      })
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
 
   const addFile = () => {
     if (!artifact || !isCommitScope(artifact.scope)) return
@@ -53,6 +75,8 @@ function Diagnostic() {
       <pre>{JSON.stringify(remotes, null, 2)}</pre>
       <h3>Files</h3>
       <pre>{JSON.stringify(rootDir, null, 2)}</pre>
+      <h3>Window Info</h3>
+      <pre>{JSON.stringify(windowInfo, null, 2)}</pre>
       <div style={{ marginTop: 10 }}>
         <button onClick={() => frame.onSelection?.(frame.target)}>
           onSelection
