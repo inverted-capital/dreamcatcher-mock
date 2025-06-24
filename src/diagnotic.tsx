@@ -50,7 +50,15 @@ function Diagnostic() {
   }
 
   return (
-    <div style={{ fontFamily: 'monospace', padding: 10 }}>
+    <div
+      style={{
+        fontFamily: 'monospace',
+        padding: 10,
+        height: '100vh',
+        overflow: 'auto',
+        boxSizing: 'border-box'
+      }}
+    >
       <h2>Diagnostic Frame</h2>
       <h3>Props</h3>
       <pre>
