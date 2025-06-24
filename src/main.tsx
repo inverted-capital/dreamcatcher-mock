@@ -5,14 +5,14 @@ import HomeScopeProvider from '@/shared/HomeScopeProvider'
 import './index.css'
 import { ArtifactWeb } from '@artifact/client/react'
 import Debug from 'debug'
-import { PrivyProvider, useIdentityToken, usePrivy } from '@privy-io/react-auth'
+import { PrivyProvider, usePrivy } from '@privy-io/react-auth'
 Debug.enable('artifact:*')
 
 const url = 'https://web-client-shy-dawn-4057.fly.dev'
 
 export function AuthenticatedApp() {
-  const { ready, authenticated, user, login } = usePrivy()
-  const { identityToken } = useIdentityToken()
+  const { ready, authenticated, user, login, getAccessToken } = usePrivy()
+  const [accessToken, setAccessToken] = useState<string | null>(null)
   const [error, onError] = useState<unknown>()
   const modalShownRef = useRef(false)
 
@@ -24,6 +24,32 @@ export function AuthenticatedApp() {
     }
   }, [ready, authenticated, login])
 
+  useEffect(() => {
+    let active = true
+    let interval: ReturnType<typeof setInterval> | undefined
+
+    async function fetchToken() {
+      if (!authenticated) {
+        if (active) setAccessToken(null)
+        return
+      }
+
+      const token = await getAccessToken()
+      if (active) setAccessToken(token)
+    }
+
+    fetchToken()
+
+    if (authenticated) {
+      interval = setInterval(fetchToken, 10 * 60 * 1000)
+    }
+
+    return () => {
+      active = false
+      if (interval) clearInterval(interval)
+    }
+  }, [authenticated, getAccessToken])
+
   if (error) {
     return <div>{String(error)}</div>
   }
@@ -31,7 +57,7 @@ export function AuthenticatedApp() {
   if (!ready) {
     return <div>Loading Privy authentication...</div>
   }
-  if (!authenticated || !user || !identityToken) {
+  if (!authenticated || !user || !accessToken) {
     return (
       <div
         className="login-container"
@@ -70,7 +96,7 @@ export function AuthenticatedApp() {
     <ArtifactWeb
       did={user.id}
       server={url}
-      secureToken={identityToken}
+      secureToken={accessToken}
       onError={onError}
       global
       placeholder={<LoadingArtifact />}
