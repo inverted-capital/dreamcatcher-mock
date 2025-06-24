@@ -65,6 +65,8 @@ function Diagnostic() {
           2
         )}
       </pre>
+      <h3>Window Info</h3>
+      <pre>{JSON.stringify(windowInfo, null, 2)}</pre>
       <h3>Scope</h3>
       <pre>{JSON.stringify(artifact?.scope, null, 2)}</pre>
       <h3>Tree</h3>
@@ -75,8 +77,6 @@ function Diagnostic() {
       <pre>{JSON.stringify(remotes, null, 2)}</pre>
       <h3>Files</h3>
       <pre>{JSON.stringify(rootDir, null, 2)}</pre>
-      <h3>Window Info</h3>
-      <pre>{JSON.stringify(windowInfo, null, 2)}</pre>
       <div style={{ marginTop: 10 }}>
         <button onClick={() => frame.onSelection?.(frame.target)}>
           onSelection
