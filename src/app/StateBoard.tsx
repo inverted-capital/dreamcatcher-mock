@@ -278,7 +278,7 @@ const StateBoard: React.FC = () => {
 
       {/* View Content */}
       {showStateBoard && (
-        <div className="flex-1 overflow-y-auto bg-gray-50">
+        <div className="flex-1 overflow-hidden w-full h-full bg-gray-50">
           {visitedViews.map((view) => (
             <div
               key={`${view}-${reloadKeys[view] ?? 0}`}
