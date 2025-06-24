@@ -15,7 +15,7 @@ function Diagnostic() {
   const frame = useFrame()
   const artifact = useArtifact()
   const tree = useTree()
-  const rootDir = useDir('.')
+  const rootDir = useDir()
   const branches = useBranches()
   const remotes = useRemotes()
   const [count, setCount] = useState(0)
