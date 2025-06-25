@@ -21,7 +21,7 @@ const FrameWithDiagnostic: React.FC<Props> = ({ view, scope, title }) => {
   const onSelection = useSelectionUpdater()
 
   return (
-    <div className="w-full h-[calc(100vh-48px)]">
+    <>
       <ArtifactHolder
         src={src}
         target={scope}
@@ -38,7 +38,7 @@ const FrameWithDiagnostic: React.FC<Props> = ({ view, scope, title }) => {
           className="w-full h-full"
         />
       )}
-    </div>
+    </>
   )
 }
 
