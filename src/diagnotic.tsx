@@ -55,6 +55,7 @@ function Diagnostic() {
         fontFamily: 'monospace',
         padding: 10,
         overflow: 'auto',
+        height: '100%',
         boxSizing: 'border-box'
       }}
     >
