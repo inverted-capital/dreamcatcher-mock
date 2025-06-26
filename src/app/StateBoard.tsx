@@ -282,7 +282,7 @@ const StateBoard: React.FC = () => {
           {visitedViews.map((view) => (
             <div
               key={`${view}-${reloadKeys[view] ?? 0}`}
-              className={view === currentView ? 'block' : 'hidden'}
+              className={view === currentView ? 'block h-full' : 'hidden'}
             >
               {renderView(view)}
             </div>
