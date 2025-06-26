@@ -42,7 +42,7 @@ export function useRegularSrc(view: View): string {
 
 export const useFrameSrcStore = create<FrameSrcState>((set, get) => ({
   srcs: {},
-  diagnostic: true,
+  diagnostic: false,
   setSrc: (view, src) =>
     set((state) => ({ srcs: { ...state.srcs, [view]: src } })),
   resetSrc: (view) =>
