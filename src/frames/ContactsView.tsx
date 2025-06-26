@@ -6,9 +6,7 @@ const ContactsView: React.FC = () => {
   const scope = useHomeScope()
   if (!scope) return <div className="p-6">Loading home scope...</div>
 
-  return (
-    <FrameWithDiagnostic view="contacts" scope={scope} title="Contacts Panel" />
-  )
+  return <FrameWithDiagnostic view="contacts" scope={scope} title="Contacts" />
 }
 
 export default ContactsView

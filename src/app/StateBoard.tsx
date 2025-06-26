@@ -14,7 +14,6 @@ import FilesView from '@/frames/FilesView'
 import ReposView from '@/frames/ReposView'
 import BranchesView from '@/frames/BranchesView'
 import HelpView from '@/frames/HelpView'
-import CustomersView from '@/frames/CustomersView'
 import WeatherView from '@/frames/WeatherView'
 import HomeView from '@/frames/HomeView'
 import InnovationsView from '@/frames/InnovationsView'
@@ -26,6 +25,7 @@ import TranscludesView from '@/frames/TranscludesView'
 import ProcessesView from '@/frames/ProcessesView'
 import ContactsView from '@/frames/ContactsView'
 import EventsView from '@/frames/EventsView'
+import EventsViewHome from '@/frames/EventsViewHome'
 
 const formatScope = (scope: Scope | null): string => {
   if (!scope) return 'No target'
@@ -107,7 +107,7 @@ const StateBoard: React.FC = () => {
       case 'contacts':
         return <ContactsView />
       case 'home-events':
-        return <EventsView home />
+        return <EventsViewHome />
       case 'events':
         return <EventsView />
       case 'files':
@@ -124,8 +124,6 @@ const StateBoard: React.FC = () => {
         return <ProcessesView />
       case 'help':
         return <HelpView />
-      case 'customers':
-        return <CustomersView />
       case 'weather':
         return <WeatherView />
       case 'innovations':
