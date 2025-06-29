@@ -112,6 +112,8 @@ function Boot() {
   )
 }
 
+export default Boot
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Boot />
