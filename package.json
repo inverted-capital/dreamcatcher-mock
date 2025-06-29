@@ -16,7 +16,7 @@
     "knip": "knip --production --fix --allow-remove-files --format --exports"
   },
   "dependencies": {
-    "@artifact/client": "npm:@jsr/artifact__client@^0.0.138",
+    "@artifact/client": "npm:@jsr/artifact__client@^0.0.140",
     "@open-iframe-resizer/react": "^1.6.0",
     "@privy-io/react-auth": "2.17.2",
     "debug": "^4.4.1",
@@ -37,7 +37,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",
     "jsr": "^0.13.4",
-    "knip": "^5.61.2",
+    "knip": "^5.61.3",
     "ox": "^0.8.3",
     "postcss": "^8.5.6",
     "prettier": "3.6.2",
