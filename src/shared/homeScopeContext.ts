@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-import type { Scope } from '@artifact/client/api'
+import type { BranchScope } from '@artifact/client/api'
 
-const HomeScopeContext = createContext<Scope | null>(null)
+const HomeScopeContext = createContext<BranchScope | null>(null)
 export default HomeScopeContext

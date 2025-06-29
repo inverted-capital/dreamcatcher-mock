@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useBaseArtifact } from '@artifact/client/hooks'
-import type { Scope } from '@artifact/client/api'
+import { isBranchScope, type BranchScope } from '@artifact/client/api'
 import HomeScopeContext from './homeScopeContext'
-import { useTargetScopeStore } from './targetScope'
 
 export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
   children
 }) => {
   const artifact = useBaseArtifact()
-  const [scope, setScope] = useState<Scope | null>(null)
-  const setTargetScope = useTargetScopeStore((s) => s.setScope)
+  const [scope, setScope] = useState<BranchScope | null>(null)
 
   useEffect(() => {
     if (!artifact) return
@@ -20,13 +18,14 @@ export const HomeScopeProvider: React.FC<{ children: React.ReactNode }> = ({
       const repoArtifact = artifact.checkout(repo)
       const { scope } = await repoArtifact.repo.branches.default()
       if (cancelled) return
-      setScope(scope)
-      setTargetScope(scope)
+      if (isBranchScope(scope)) {
+        setScope(scope)
+      }
     })()
     return () => {
       cancelled = true
     }
-  }, [artifact, setTargetScope])
+  }, [artifact])
 
   if (!artifact) return null
 
