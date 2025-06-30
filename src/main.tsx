@@ -69,11 +69,7 @@ export function AuthenticatedApp() {
     <ArtifactWeb
       did={user.id}
       server={url}
-      getToken={async () => {
-        const token = await getAccessToken()
-        if (!token) throw new Error('No access token')
-        return token
-      }}
+      getAccessToken={getAccessToken}
       onError={onError}
       global
       placeholder={<LoadingArtifact />}
