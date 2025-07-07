@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { ChatMessage, Chat, NavigationItem } from '@/shared/types'
+import type { Scope } from '@artifact/client/api'
 import { mockMessages } from '@/shared/mockMessages'
 import { mockChats } from '@/shared/mockChats'
 
@@ -33,6 +34,8 @@ interface ChatActions {
   collapseNavItem: (id: string) => void
   expandNavItem: (id: string) => void
   createNewChat: () => string
+  /** Select a chat by id, creating it if necessary */
+  selectOrCreateChat: (id: string, scope?: Scope) => void
   selectChat: (chatId: string) => void
   setSearchQuery: (query: string) => void
   getFilteredChats: () => Chat[]
@@ -159,6 +162,29 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
     }))
 
     return newChatId
+  },
+
+  selectOrCreateChat: (id, scope) => {
+    const existing = get().chats.find((c) => c.id === id)
+    if (!existing) {
+      const newChat: Chat = {
+        id,
+        title: `Chat ${id}`,
+        timestamp: new Date().toISOString(),
+        messageIds: [],
+        scope
+      }
+      set((state) => ({
+        chats: [newChat, ...state.chats],
+        currentChatId: id,
+        isNewEmptyChat: true
+      }))
+    } else {
+      set({
+        currentChatId: id,
+        isNewEmptyChat: existing.messageIds.length === 0
+      })
+    }
   },
 
   selectChat: (chatId) => {

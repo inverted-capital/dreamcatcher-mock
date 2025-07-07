@@ -13,9 +13,15 @@ interface Props {
   view: View
   scope: Scope
   title: string
+  onNavigateTo?: (scope: Scope) => void
 }
 
-const FrameWithDiagnostic: React.FC<Props> = ({ view, scope, title }) => {
+const FrameWithDiagnostic: React.FC<Props> = ({
+  view,
+  scope,
+  title,
+  onNavigateTo
+}) => {
   const diagnostic = useFrameSrcStore((s) => s.diagnostic)
   const src = useRegularSrc(view)
   const onSelection = useSelectionUpdater()
@@ -26,6 +32,7 @@ const FrameWithDiagnostic: React.FC<Props> = ({ view, scope, title }) => {
         src={src}
         target={scope}
         onSelection={onSelection}
+        onNavigateTo={onNavigateTo}
         title={title}
         className={diagnostic ? 'hidden w-full h-full' : 'w-full h-full'}
       />
@@ -34,6 +41,7 @@ const FrameWithDiagnostic: React.FC<Props> = ({ view, scope, title }) => {
           src={DIAGNOSTIC_PATH}
           target={scope}
           onSelection={onSelection}
+          onNavigateTo={onNavigateTo}
           title="Diagnostic Panel"
           className="w-full h-full"
         />
