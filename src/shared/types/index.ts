@@ -1,3 +1,5 @@
+import type { Scope } from '@artifact/client/api'
+
 type Role = 'user' | 'assistant' | 'system'
 type MessageType = 'text' | 'navigation' | 'file' | 'code'
 export type View =
@@ -54,6 +56,8 @@ export interface Chat {
   lastMessage?: string
   timestamp: string
   messageIds: string[]
+  /** The associated Artifact scope for this chat */
+  scope?: Scope
 }
 
 interface TranscludePart {
