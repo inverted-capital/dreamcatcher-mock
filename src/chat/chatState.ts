@@ -15,14 +15,11 @@ function getInitialChatId(): string {
 }
 
 const initialChatId = getInitialChatId()
-const initialChat = mockChats.find((chat) => chat.id === initialChatId)
 
 interface ChatState {
   messages: ChatMessage[]
   navigationHistory: NavigationItem[]
   currentChatId: string | null
-  searchQuery: string
-  isNewEmptyChat: boolean
   chats: Chat[]
 }
 
@@ -37,8 +34,6 @@ interface ChatActions {
   /** Select a chat by id, creating it if necessary */
   selectOrCreateChat: (id: string, scope?: Scope) => void
   selectChat: (chatId: string) => void
-  setSearchQuery: (query: string) => void
-  getFilteredChats: () => Chat[]
   getChatMessages: (chatId: string) => ChatMessage[]
 }
 
@@ -51,8 +46,6 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
   })),
   chats: mockChats,
   currentChatId: initialChatId,
-  searchQuery: '',
-  isNewEmptyChat: initialChat?.messageIds.length === 0 || false,
   navigationHistory: [
     {
       id: '1',
@@ -93,8 +86,7 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
 
       return {
         messages: [...state.messages, newMessage],
-        chats: updatedChats,
-        isNewEmptyChat: false
+        chats: updatedChats
       }
     })
   },
@@ -157,8 +149,7 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
 
     set((state) => ({
       chats: [newChat, ...state.chats],
-      currentChatId: newChatId,
-      isNewEmptyChat: true
+      currentChatId: newChatId
     }))
 
     return newChatId
@@ -176,41 +167,19 @@ export const useChatStore = create<ChatState & ChatActions>()((set, get) => ({
       }
       set((state) => ({
         chats: [newChat, ...state.chats],
-        currentChatId: id,
-        isNewEmptyChat: true
+        currentChatId: id
       }))
     } else {
       set({
-        currentChatId: id,
-        isNewEmptyChat: existing.messageIds.length === 0
+        currentChatId: id
       })
     }
   },
 
   selectChat: (chatId) => {
-    const selectedChat = get().chats.find((chat) => chat.id === chatId)
     set({
-      currentChatId: chatId,
-      // If selecting an existing chat with messages, it's not a new empty chat
-      isNewEmptyChat: selectedChat?.messageIds.length === 0 || false
+      currentChatId: chatId
     })
-  },
-
-  setSearchQuery: (query) => {
-    set({ searchQuery: query })
-  },
-
-  getFilteredChats: () => {
-    const { chats, searchQuery } = get()
-
-    if (!searchQuery.trim()) return chats
-
-    return chats.filter(
-      (chat) =>
-        chat.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (chat.lastMessage &&
-          chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()))
-    )
   },
 
   getChatMessages: (chatId) => {
