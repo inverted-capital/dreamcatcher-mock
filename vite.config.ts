@@ -23,7 +23,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
-        diagnotic: path.resolve(__dirname, 'diagnotic.html')
+        diagnostic: path.resolve(__dirname, 'diagnostic.html')
       }
     }
   }
