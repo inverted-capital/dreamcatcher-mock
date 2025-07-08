@@ -6,6 +6,7 @@ import type { Scope } from '@artifact/client/api'
 
 const ChatsView: React.FC = () => {
   const scope = useHomeScope()
+
   const selectOrCreateChat = useChatStore((s) => s.selectOrCreateChat)
 
   const handleNavigate = useCallback(

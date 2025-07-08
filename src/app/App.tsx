@@ -1,5 +1,4 @@
 import useHashRouter from './useHashRouter'
-import useHomeScope from '@/shared/useHomeScope'
 import Sidebar from './Sidebar'
 import StateBoard from './StateBoard'
 import { ChatHistory, ChatInput } from '@/chat'
@@ -9,7 +8,6 @@ import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
 
 function App() {
   useHashRouter()
-  useHomeScope()
   const [showChat, setShowChat] = useState(true)
   const [chatFullscreen, setChatFullscreen] = useState(false)
 
