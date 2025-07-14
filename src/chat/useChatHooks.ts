@@ -1,5 +1,5 @@
 import { useArtifact, useJson, useDir, useStore } from '@artifact/client/hooks'
-import { useCallback, useMemo, useEffect } from 'react'
+import { useCallback, useMemo, useEffect, useState } from 'react'
 import schema from '@dreamcatcher/chats'
 import { configSchema } from '@dreamcatcher/chats/schema'
 import { useChat as aiUseChat, UIMessage } from '@ai-sdk/react'
@@ -13,6 +13,11 @@ const log = Debug('dreamcatcher:useChatHooks')
 // or, just try it, add them whenever they change.
 
 export const useChat = (chatId: string) => {
+  const [chatIdCheck] = useState(chatId)
+  if (chatIdCheck !== chatId) {
+    throw new Error('chatId changed:' + chatIdCheck + ' -> ' + chatId)
+  }
+
   const artifact = useArtifact()
   if (!artifact) {
     throw new Error('No artifact found')
@@ -23,7 +28,8 @@ export const useChat = (chatId: string) => {
     id: chatId
   })
 
-  const messagesDir = useDir(chatId && `chats/${chatId}/messages`)
+  const messagesPath = `chats/${chatId}/messages`
+  const messagesDir = useDir(messagesPath)
   const store = useStore()
 
   const messages = useMemo(() => {
@@ -32,7 +38,7 @@ export const useChat = (chatId: string) => {
     const messages: UIMessage[] = []
     for (const meta of messagesDir) {
       if (meta.type !== 'blob') continue
-      const json = readFile(meta.path, transform)
+      const json = readFile(messagesPath + '/' + meta.path, transform)
       const { success, data, error } = uiMessageSchema.safeParse(json)
       if (success) {
         messages.push(data as UIMessage)
