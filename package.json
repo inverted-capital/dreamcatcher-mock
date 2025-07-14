@@ -19,19 +19,26 @@
     "@ai-sdk/react": "^2.0.0-beta.15",
     "@artifact/client": "npm:@jsr/artifact__client@^0.0.161",
     "@dreamcatcher/chats": "npm:@jsr/dreamcatcher__chats@^0.0.11",
+    "@llm-ui/code": "^0.13.3",
+    "@llm-ui/markdown": "^0.13.3",
+    "@llm-ui/react": "^0.13.3",
     "@open-iframe-resizer/react": "^1.6.0",
     "@privy-io/react-auth": "2.18.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "debug": "^4.4.1",
+    "html-react-parser": "^5.2.5",
     "lucide-react": "^0.525.0",
-    "react": "^19",
-    "react-dom": "^19",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^1.29.2",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@tailwindcss/postcss": "^4.1.11",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.31.0",
@@ -55,5 +62,16 @@
     "useTabs": false,
     "semi": false,
     "trailingComma": "none"
+  },
+  "overrides": {
+    "@llm-ui/react": {
+      "react": "^19.1"
+    },
+    "@llm-ui/markdown": {
+      "react": "^19.1"
+    },
+    "@llm-ui/code": {
+      "react": "^19.1"
+    }
   }
 }
