@@ -7,7 +7,7 @@ import transport from '@dreamcatcher/chats/transport'
 import Debug from 'debug'
 import { z } from 'zod'
 
-const log = Debug('dreamcatcher:useChatHooks')
+const log = Debug('artifact:useChatHooks')
 
 // only when the status is idle, can we use setMessages to add messages in ?
 // or, just try it, add them whenever they change.
@@ -24,9 +24,11 @@ export const useChat = (chatId: string) => {
   }
 
   const ai = aiUseChat({
+    messages: [],
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
     id: chatId
   })
+  log('ai', ai)
 
   const messagesPath = `chats/${chatId}/messages`
   const messagesDir = useDir(messagesPath)
@@ -47,14 +49,14 @@ export const useChat = (chatId: string) => {
       }
     }
     return messages
-  }, [store, messagesDir])
+  }, [store, messagesDir, messagesPath])
 
   useEffect(() => {
     if (!containsAllById(ai.messages, messages)) {
       log('setting messages', messages)
       ai.setMessages(messages)
     }
-  }, [messages, ai.messages, ai.setMessages])
+  }, [messages, ai])
 
   return ai
 }
