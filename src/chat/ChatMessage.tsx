@@ -1,26 +1,31 @@
 import React from 'react'
-
-import { ChatMessage as ChatMessageType } from '@/shared/types'
+import Loader2 from 'lucide-react/dist/esm/icons/loader-2'
+import type { UIMessage } from '@ai-sdk/react'
 
 interface ChatMessageProps {
-  message: ChatMessageType
+  message: UIMessage
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user'
 
-  // Get actions from Zustand stores
+  const textParts = message.parts.filter((p) => p.type === 'text') as Array<{
+    type: 'text'
+    text: string
+    state?: 'streaming' | 'done'
+  }>
 
-  // Extract transclude information from the message if it exists
-  const hasContext = isUser && message.content.startsWith('Transclude:')
-  let messageContent = message.content
+  const reasoningParts = message.parts.filter(
+    (p) => p.type === 'reasoning'
+  ) as Array<{ type: 'reasoning'; text: string; state?: 'streaming' | 'done' }>
 
-  if (hasContext) {
-    const parts = message.content.split('\n\n')
-    if (parts.length > 1) {
-      messageContent = parts.slice(1).join('\n\n')
-    }
-  }
+  const textContent = textParts.map((p) => p.text).join('')
+  const reasoningContent = reasoningParts.map((p) => p.text).join('')
+
+  const isStreaming =
+    message.parts.some((p) => p.type === 'step-start') ||
+    textParts.some((p) => p.state === 'streaming') ||
+    reasoningParts.some((p) => p.state === 'streaming')
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
@@ -31,22 +36,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             : 'bg-white border border-gray-200 text-gray-800'
         }`}
       >
-        {messageContent}
-
-        {message.attachments && message.attachments.length > 0 && (
-          <div className="mt-2 space-y-1">
-            {message.attachments.map((attachment) => (
-              <div
-                key={attachment.id}
-                className="flex items-center bg-white/10 rounded px-2 py-1 text-sm"
-              >
-                <span className="truncate">{attachment.name}</span>
-                <span className="ml-1 text-xs opacity-70">
-                  ({Math.round(attachment.size || 0 / 1024)}KB)
-                </span>
-              </div>
-            ))}
+        {!isUser && reasoningContent && (
+          <div className="text-xs italic text-gray-500 mb-1">
+            {reasoningContent}
           </div>
+        )}
+        <span>{textContent}</span>
+        {isStreaming && (
+          <Loader2 size={14} className="inline-block ml-1 animate-spin" />
         )}
       </div>
     </div>
