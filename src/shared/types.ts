@@ -102,4 +102,4 @@ export const validViews: readonly View[] = [
   'napps',
   'transcludes',
   'processes'
-] as const;
+] as const

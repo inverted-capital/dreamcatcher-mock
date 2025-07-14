@@ -6,10 +6,13 @@ const generateDefaultSrc = (view: View): string => {
   const panelName = view === 'home-events' ? 'events' : view
   return `https://inverted-capital.github.io/frame-${panelName}-panel/`
 }
-const DEFAULT_SRCS: Record<View, string> = validViews.reduce((acc, view) => {
-  acc[view] = generateDefaultSrc(view)
-  return acc
-}, {} as Record<View, string>)
+const DEFAULT_SRCS: Record<View, string> = validViews.reduce(
+  (acc, view) => {
+    acc[view] = generateDefaultSrc(view)
+    return acc
+  },
+  {} as Record<View, string>
+)
 
 interface FrameSrcState {
   srcs: Partial<Record<View, string>>
