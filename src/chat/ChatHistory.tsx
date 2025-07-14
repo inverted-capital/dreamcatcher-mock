@@ -1,7 +1,7 @@
 import React from 'react'
 import { useChatStore } from './chatState'
 import { useExists } from '@artifact/client/hooks'
-// import ChatMessage from './ChatMessage'
+import ChatMessage from './ChatMessage'
 // import NavigationMarker from './NavigationMarker'
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square'
 import Settings from 'lucide-react/dist/esm/icons/settings'
@@ -179,7 +179,7 @@ const ChatHistoryInternal: React.FC<ChatHistoryProps> = ({
           <div className="py-4 px-6">
             <div className="space-y-4">
               {messages.map((item) => (
-                <pre key={item.id}>{JSON.stringify(item, null, 2)}</pre>
+                <ChatMessage key={item.id} message={item} />
               ))}
             </div>
             <div ref={messagesEndRef} />
