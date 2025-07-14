@@ -2,17 +2,28 @@ import useHashRouter from './useHashRouter'
 import Sidebar from './Sidebar'
 import StateBoard from './StateBoard'
 import { ChatHistory, ChatInput } from '@/chat'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
 import { useChat } from '@/chat/useChatHooks'
 import { useChatStore } from '@/chat/chatState'
+import useHomeScope from '@/shared/useHomeScope'
+import { useTargetScopeStore } from '@/shared/targetScope'
 
 function App() {
   useHashRouter()
+  const homeScope = useHomeScope()
+  const currentScope = useTargetScopeStore((s) => s.scope)
+  const setScope = useTargetScopeStore((s) => s.setScope)
   const [showChat, setShowChat] = useState(true)
   const [chatFullscreen, setChatFullscreen] = useState(false)
   const chatId = useChatStore((state) => state.currentChatId)
+
+  useEffect(() => {
+    if (!currentScope && homeScope) {
+      setScope(homeScope)
+    }
+  }, [currentScope, homeScope, setScope])
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
