@@ -43,17 +43,12 @@ export const useChat = (chatId: string) => {
     return messages
   }, [store, messagesDir])
 
-  const containsAllById = (current: UIMessage[], incoming: UIMessage[]) => {
-    const ids = new Set(current.map((m) => m.id))
-    return incoming.every((msg) => ids.has(msg.id))
-  }
-
   useEffect(() => {
     if (!containsAllById(ai.messages, messages)) {
       log('setting messages', messages)
       ai.setMessages(messages)
     }
-  }, [messages, ai.messages, ai])
+  }, [messages, ai.messages, ai.setMessages])
 
   return ai
 }
@@ -114,3 +109,8 @@ const uiMessageSchema = z.object({
   role: z.enum(['system', 'user', 'assistant']),
   parts: z.array(z.object({ type: z.string() }).passthrough())
 })
+
+const containsAllById = (current: UIMessage[], incoming: UIMessage[]) => {
+  const ids = new Set(current.map((m) => m.id))
+  return incoming.every((msg) => ids.has(msg.id))
+}
