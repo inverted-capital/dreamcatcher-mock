@@ -1,5 +1,6 @@
 import { useArtifact, useJson, useDir, useStore } from '@artifact/client/hooks'
 import { useCallback, useMemo, useEffect } from 'react'
+import equal from 'fast-deep-equal'
 import schema from '@dreamcatcher/chats'
 import { configSchema } from '@dreamcatcher/chats/schema'
 import { useChat as aiUseChat, UIMessage } from '@ai-sdk/react'
@@ -44,8 +45,10 @@ export const useChat = (chatId: string) => {
   }, [store, messagesDir])
 
   useEffect(() => {
-    log('setting messages', messages)
-    ai.setMessages(messages)
+    if (!equal(ai.messages, messages)) {
+      log('setting messages', messages)
+      ai.setMessages(messages)
+    }
   }, [messages, ai])
 
   return ai
