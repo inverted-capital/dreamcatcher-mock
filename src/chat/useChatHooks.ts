@@ -2,7 +2,6 @@ import { useArtifact, useJson, useDir, useStore } from '@artifact/client/hooks'
 import { useCallback, useMemo, useEffect } from 'react'
 import schema from '@dreamcatcher/chats'
 import { configSchema } from '@dreamcatcher/chats/schema'
-import { useChatStore } from './chatState'
 import { useChat as aiUseChat, UIMessage } from '@ai-sdk/react'
 import transport from '@dreamcatcher/chats/transport'
 import Debug from 'debug'
@@ -13,13 +12,12 @@ const log = Debug('dreamcatcher:useChatHooks')
 // only when the status is idle, can we use setMessages to add messages in ?
 // or, just try it, add them whenever they change.
 
-export const useChat = () => {
+export const useChat = (chatId: string) => {
   const artifact = useArtifact()
   if (!artifact) {
     throw new Error('No artifact found')
   }
 
-  const chatId = useChatStore((s) => s.currentChatId)
   const ai = aiUseChat({
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
     id: chatId

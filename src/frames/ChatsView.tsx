@@ -13,8 +13,8 @@ const ChatsView: React.FC = () => {
     (navigate: Scope) => {
       if (isFileScope(navigate)) {
         const { path } = navigate
-        const [messages, chatId] = path.split('/')
-        if (messages === 'messages' && chatId) {
+        const [chats, chatId] = path.split('/')
+        if (chats === 'chats' && chatId) {
           setCurrentChatId(chatId)
         }
       }

@@ -19,16 +19,17 @@ import { useChatManagement, useChat } from './useChatHooks'
 interface ChatHistoryProps {
   onToggleFullscreen: () => void
   isFullscreen: boolean
+  chatId: string
 }
 
-const ChatHistory: React.FC<ChatHistoryProps> = ({
+const ChatHistoryInternal: React.FC<ChatHistoryProps> = ({
   onToggleFullscreen,
-  isFullscreen
+  isFullscreen,
+  chatId
 }) => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
   const { newChat } = useChatManagement()
 
-  const chatId = useChatStore((state) => state.currentChatId)
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId)
   const [pendingChatId, setPendingChatId] = React.useState<string | null>(null)
   const chatExists = useExists(
@@ -40,7 +41,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
     setCurrentChatId(id)
     setPendingChatId(id)
   }
-  const { messages } = useChat()
+  const { messages } = useChat(chatId)
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -186,6 +187,28 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
         )}
       </div>
     </div>
+  )
+}
+
+const ChatHistory: React.FC<Omit<ChatHistoryProps, 'chatId'>> = ({
+  onToggleFullscreen,
+  isFullscreen
+}) => {
+  const chatId = useChatStore((s) => s.currentChatId)
+  if (!chatId || chatId.length === 0) {
+    return (
+      <div className="bg-white border-t border-gray-200 p-4 text-center text-gray-500">
+        Select a chat to start messaging
+      </div>
+    )
+  }
+  return (
+    <ChatHistoryInternal
+      chatId={chatId}
+      key={chatId}
+      onToggleFullscreen={onToggleFullscreen}
+      isFullscreen={isFullscreen}
+    />
   )
 }
 
