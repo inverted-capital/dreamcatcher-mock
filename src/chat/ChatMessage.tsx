@@ -23,7 +23,6 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const reasoningContent = reasoningParts.map((p) => p.text).join('')
 
   const isStreaming =
-    message.parts.some((p) => p.type === 'step-start') ||
     textParts.some((p) => p.state === 'streaming') ||
     reasoningParts.some((p) => p.state === 'streaming')
 
@@ -37,7 +36,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         }`}
       >
         {!isUser && reasoningContent && (
-          <div className="text-xs italic text-gray-500 mb-1">
+          <div className="text-xs italic text-gray-500 mb-1 whitespace-pre-wrap">
             {reasoningContent}
           </div>
         )}
