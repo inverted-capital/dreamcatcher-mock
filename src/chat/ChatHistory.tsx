@@ -1,5 +1,6 @@
 import React from 'react'
 import { useChatStore } from './chatState'
+import { useExists } from '@artifact/client/hooks'
 // import ChatMessage from './ChatMessage'
 // import NavigationMarker from './NavigationMarker'
 import MessageSquare from 'lucide-react/dist/esm/icons/message-square'
@@ -28,11 +29,28 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   const { newChat } = useChatManagement()
 
   const chatId = useChatStore((state) => state.currentChatId)
+  const setCurrentChatId = useChatStore((state) => state.setCurrentChatId)
+  const [pendingChatId, setPendingChatId] = React.useState<string | null>(null)
+  const chatExists = useExists(
+    pendingChatId ? `chats/${pendingChatId}` : undefined
+  )
+
+  const handleNewChat = async () => {
+    const id = await newChat()
+    setCurrentChatId(id)
+    setPendingChatId(id)
+  }
   const { messages } = useChat()
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  React.useEffect(() => {
+    if (pendingChatId && chatExists) {
+      setPendingChatId(null)
+    }
+  }, [pendingChatId, chatExists])
 
   // Get items for the timeline display
   // const getTimelineItems = (): TimelineItem[] => {
@@ -118,7 +136,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
               <Search size={14} />
             </button>
             <button
-              onClick={newChat}
+              onClick={handleNewChat}
               className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-md transition-colors"
             >
               <Plus size={14} />
@@ -139,7 +157,13 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
 
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto">
-        {!chatId || messages.length === 0 ? (
+        {pendingChatId && !chatExists ? (
+          <div className="flex-1 flex items-center justify-center h-full">
+            <div className="text-center">
+              <p className="text-gray-500">Creating chat...</p>
+            </div>
+          </div>
+        ) : !chatId || messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center h-full">
             <div className="text-center">
               <MessageSquare size={40} className="mx-auto text-gray-300 mb-2" />
