@@ -2,11 +2,10 @@ import React, { useState, useRef, useEffect } from 'react'
 import Send from 'lucide-react/dist/esm/icons/send'
 import Paperclip from 'lucide-react/dist/esm/icons/paperclip'
 import Mic from 'lucide-react/dist/esm/icons/mic'
-import { useChat } from './useChatHooks'
-
-const ChatInput: React.FC<{ ai: ReturnType<typeof useChat> }> = ({ ai }) => {
+const ChatInput: React.FC<{ onSendMessage: (text: string) => void }> = ({
+  onSendMessage
+}) => {
   const [message, setMessage] = useState('')
-  const { sendMessage } = ai // TODO provide stop button
   const [isRecording, setIsRecording] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -24,7 +23,7 @@ const ChatInput: React.FC<{ ai: ReturnType<typeof useChat> }> = ({ ai }) => {
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      sendMessage({ text: message })
+      onSendMessage(message)
       setMessage('')
     }
   }
