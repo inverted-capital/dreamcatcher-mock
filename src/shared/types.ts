@@ -83,3 +83,23 @@ export interface FileItem {
   parentId?: string
   isFolder?: boolean
 }
+
+export const validViews: readonly View[] = [
+  'contacts',
+  'chats',
+  'home-events',
+  'events',
+  'files',
+  'repos',
+  'branches',
+  'help',
+  'weather',
+  'customers',
+  'home',
+  'innovations',
+  'settings',
+  'account',
+  'napps',
+  'transcludes',
+  'processes'
+] as const;

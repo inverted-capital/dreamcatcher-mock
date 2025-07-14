@@ -16,7 +16,6 @@ import Cpu from 'lucide-react/dist/esm/icons/cpu'
 import UsersRound from 'lucide-react/dist/esm/icons/users-round'
 import Zap from 'lucide-react/dist/esm/icons/zap'
 import { SidebarItem } from '@/shared/types'
-import { useChatStore } from '@/chat/chatState'
 import { useNavigationStore } from '@/shared/navigationState'
 import { usePrivy } from '@privy-io/react-auth'
 
@@ -24,7 +23,6 @@ const Sidebar: React.FC = () => {
   // Get state and actions from Zustand stores
   const currentView = useNavigationStore((state) => state.currentView)
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
-  const navigateTo = useChatStore((state) => state.navigateTo)
 
   // Get the logout function from Privy
   const { logout } = usePrivy()
@@ -92,11 +90,6 @@ const Sidebar: React.FC = () => {
       item.action()
     } else {
       setCurrentView(item.view)
-      navigateTo({
-        title: item.label,
-        icon: item.icon,
-        view: item.view
-      })
     }
   }
 

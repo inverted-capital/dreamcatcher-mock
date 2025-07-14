@@ -2,15 +2,12 @@ import React, { useState, useRef, useEffect } from 'react'
 import Send from 'lucide-react/dist/esm/icons/send'
 import Paperclip from 'lucide-react/dist/esm/icons/paperclip'
 import Mic from 'lucide-react/dist/esm/icons/mic'
-import { useChatStore } from './chatState'
+import { useChat } from './useChatHooks'
 
 const ChatInput: React.FC = () => {
   const [message, setMessage] = useState('')
+  const { sendMessage } = useChat() // TODO provide stop button
   const [isRecording, setIsRecording] = useState(false)
-
-  // Get state and actions from Zustand stores
-  const { addMessage } = useChatStore()
-
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   // Auto-resize the textarea based on content
@@ -23,29 +20,12 @@ const ChatInput: React.FC = () => {
       const maxHeight = 120 // Equivalent to about 5 lines
       textareaRef.current.style.height = `${Math.min(scrollHeight, maxHeight)}px`
     }
-  }, [message])
+  }, [])
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      addMessage({
-        content: message,
-        role: 'user',
-        type: 'text'
-      })
-
+      sendMessage({ text: message })
       setMessage('')
-
-      // Store the message for response to prevent closure issues
-      const userMessageContent = message
-
-      // Simulate AI response with a fixed message after a short delay
-      setTimeout(() => {
-        addMessage({
-          content: `I've processed your request about "${userMessageContent.substring(0, 20)}${userMessageContent.length > 20 ? '...' : ''}" within the current scope. Here's what I found:`,
-          role: 'assistant',
-          type: 'text'
-        })
-      }, 1000)
     }
   }
 
@@ -62,6 +42,11 @@ const ChatInput: React.FC = () => {
 
   return (
     <div className="bg-white border-t border-gray-200 p-4">
+      {isRecording && (
+        <div className="mt-2 text-center text-sm text-red-500 animate-pulse">
+          Recording... (Click mic to stop)
+        </div>
+      )}
       <div className="flex items-end bg-gray-50 rounded-lg border border-gray-200">
         <button
           className="p-2.5 text-gray-500 hover:text-gray-700 flex-shrink-0 transition-colors"
@@ -98,12 +83,6 @@ const ChatInput: React.FC = () => {
           <Send size={18} />
         </button>
       </div>
-
-      {isRecording && (
-        <div className="mt-2 text-center text-sm text-red-500 animate-pulse">
-          Recording... (Click mic to stop)
-        </div>
-      )}
     </div>
   )
 }

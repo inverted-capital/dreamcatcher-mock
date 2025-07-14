@@ -1,25 +1,15 @@
 import { create } from 'zustand'
-import type { View } from '@/shared/types'
+import { validViews, type View } from '@/shared/types'
 
-const DEFAULT_SRCS: Record<View, string> = {
-  contacts: 'https://inverted-capital.github.io/frame-contacts-panel/',
-  chats: 'https://inverted-capital.github.io/frame-chats-panel/',
-  'home-events': 'https://inverted-capital.github.io/frame-events-panel/',
-  events: 'https://inverted-capital.github.io/frame-events-panel/',
-  files: 'https://inverted-capital.github.io/frame-files-panel/',
-  repos: 'https://inverted-capital.github.io/frame-repos-panel/',
-  branches: 'https://inverted-capital.github.io/frame-branches-panel/',
-  help: 'https://inverted-capital.github.io/frame-help-panel/',
-  weather: 'https://inverted-capital.github.io/frame-weather-panel/',
-  customers: 'https://inverted-capital.github.io/frame-customers-panel/',
-  home: 'https://inverted-capital.github.io/frame-home-panel/',
-  innovations: 'https://inverted-capital.github.io/frame-innovations-panel/',
-  settings: 'https://inverted-capital.github.io/frame-settings-panel/',
-  account: 'https://inverted-capital.github.io/frame-account-panel/',
-  napps: 'https://inverted-capital.github.io/frame-napps-panel/',
-  transcludes: 'https://inverted-capital.github.io/frame-transcludes-panel/',
-  processes: 'https://inverted-capital.github.io/frame-processes-panel/'
+// Generate default sources from validViews
+const generateDefaultSrc = (view: View): string => {
+  const panelName = view === 'home-events' ? 'events' : view
+  return `https://inverted-capital.github.io/frame-${panelName}-panel/`
 }
+const DEFAULT_SRCS: Record<View, string> = validViews.reduce((acc, view) => {
+  acc[view] = generateDefaultSrc(view)
+  return acc
+}, {} as Record<View, string>)
 
 interface FrameSrcState {
   srcs: Partial<Record<View, string>>

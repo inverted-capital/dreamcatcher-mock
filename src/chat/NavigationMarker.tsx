@@ -6,7 +6,6 @@ import FileText from 'lucide-react/dist/esm/icons/file-text'
 import Home from 'lucide-react/dist/esm/icons/home'
 import GitBranch from 'lucide-react/dist/esm/icons/git-branch'
 import { NavigationItem } from '@/shared/types'
-import { useChatStore } from './chatState'
 import { useNavigationStore } from '@/shared/navigationState'
 
 interface NavigationMarkerProps {
@@ -15,7 +14,6 @@ interface NavigationMarkerProps {
 
 const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
   // Get state and actions from Zustand stores
-  const { navigateTo, collapseNavItem, expandNavItem } = useChatStore()
 
   const currentView = useNavigationStore((state) => state.currentView)
   const setCurrentView = useNavigationStore((state) => state.setCurrentView)
@@ -61,27 +59,27 @@ const NavigationMarker: React.FC<NavigationMarkerProps> = ({ item }) => {
 
   const handleClick = () => {
     setCurrentView(item.view)
-    navigateTo({
-      title: item.title,
-      icon: item.icon,
-      view: item.view,
-      parentId: item.parentId
-    })
+    // navigateTo({
+    //   title: item.title,
+    //   icon: item.icon,
+    //   view: item.view,
+    //   parentId: item.parentId
+    // })
   }
 
   const toggleCollapse = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (item.collapsed) {
-      expandNavItem(item.id)
-    } else {
-      collapseNavItem(item.id)
-    }
+    // if (item.collapsed) {
+    //   expandNavItem(item.id)
+    // } else {
+    //   collapseNavItem(item.id)
+    // }
   }
 
   const handleTranscludeItemClick = (part: { type: string; value: string }) => {
     if (part.type === 'file') {
       setCurrentView('files')
-      navigateTo({ title: 'Files', icon: 'Folder', view: 'files' })
+      // navigateTo({ title: 'Files', icon: 'Folder', view: 'files' })
     }
   }
 
