@@ -38,7 +38,7 @@ function App() {
             chatFullscreen ? 'w-full' : showChat ? 'w-2/5' : 'w-0'
           } flex flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out ${showChat ? 'border-r border-gray-200' : ''}`}
         >
-          {showChat && (
+          {showChat && chatId && (
             <Chat
               onToggleFullscreen={() => setChatFullscreen(!chatFullscreen)}
               isFullscreen={chatFullscreen}
