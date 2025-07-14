@@ -5,12 +5,14 @@ import { ChatHistory, ChatInput } from '@/chat'
 import { useState } from 'react'
 import ChevronLeft from 'lucide-react/dist/esm/icons/chevron-left'
 import ChevronRight from 'lucide-react/dist/esm/icons/chevron-right'
+import { useChat } from '@/chat/useChatHooks'
+import { useChatStore } from '@/chat/chatState'
 
 function App() {
   useHashRouter()
   const [showChat, setShowChat] = useState(true)
   const [chatFullscreen, setChatFullscreen] = useState(false)
-
+  const chatId = useChatStore((state) => state.currentChatId)
   return (
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
@@ -37,13 +39,12 @@ function App() {
           } flex flex-col overflow-hidden bg-white transition-all duration-300 ease-in-out ${showChat ? 'border-r border-gray-200' : ''}`}
         >
           {showChat && (
-            <>
-              <ChatHistory
-                onToggleFullscreen={() => setChatFullscreen(!chatFullscreen)}
-                isFullscreen={chatFullscreen}
-              />
-              <ChatInput />
-            </>
+            <Chat
+              onToggleFullscreen={() => setChatFullscreen(!chatFullscreen)}
+              isFullscreen={chatFullscreen}
+              chatId={chatId}
+              key={chatId}
+            />
           )}
         </div>
 
@@ -62,3 +63,27 @@ function App() {
 }
 
 export default App
+
+interface ChatProps {
+  onToggleFullscreen: () => void
+  isFullscreen: boolean
+  chatId: string
+}
+
+const Chat: React.FC<ChatProps> = ({
+  onToggleFullscreen,
+  isFullscreen,
+  chatId
+}) => {
+  const ai = useChat(chatId)
+  return (
+    <>
+      <ChatHistory
+        onToggleFullscreen={onToggleFullscreen}
+        isFullscreen={isFullscreen}
+        ai={ai}
+      />
+      <ChatInput ai={ai} />
+    </>
+  )
+}

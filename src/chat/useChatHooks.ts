@@ -28,7 +28,6 @@ export const useChat = (chatId: string) => {
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
     id: chatId
   })
-  log('ai', ai)
 
   const messagesPath = `chats/${chatId}/messages`
   const messagesDir = useDir(messagesPath)
@@ -73,7 +72,7 @@ export const useChatManagement = () => {
   const newChat = useCallback(async (): Promise<string> => {
     const fns = artifact.fibers.actions.bind(schema)
     const { chatId } = await fns.newChat({
-      config: { model: 'gpt-4o', provider: 'openai' }
+      config: { model: 'grok-4', provider: 'xai' }
     })
     return chatId
   }, [artifact])

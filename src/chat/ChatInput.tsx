@@ -3,11 +3,10 @@ import Send from 'lucide-react/dist/esm/icons/send'
 import Paperclip from 'lucide-react/dist/esm/icons/paperclip'
 import Mic from 'lucide-react/dist/esm/icons/mic'
 import { useChat } from './useChatHooks'
-import { useChatStore } from './chatState'
 
-const ChatInputInternal: React.FC<{ chatId: string }> = ({ chatId }) => {
+const ChatInput: React.FC<{ ai: ReturnType<typeof useChat> }> = ({ ai }) => {
   const [message, setMessage] = useState('')
-  const { sendMessage } = useChat(chatId) // TODO provide stop button
+  const { sendMessage } = ai // TODO provide stop button
   const [isRecording, setIsRecording] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -86,18 +85,6 @@ const ChatInputInternal: React.FC<{ chatId: string }> = ({ chatId }) => {
       </div>
     </div>
   )
-}
-
-const ChatInput: React.FC = () => {
-  const chatId = useChatStore((s) => s.currentChatId)
-  if (!chatId || chatId.length === 0) {
-    return (
-      <div className="bg-white border-t border-gray-200 p-4 text-center text-gray-500">
-        Select a chat to start messaging
-      </div>
-    )
-  }
-  return <ChatInputInternal chatId={chatId} key={chatId} />
 }
 
 export default ChatInput
