@@ -2,24 +2,28 @@ import type { Scope } from '@artifact/client/api'
 
 type Role = 'user' | 'assistant' | 'system'
 type MessageType = 'text' | 'navigation' | 'file' | 'code'
-export type View =
-  | 'contacts'
-  | 'chats'
-  | 'home-events'
-  | 'events'
-  | 'files'
-  | 'repos'
-  | 'branches'
-  | 'help'
-  | 'weather'
-  | 'customers'
-  | 'home'
-  | 'innovations'
-  | 'settings'
-  | 'account'
-  | 'napps'
-  | 'transcludes'
-  | 'processes'
+
+export const validViews = [
+  'contacts',
+  'chats',
+  'home-events',
+  'events',
+  'files',
+  'repos',
+  'branches',
+  'help',
+  'weather',
+  'customers',
+  'home',
+  'innovations',
+  'settings',
+  'account',
+  'napps',
+  'transcludes',
+  'processes'
+] as const
+
+export type View = (typeof validViews)[number]
 
 export interface ChatMessage {
   id: string
@@ -83,23 +87,3 @@ export interface FileItem {
   parentId?: string
   isFolder?: boolean
 }
-
-export const validViews: readonly View[] = [
-  'contacts',
-  'chats',
-  'home-events',
-  'events',
-  'files',
-  'repos',
-  'branches',
-  'help',
-  'weather',
-  'customers',
-  'home',
-  'innovations',
-  'settings',
-  'account',
-  'napps',
-  'transcludes',
-  'processes'
-] as const
