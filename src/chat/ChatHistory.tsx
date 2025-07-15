@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useChatStore } from './chatState'
 import { useExists } from '@artifact/client/hooks'
 import ChatMessage from './ChatMessage'
@@ -10,8 +10,7 @@ import Plus from 'lucide-react/dist/esm/icons/plus'
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2'
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2'
 // import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
-import { useChatManagement, useChat } from './useChatHooks'
-import equal from 'fast-deep-equal'
+import { useChatManagement, UIMessage } from './useChatHooks'
 // import Debug from 'debug'
 // const log = Debug('artifact:ChatHistory')
 
@@ -22,13 +21,15 @@ import equal from 'fast-deep-equal'
 interface ChatHistoryProps {
   onToggleFullscreen: () => void
   isFullscreen: boolean
-  ai: ReturnType<typeof useChat>
+  chatId: string
+  messages: UIMessage[]
 }
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({
   onToggleFullscreen,
   isFullscreen,
-  ai
+  chatId,
+  messages
 }) => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
   const { newChat } = useChatManagement()
@@ -45,29 +46,11 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
     setPendingChatId(id)
   }
 
-  const [messages, setMessages] = useState<typeof ai.messages>([])
-
   useEffect(() => {
-    if (!equal(ai.messages, messages)) {
-      if (ai.messages.length !== messages.length) {
-        setMessages(structuredClone(ai.messages))
-      } else {
-        const next = [...messages]
-        ai.messages.forEach((message, index) => {
-          if (!equal(message, next[index])) {
-            next[index] = structuredClone(message)
-          }
-        })
-        setMessages(next)
-      }
-    }
-  }, [ai, messages])
-
-  React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (pendingChatId && chatExists) {
       setPendingChatId(null)
     }
@@ -141,8 +124,10 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
           <div className="flex items-center space-x-3">
             <MessageSquare size={18} className="text-blue-600" />
             <div>
-              <h2 className="text-base font-semibold text-gray-900">{ai.id}</h2>
-              {ai.id && (
+              <h2 className="text-base font-semibold text-gray-900">
+                {chatId}
+              </h2>
+              {chatId && (
                 <p className="text-xs text-gray-500">
                   {messages.length} messages
                 </p>
@@ -182,12 +167,12 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
               <p className="text-gray-500">Creating chat...</p>
             </div>
           </div>
-        ) : !ai.id || messages.length === 0 ? (
+        ) : !chatId || messages.length === 0 ? (
           <div className="flex-1 flex items-center justify-center h-full">
             <div className="text-center">
               <MessageSquare size={40} className="mx-auto text-gray-300 mb-2" />
               <p className="text-gray-500">
-                {!ai.id
+                {!chatId
                   ? 'Select a chat or start a new one'
                   : 'No messages yet'}
               </p>

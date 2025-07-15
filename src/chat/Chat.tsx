@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { ChatHistory } from '.'
 import ChatInput from './ChatInput'
 import { useChat } from './useChatHooks'
@@ -33,22 +33,26 @@ const Chat: React.FC<ChatProps> = ({
     }
   }, [pendingMessage, valid, ai, setPendingMessage])
 
-  const handleSend = async (text: string) => {
-    if (!valid) {
-      const id = await newChat()
-      setPendingMessage(text)
-      setCurrentChatId(id)
-    } else {
-      ai.sendMessage({ text })
-    }
-  }
+  const handleSend = useCallback(
+    async (text: string) => {
+      if (!valid) {
+        const id = await newChat()
+        setPendingMessage(text)
+        setCurrentChatId(id)
+      } else {
+        ai.sendMessage({ text })
+      }
+    },
+    [valid, newChat, ai, setCurrentChatId, setPendingMessage]
+  )
 
   return (
     <>
       <ChatHistory
         onToggleFullscreen={onToggleFullscreen}
         isFullscreen={isFullscreen}
-        ai={ai}
+        chatId={chatId ?? 'new'}
+        messages={ai.messages}
       />
       <ChatInput onSendMessage={handleSend} />
     </>

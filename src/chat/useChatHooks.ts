@@ -6,6 +6,8 @@ import { useChat as aiUseChat, UIMessage } from '@ai-sdk/react'
 import transport from '@dreamcatcher/chats/transport'
 import Debug from 'debug'
 import { z } from 'zod'
+import equal from 'fast-deep-equal'
+export type { UIMessage }
 
 const log = Debug('artifact:useChatHooks')
 
@@ -23,6 +25,8 @@ export const useChat = (chatId: string) => {
     throw new Error('No artifact found')
   }
 
+  const [messages, setMessages] = useState<UIMessage[]>([])
+
   const ai = aiUseChat({
     messages: [],
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
@@ -33,7 +37,7 @@ export const useChat = (chatId: string) => {
   const messagesDir = useDir(messagesPath)
   const store = useStore()
 
-  const messages = useMemo(() => {
+  const storedMessages = useMemo(() => {
     if (!messagesDir || !store) return []
     const { readFile } = store.getState()
     const messages: UIMessage[] = []
@@ -51,13 +55,31 @@ export const useChat = (chatId: string) => {
   }, [store, messagesDir, messagesPath])
 
   useEffect(() => {
-    if (!containsAllById(ai.messages, messages)) {
-      log('setting messages', messages)
-      ai.setMessages(messages)
+    if (!containsAllById(ai.messages, storedMessages)) {
+      log('setting stored messages', storedMessages)
+      ai.setMessages(storedMessages)
     }
-  }, [messages, ai])
+  }, [storedMessages, ai])
 
-  return ai
+  useEffect(() => {
+    if (!equal(ai.messages, messages)) {
+      if (ai.messages.length !== messages.length) {
+        setMessages(structuredClone(ai.messages))
+        log('messages totally changed', ai.messages)
+      } else {
+        const next = [...messages]
+        ai.messages.forEach((message, index) => {
+          if (!equal(message, next[index])) {
+            next[index] = structuredClone(message)
+          }
+        })
+        setMessages(next)
+        log('messages partially changed', ai.messages)
+      }
+    }
+  }, [ai, messages])
+
+  return useMemo(() => ({ ...ai, messages }), [messages, ai])
 }
 
 const transform = (bytes: Uint8Array) => {

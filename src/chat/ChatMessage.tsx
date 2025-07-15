@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import equal from 'fast-deep-equal'
+import React, { useState, memo } from 'react'
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2'
 import type { UIMessage } from '@ai-sdk/react'
 import parseHtml from 'html-react-parser'
@@ -17,7 +16,7 @@ import {
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
 import {
-  throttleBasic,
+  // throttleBasic,
   useLLMOutput,
   type LLMOutputComponent
 } from '@llm-ui/react'
@@ -31,10 +30,10 @@ interface ChatMessageProps {
   message: UIMessage
 }
 
-const MarkdownComponent: LLMOutputComponent = ({ blockMatch }) => {
+const MarkdownComponent: LLMOutputComponent = memo(({ blockMatch }) => {
   const markdown = blockMatch.output
   return <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
-}
+})
 
 const highlighter = loadHighlighter(
   getSingletonHighlighterCore({
@@ -49,7 +48,7 @@ const codeToHtmlOptions: CodeToHtmlOptions = {
   theme: 'github-dark'
 }
 
-const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
+const CodeBlock: LLMOutputComponent = memo(({ blockMatch }) => {
   const { html, code } = useCodeBlockToHtml({
     markdownCodeBlock: blockMatch.output,
     highlighter,
@@ -86,9 +85,9 @@ const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
       {content}
     </div>
   )
-}
+})
 
-const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
+const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
   const isUser = message.role === 'user'
 
   const textParts = message.parts.filter((p) => p.type === 'text') as Array<{
@@ -133,8 +132,8 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
         lookBack: codeBlockLookBack()
       }
     ],
-    isStreamFinished: !isStreaming,
-    throttle: throttleBasic()
+    isStreamFinished: !isStreaming
+    // throttle: throttleBasic()
   })
 
   return (
@@ -163,11 +162,6 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
       </div>
     </div>
   )
-}
-
-const ChatMessage = React.memo(ChatMessageComponent, (prev, next) => {
-  const e = equal(prev.message, next.message)
-  return e
 })
 
 export default ChatMessage
