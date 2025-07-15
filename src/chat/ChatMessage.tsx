@@ -159,8 +159,9 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
   )
 }
 
-const ChatMessage = React.memo(ChatMessageComponent, (prev, next) =>
-  equal(prev.message, next.message)
-)
+const ChatMessage = React.memo(ChatMessageComponent, (prev, next) => {
+  const e = equal(prev.message, next.message)
+  return e
+})
 
 export default ChatMessage

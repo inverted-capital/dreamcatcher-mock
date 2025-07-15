@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useChatStore } from './chatState'
 import { useExists } from '@artifact/client/hooks'
 import ChatMessage from './ChatMessage'
@@ -11,8 +11,9 @@ import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2'
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2'
 // import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 import { useChatManagement, useChat } from './useChatHooks'
-import Debug from 'debug'
-const log = Debug('artifact:ChatHistory')
+import equal from 'fast-deep-equal'
+// import Debug from 'debug'
+// const log = Debug('artifact:ChatHistory')
 
 // type TimelineItem =
 //   | { type: 'message'; data: ChatMessageType; time: number }
@@ -43,8 +44,16 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
     setCurrentChatId(id)
     setPendingChatId(id)
   }
-  const { messages } = ai
-  log('messages', messages)
+
+  const [messages, setMessages] = useState<typeof ai.messages>([])
+  const equalMessages = equal(ai.messages, messages)
+
+  useEffect(() => {
+    if (!equalMessages) {
+      const clone = structuredClone(ai.messages)
+      setMessages(clone)
+    }
+  }, [ai.messages, equalMessages])
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })

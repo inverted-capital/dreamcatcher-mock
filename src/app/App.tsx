@@ -53,7 +53,7 @@ function App() {
               onToggleFullscreen={() => setChatFullscreen(!chatFullscreen)}
               isFullscreen={chatFullscreen}
               chatId={chatId}
-              key={chatId ?? 'new'}
+              key={chatId}
             />
           )}
         </div>
