@@ -29,4 +29,9 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  pre.shiki {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
 }
