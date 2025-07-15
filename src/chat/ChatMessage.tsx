@@ -1,9 +1,62 @@
 import React from 'react'
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2'
 import type { UIMessage } from '@ai-sdk/react'
+import parseHtml from 'html-react-parser'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import type { CodeToHtmlOptions } from '@llm-ui/code'
+import {
+  codeBlockLookBack,
+  findCompleteCodeBlock,
+  findPartialCodeBlock,
+  loadHighlighter,
+  useCodeBlockToHtml,
+  allLangs,
+  allLangsAlias
+} from '@llm-ui/code'
+import { markdownLookBack } from '@llm-ui/markdown'
+import { useLLMOutput, type LLMOutputComponent } from '@llm-ui/react'
+import { getHighlighterCore } from 'shiki/core'
+import { bundledThemes } from 'shiki/themes'
+import { bundledLanguagesInfo } from 'shiki/langs'
+import getWasm from 'shiki/wasm'
 
 interface ChatMessageProps {
   message: UIMessage
+}
+
+const MarkdownComponent: LLMOutputComponent = ({ blockMatch }) => {
+  const markdown = blockMatch.output
+  return <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+}
+
+const highlighter = loadHighlighter(
+  getHighlighterCore({
+    langs: allLangs(bundledLanguagesInfo),
+    langAlias: allLangsAlias(bundledLanguagesInfo),
+    themes: Object.values(bundledThemes),
+    loadWasm: getWasm
+  })
+)
+
+const codeToHtmlOptions: CodeToHtmlOptions = {
+  theme: 'github-dark'
+}
+
+const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
+  const { html, code } = useCodeBlockToHtml({
+    markdownCodeBlock: blockMatch.output,
+    highlighter,
+    codeToHtmlOptions
+  })
+  if (!html) {
+    return (
+      <pre className="shiki">
+        <code>{code}</code>
+      </pre>
+    )
+  }
+  return <>{parseHtml(html)}</>
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
@@ -26,6 +79,23 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     textParts.some((p) => p.state === 'streaming') ||
     reasoningParts.some((p) => p.state === 'streaming')
 
+  const { blockMatches } = useLLMOutput({
+    llmOutput: textContent,
+    fallbackBlock: {
+      component: MarkdownComponent,
+      lookBack: markdownLookBack()
+    },
+    blocks: [
+      {
+        component: CodeBlock,
+        findCompleteMatch: findCompleteCodeBlock(),
+        findPartialMatch: findPartialCodeBlock(),
+        lookBack: codeBlockLookBack()
+      }
+    ],
+    isStreamFinished: !isStreaming
+  })
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
@@ -40,7 +110,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
             {reasoningContent}
           </div>
         )}
-        <span>{textContent}</span>
+        <div className="prose prose-sm break-words">
+          {blockMatches.map((blockMatch, index) => {
+            const Component = blockMatch.block.component
+            return <Component key={index} blockMatch={blockMatch} />
+          })}
+        </div>
         {isStreaming && (
           <Loader2 size={14} className="inline-block ml-1 animate-spin" />
         )}
