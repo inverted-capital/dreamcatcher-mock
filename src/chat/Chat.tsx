@@ -23,8 +23,8 @@ const Chat: React.FC<ChatProps> = ({
   const setPendingMessage = useChatStore((state) => state.setPendingMessage)
 
   const chatExists = useExists(chatId ? `chats/${chatId}` : undefined)
+  const ai = useChat(chatId ?? 'new')
   const valid = chatId && chatExists
-  const ai = useChat(valid ? chatId! : 'new')
 
   useEffect(() => {
     if (pendingMessage && valid) {
