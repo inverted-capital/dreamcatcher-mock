@@ -16,7 +16,12 @@ import {
   allLangsAlias
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
-import { useLLMOutput, type LLMOutputComponent } from '@llm-ui/react'
+import {
+  throttleBasic,
+  useLLMOutput,
+  type LLMOutputComponent
+} from '@llm-ui/react'
+
 import { getSingletonHighlighterCore } from 'shiki/core'
 import { bundledThemes } from 'shiki/themes'
 import { bundledLanguagesInfo } from 'shiki/langs'
@@ -128,7 +133,8 @@ const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
         lookBack: codeBlockLookBack()
       }
     ],
-    isStreamFinished: !isStreaming
+    isStreamFinished: !isStreaming,
+    throttle: throttleBasic()
   })
 
   return (
