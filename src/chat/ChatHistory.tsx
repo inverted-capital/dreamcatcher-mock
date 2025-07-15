@@ -46,14 +46,22 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   }
 
   const [messages, setMessages] = useState<typeof ai.messages>([])
-  const equalMessages = equal(ai.messages, messages)
 
   useEffect(() => {
-    if (!equalMessages) {
-      const clone = structuredClone(ai.messages)
-      setMessages(clone)
+    if (!equal(ai.messages, messages)) {
+      if (ai.messages.length !== messages.length) {
+        setMessages(structuredClone(ai.messages))
+      } else {
+        const next = [...messages]
+        ai.messages.forEach((message, index) => {
+          if (!equal(message, next[index])) {
+            next[index] = structuredClone(message)
+          }
+        })
+        setMessages(next)
+      }
     }
-  }, [ai.messages, equalMessages])
+  }, [ai, messages])
 
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
