@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import equal from 'fast-deep-equal'
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2'
 import type { UIMessage } from '@ai-sdk/react'
@@ -50,14 +50,37 @@ const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
     highlighter,
     codeToHtmlOptions
   })
-  if (!html) {
-    return (
-      <pre className="shiki">
-        <code>{code}</code>
-      </pre>
-    )
+  const [copied, setCopied] = useState(false)
+
+  const copyCode = async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch (err) {
+      console.error('Failed to copy code', err)
+    }
   }
-  return <>{parseHtml(html)}</>
+
+  const content = html ? (
+    parseHtml(html)
+  ) : (
+    <pre className="shiki">
+      <code>{code}</code>
+    </pre>
+  )
+
+  return (
+    <div className="relative">
+      <button
+        onClick={copyCode}
+        className="absolute top-1 right-1 rounded bg-gray-700 bg-opacity-50 px-1 text-xs text-gray-100 hover:bg-gray-600"
+      >
+        {copied ? 'Copied' : 'Copy'}
+      </button>
+      {content}
+    </div>
+  )
 }
 
 const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
