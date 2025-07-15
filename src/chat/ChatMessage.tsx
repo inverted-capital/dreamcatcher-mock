@@ -73,7 +73,12 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   ) as Array<{ type: 'reasoning'; text: string; state?: 'streaming' | 'done' }>
 
   const textContent = textParts.map((p) => p.text).join('')
-  const reasoningContent = reasoningParts.map((p) => p.text).join('')
+  const reasoningContent = reasoningParts
+    .map((p) => {
+      const trimmed = p.text.trim()
+      return trimmed === 'Thinking...' ? '(empty reasoning tick)' : trimmed
+    })
+    .join('\n')
 
   const isStreaming =
     textParts.some((p) => p.state === 'streaming') ||
