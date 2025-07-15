@@ -1,4 +1,5 @@
 import React from 'react'
+import equal from 'fast-deep-equal'
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2'
 import type { UIMessage } from '@ai-sdk/react'
 import parseHtml from 'html-react-parser'
@@ -59,7 +60,7 @@ const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
   return <>{parseHtml(html)}</>
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+const ChatMessageComponent: React.FC<ChatMessageProps> = ({ message }) => {
   const isUser = message.role === 'user'
 
   const textParts = message.parts.filter((p) => p.type === 'text') as Array<{
@@ -134,5 +135,9 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     </div>
   )
 }
+
+const ChatMessage = React.memo(ChatMessageComponent, (prev, next) =>
+  equal(prev.message, next.message)
+)
 
 export default ChatMessage
