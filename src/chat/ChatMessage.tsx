@@ -16,7 +16,7 @@ import {
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
 import { useLLMOutput, type LLMOutputComponent } from '@llm-ui/react'
-import { getHighlighterCore } from 'shiki/core'
+import { getSingletonHighlighterCore } from 'shiki/core'
 import { bundledThemes } from 'shiki/themes'
 import { bundledLanguagesInfo } from 'shiki/langs'
 import getWasm from 'shiki/wasm'
@@ -31,7 +31,7 @@ const MarkdownComponent: LLMOutputComponent = ({ blockMatch }) => {
 }
 
 const highlighter = loadHighlighter(
-  getHighlighterCore({
+  getSingletonHighlighterCore({
     langs: allLangs(bundledLanguagesInfo),
     langAlias: allLangsAlias(bundledLanguagesInfo),
     themes: Object.values(bundledThemes),

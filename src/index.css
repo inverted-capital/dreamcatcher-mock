@@ -30,7 +30,7 @@
     overflow: hidden;
   }
 
-  pre.shiki {
+  pre {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
