@@ -73,13 +73,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   ) as Array<{ type: 'reasoning'; text: string; state?: 'streaming' | 'done' }>
 
   const textContent = textParts.map((p) => p.text).join('')
-  const isEmptyReasoning = (text: string) =>
-    /^((Thinking\.\.\.\s*)+)$/i.test(text)
-
   const reasoningContent = reasoningParts
     .map((p) => {
-      const trimmed = p.text.trim()
-      return isEmptyReasoning(trimmed) ? '(empty reasoning tick)' : trimmed
+      const text = p.text
+      const match = text.match(/^\s*((Thinking\.\.\.\s*)+)\s*$/i)
+      if (match) {
+        const count = (text.match(/Thinking\.\.\./gi) || []).length
+        return Array(count).fill('(empty reasoning tick)').join('\n')
+      } else {
+        return text.trim()
+      }
     })
     .join('\n')
 
