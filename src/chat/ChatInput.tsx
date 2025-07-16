@@ -40,7 +40,7 @@ const ChatInput: React.FC<{ onSendMessage: (text: string) => void }> = ({
   }
 
   return (
-    <div className="bg-white border-t border-gray-200 p-4">
+    <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
       {isRecording && (
         <div className="mt-2 text-center text-sm text-red-500 animate-pulse">
           Recording... (Click mic to stop)
