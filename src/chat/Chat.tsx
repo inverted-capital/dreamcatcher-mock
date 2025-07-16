@@ -23,15 +23,15 @@ const Chat: React.FC<ChatProps> = ({
   const setPendingMessage = useChatStore((state) => state.setPendingMessage)
 
   const chatExists = useExists(chatId ? `chats/${chatId}` : undefined)
-  const ai = useChat(chatId ?? 'new')
+  const { messages, sendMessage } = useChat(chatId ?? 'new')
   const valid = chatId && chatExists
 
   useEffect(() => {
     if (pendingMessage && valid) {
-      ai.sendMessage({ text: pendingMessage })
+      sendMessage({ text: pendingMessage })
       setPendingMessage(null)
     }
-  }, [pendingMessage, valid, ai, setPendingMessage])
+  }, [pendingMessage, valid, sendMessage, setPendingMessage])
 
   const handleSend = useCallback(
     async (text: string) => {
@@ -40,10 +40,10 @@ const Chat: React.FC<ChatProps> = ({
         setPendingMessage(text)
         setCurrentChatId(id)
       } else {
-        ai.sendMessage({ text })
+        sendMessage({ text })
       }
     },
-    [valid, newChat, ai, setCurrentChatId, setPendingMessage]
+    [valid, newChat, sendMessage, setCurrentChatId, setPendingMessage]
   )
 
   return (
@@ -52,7 +52,7 @@ const Chat: React.FC<ChatProps> = ({
         onToggleFullscreen={onToggleFullscreen}
         isFullscreen={isFullscreen}
         chatId={chatId ?? 'new'}
-        messages={ai.messages}
+        messages={messages}
       />
       <ChatInput onSendMessage={handleSend} />
     </>

@@ -16,7 +16,7 @@ import {
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
 import {
-  // throttleBasic,
+  throttleBasic,
   useLLMOutput,
   type LLMOutputComponent
 } from '@llm-ui/react'
@@ -24,7 +24,7 @@ import {
 import { getSingletonHighlighterCore } from 'shiki/core'
 import { bundledThemes } from 'shiki/themes'
 import { bundledLanguagesInfo } from 'shiki/langs'
-import getWasm from 'shiki/wasm'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 interface ChatMessageProps {
   message: UIMessage
@@ -40,7 +40,7 @@ const highlighter = loadHighlighter(
     langs: allLangs(bundledLanguagesInfo),
     langAlias: allLangsAlias(bundledLanguagesInfo),
     themes: Object.values(bundledThemes),
-    loadWasm: getWasm
+    engine: createJavaScriptRegexEngine()
   })
 )
 
@@ -132,8 +132,8 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
         lookBack: codeBlockLookBack()
       }
     ],
-    isStreamFinished: !isStreaming
-    // throttle: throttleBasic()
+    isStreamFinished: !isStreaming,
+    throttle: throttleBasic()
   })
 
   return (

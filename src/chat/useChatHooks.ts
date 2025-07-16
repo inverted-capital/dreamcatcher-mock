@@ -1,9 +1,10 @@
+import delay from 'delay'
 import { useArtifact, useJson, useDir, useStore } from '@artifact/client/hooks'
 import { useCallback, useMemo, useEffect, useState } from 'react'
 import schema from '@dreamcatcher/chats'
 import { configSchema } from '@dreamcatcher/chats/schema'
-import { useChat as aiUseChat, UIMessage } from '@ai-sdk/react'
 import transport from '@dreamcatcher/chats/transport'
+import { type UIMessage, useChat as aiUseChat } from '@dreamcatcher/chats/react'
 import Debug from 'debug'
 import { z } from 'zod'
 import equal from 'fast-deep-equal'
@@ -30,56 +31,66 @@ export const useChat = (chatId: string) => {
   const ai = aiUseChat({
     messages: [],
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
-    id: chatId
+    id: chatId,
+    onData: (data) => {
+      log('onData', data)
+    }
   })
+  const { setMessages: aiSetMessages, sendMessage } = ai
 
   const messagesPath = `chats/${chatId}/messages`
   const messagesDir = useDir(messagesPath)
   const store = useStore()
 
-  const storedMessages = useMemo(() => {
-    if (!messagesDir || !store) return []
+  useEffect(() => {
+    if (!messagesDir || !store) return
     const { readFile } = store.getState()
-    const messages: UIMessage[] = []
+    const storedMessages: UIMessage[] = []
     for (const meta of messagesDir) {
       if (meta.type !== 'blob') continue
       const json = readFile(messagesPath + '/' + meta.path, transform)
       const { success, data, error } = uiMessageSchema.safeParse(json)
       if (success) {
-        messages.push(data as UIMessage)
+        storedMessages.push(data as UIMessage)
       } else {
         log('error parsing message', error)
       }
     }
-    return messages
-  }, [store, messagesDir, messagesPath])
 
-  useEffect(() => {
-    if (!containsAllById(ai.messages, storedMessages)) {
+    if (!containsAllById(messages, storedMessages)) {
       log('setting stored messages', storedMessages)
-      ai.setMessages(storedMessages)
+      aiSetMessages(storedMessages)
     }
-  }, [storedMessages, ai])
+  }, [messages, store, messagesDir, messagesPath, aiSetMessages])
 
   useEffect(() => {
-    if (!equal(ai.messages, messages)) {
-      if (ai.messages.length !== messages.length) {
-        setMessages(structuredClone(ai.messages))
-        log('messages totally changed', ai.messages)
-      } else {
-        const next = [...messages]
-        ai.messages.forEach((message, index) => {
-          if (!equal(message, next[index])) {
-            next[index] = structuredClone(message)
-          }
-        })
-        setMessages(next)
-        log('messages partially changed', ai.messages)
-      }
+    let active = true
+    delay(10).then(() => {
+      if (!active) return
+      setMessages((current) => {
+        if (equal(ai.messages, current)) {
+          return current
+        }
+        if (ai.messages.length !== current.length) {
+          const next = structuredClone(ai.messages)
+          return next
+        } else {
+          const next = [...current]
+          ai.messages.forEach((message, index) => {
+            if (!equal(message, next[index])) {
+              next[index] = structuredClone(message)
+            }
+          })
+          return next
+        }
+      })
+    })
+    return () => {
+      active = false
     }
-  }, [ai, messages])
+  }, [ai])
 
-  return useMemo(() => ({ ...ai, messages }), [messages, ai])
+  return useMemo(() => ({ sendMessage, messages }), [sendMessage, messages])
 }
 
 const transform = (bytes: Uint8Array) => {
