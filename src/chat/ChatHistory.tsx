@@ -121,7 +121,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   // const timelineItems = getTimelineItems()
 
   return (
-    <div className="flex flex-col flex-1 bg-gray-50">
+    <div className="flex flex-col h-full flex-shrink bg-gray-50">
       <div className="bg-white border-b border-gray-200 px-4 py-2 pl-12">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">

@@ -8,6 +8,7 @@ import Debug from 'debug'
 import { z } from 'zod'
 import equal from 'fast-deep-equal'
 export type { UIMessage }
+import { produce } from 'immer'
 
 const log = Debug('artifact:useChatHooks')
 
@@ -68,22 +69,18 @@ export const useChat = (chatId: string) => {
     Promise.resolve().then(() => {
       // idea here is to allow the ui thread a break
       if (!active) return
+
       setMessages((current) => {
-        if (equal(ai.messages, current)) {
+        if (equal(current, ai.messages)) {
           return current
         }
-        if (ai.messages.length !== current.length) {
-          const next = structuredClone(ai.messages)
-          return next
-        } else {
-          const next = [...current]
-          ai.messages.forEach((message, index) => {
-            if (!equal(message, next[index])) {
-              next[index] = structuredClone(message)
-            }
-          })
-          return next
+        const next = produce(current, (draft) => {
+          syncDraft(draft, ai.messages)
+        })
+        if (equal(next, current)) {
+          return current
         }
+        return next
       })
     })
     return () => {
@@ -154,4 +151,60 @@ const uiMessageSchema = z.object({
 const containsAllById = (current: UIMessage[], incoming: UIMessage[]) => {
   const ids = new Set(current.map((m) => m.id))
   return incoming.every((msg) => ids.has(msg.id))
+}
+
+function syncDraft(draft: any, newState: any) {
+  if (
+    typeof draft !== 'object' ||
+    draft === null ||
+    typeof newState !== 'object' ||
+    newState === null
+  ) {
+    throw new Error('Root must be non-null objects or arrays')
+  }
+  if (Array.isArray(draft) !== Array.isArray(newState)) {
+    throw new Error('Root type mismatch (object vs array)')
+  }
+
+  if (Array.isArray(draft)) {
+    // Handle arrays: adjust length and sync elements
+    if (draft.length !== newState.length) {
+      draft.length = newState.length
+    }
+    for (let i = 0; i < newState.length; i++) {
+      if (draft[i] !== newState[i]) {
+        if (
+          typeof newState[i] === 'object' &&
+          newState[i] !== null &&
+          typeof draft[i] === 'object' &&
+          draft[i] !== null
+        ) {
+          syncDraft(draft[i], newState[i])
+        } else {
+          draft[i] = newState[i]
+        }
+      }
+    }
+  } else {
+    // Handle objects: remove extra keys, then add/update
+    for (const key in draft) {
+      if (!(key in newState)) {
+        delete draft[key]
+      }
+    }
+    for (const key in newState) {
+      if (draft[key] !== newState[key]) {
+        if (
+          typeof newState[key] === 'object' &&
+          newState[key] !== null &&
+          typeof draft[key] === 'object' &&
+          draft[key] !== null
+        ) {
+          syncDraft(draft[key], newState[key])
+        } else {
+          draft[key] = newState[key]
+        }
+      }
+    }
+  }
 }
