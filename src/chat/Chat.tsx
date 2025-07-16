@@ -47,7 +47,7 @@ const Chat: React.FC<ChatProps> = ({
   )
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <ChatHistory
         onToggleFullscreen={onToggleFullscreen}
         isFullscreen={isFullscreen}
@@ -55,7 +55,7 @@ const Chat: React.FC<ChatProps> = ({
         messages={messages}
       />
       <ChatInput onSendMessage={handleSend} />
-    </>
+    </div>
   )
 }
 
