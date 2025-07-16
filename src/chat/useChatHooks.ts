@@ -9,6 +9,7 @@ import { z } from 'zod'
 import equal from 'fast-deep-equal'
 export type { UIMessage }
 import { produce } from 'immer'
+import delay from 'delay'
 
 const log = Debug('artifact:useChatHooks')
 
@@ -66,7 +67,7 @@ export const useChat = (chatId: string) => {
 
   useEffect(() => {
     let active = true
-    Promise.resolve().then(() => {
+    delay(10).then(() => {
       // idea here is to allow the ui thread a break
       if (!active) return
 
@@ -75,7 +76,8 @@ export const useChat = (chatId: string) => {
           return current
         }
         const next = produce(current, (draft) => {
-          syncDraft(draft, ai.messages)
+          const patches = createPatch(current, ai.messages)
+          applyPatch(draft, patches)
         })
         if (equal(next, current)) {
           return current
@@ -153,58 +155,4 @@ const containsAllById = (current: UIMessage[], incoming: UIMessage[]) => {
   return incoming.every((msg) => ids.has(msg.id))
 }
 
-function syncDraft(draft: any, newState: any) {
-  if (
-    typeof draft !== 'object' ||
-    draft === null ||
-    typeof newState !== 'object' ||
-    newState === null
-  ) {
-    throw new Error('Root must be non-null objects or arrays')
-  }
-  if (Array.isArray(draft) !== Array.isArray(newState)) {
-    throw new Error('Root type mismatch (object vs array)')
-  }
-
-  if (Array.isArray(draft)) {
-    // Handle arrays: adjust length and sync elements
-    if (draft.length !== newState.length) {
-      draft.length = newState.length
-    }
-    for (let i = 0; i < newState.length; i++) {
-      if (draft[i] !== newState[i]) {
-        if (
-          typeof newState[i] === 'object' &&
-          newState[i] !== null &&
-          typeof draft[i] === 'object' &&
-          draft[i] !== null
-        ) {
-          syncDraft(draft[i], newState[i])
-        } else {
-          draft[i] = newState[i]
-        }
-      }
-    }
-  } else {
-    // Handle objects: remove extra keys, then add/update
-    for (const key in draft) {
-      if (!(key in newState)) {
-        delete draft[key]
-      }
-    }
-    for (const key in newState) {
-      if (draft[key] !== newState[key]) {
-        if (
-          typeof newState[key] === 'object' &&
-          newState[key] !== null &&
-          typeof draft[key] === 'object' &&
-          draft[key] !== null
-        ) {
-          syncDraft(draft[key], newState[key])
-        } else {
-          draft[key] = newState[key]
-        }
-      }
-    }
-  }
-}
+import { createPatch, applyPatch } from 'rfc6902'
