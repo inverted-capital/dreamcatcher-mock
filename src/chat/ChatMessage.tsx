@@ -16,7 +16,7 @@ import {
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
 import {
-  throttleBasic,
+  // throttleBasic,
   useLLMOutput,
   type LLMOutputComponent
 } from '@llm-ui/react'
@@ -30,10 +30,10 @@ interface ChatMessageProps {
   message: UIMessage
 }
 
-const MarkdownComponent: LLMOutputComponent = memo(({ blockMatch }) => {
+const MarkdownComponent: LLMOutputComponent = ({ blockMatch }) => {
   const markdown = blockMatch.output
   return <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
-})
+}
 
 const highlighter = loadHighlighter(
   getSingletonHighlighterCore({
@@ -48,7 +48,7 @@ const codeToHtmlOptions: CodeToHtmlOptions = {
   theme: 'github-dark'
 }
 
-const CodeBlock: LLMOutputComponent = memo(({ blockMatch }) => {
+const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
   const { html, code } = useCodeBlockToHtml({
     markdownCodeBlock: blockMatch.output,
     highlighter,
@@ -85,7 +85,7 @@ const CodeBlock: LLMOutputComponent = memo(({ blockMatch }) => {
       {content}
     </div>
   )
-})
+}
 
 const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
   const isUser = message.role === 'user'
@@ -132,8 +132,8 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
         lookBack: codeBlockLookBack()
       }
     ],
-    isStreamFinished: !isStreaming,
-    throttle: throttleBasic()
+    isStreamFinished: !isStreaming
+    // throttle: throttleBasic()
   })
 
   return (
