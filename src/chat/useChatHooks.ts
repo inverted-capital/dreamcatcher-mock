@@ -1,4 +1,3 @@
-import delay from 'delay'
 import { useArtifact, useJson, useDir, useStore } from '@artifact/client/hooks'
 import { useCallback, useMemo, useEffect, useState } from 'react'
 import schema from '@dreamcatcher/chats'
@@ -32,6 +31,7 @@ export const useChat = (chatId: string) => {
     messages: [],
     transport: transport(artifact.fibers.actions.bind(schema).generateText),
     id: chatId,
+    experimental_throttle: 50,
     onData: (data) => {
       log('onData', data)
     }
@@ -65,7 +65,8 @@ export const useChat = (chatId: string) => {
 
   useEffect(() => {
     let active = true
-    delay(10).then(() => {
+    Promise.resolve().then(() => {
+      // idea here is to allow the ui thread a break
       if (!active) return
       setMessages((current) => {
         if (equal(ai.messages, current)) {
