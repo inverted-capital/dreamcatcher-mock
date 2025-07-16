@@ -30,10 +30,15 @@ interface ChatMessageProps {
   message: UIMessage
 }
 
-const MarkdownComponent: LLMOutputComponent = ({ blockMatch }) => {
+const MarkdownComponentBase: LLMOutputComponent = ({ blockMatch }) => {
   const markdown = blockMatch.output
   return <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
 }
+
+const MarkdownComponent = memo(
+  MarkdownComponentBase,
+  (prev, next) => prev.blockMatch.output === next.blockMatch.output
+)
 
 const highlighter = loadHighlighter(
   getSingletonHighlighterCore({
@@ -48,7 +53,7 @@ const codeToHtmlOptions: CodeToHtmlOptions = {
   theme: 'github-dark'
 }
 
-const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
+const CodeBlockBase: LLMOutputComponent = ({ blockMatch }) => {
   const { html, code } = useCodeBlockToHtml({
     markdownCodeBlock: blockMatch.output,
     highlighter,
@@ -86,6 +91,11 @@ const CodeBlock: LLMOutputComponent = ({ blockMatch }) => {
     </div>
   )
 }
+
+const CodeBlock = memo(
+  CodeBlockBase,
+  (prev, next) => prev.blockMatch.output === next.blockMatch.output
+)
 
 const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
   const isUser = message.role === 'user'
