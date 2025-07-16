@@ -16,7 +16,7 @@ import {
 } from '@llm-ui/code'
 import { markdownLookBack } from '@llm-ui/markdown'
 import {
-  // throttleBasic,
+  throttleBasic,
   useLLMOutput,
   type LLMOutputComponent
 } from '@llm-ui/react'
@@ -132,8 +132,8 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
         lookBack: codeBlockLookBack()
       }
     ],
-    isStreamFinished: !isStreaming
-    // throttle: throttleBasic()
+    isStreamFinished: !isStreaming,
+    throttle: throttleBasic()
   })
 
   return (
