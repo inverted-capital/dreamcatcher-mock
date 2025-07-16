@@ -3,7 +3,11 @@ import { useCallback, useMemo, useEffect, useState } from 'react'
 import schema from '@dreamcatcher/chats'
 import { configSchema } from '@dreamcatcher/chats/schema'
 import transport from '@dreamcatcher/chats/transport'
-import { type UIMessage, useChat as aiUseChat } from '@dreamcatcher/chats/react'
+import {
+  type UIMessage,
+  useChat as aiUseChat,
+  Chat
+} from '@dreamcatcher/chats/react'
 import Debug from 'debug'
 import { z } from 'zod'
 import equal from 'fast-deep-equal'
@@ -12,6 +16,8 @@ import { produce } from 'immer'
 import delay from 'delay'
 
 const log = Debug('artifact:useChatHooks')
+
+const chatCache = new Map<string, Chat<UIMessage>>()
 
 // only when the status is idle, can we use setMessages to add messages in ?
 // or, just try it, add them whenever they change.
@@ -29,14 +35,25 @@ export const useChat = (chatId: string) => {
 
   const [messages, setMessages] = useState<UIMessage[]>([])
 
-  const ai = aiUseChat({
-    messages: [],
-    transport: transport(artifact.fibers.actions.bind(schema).generateText),
-    id: chatId,
-    experimental_throttle: 50,
-    onData: (data) => {
-      log('onData', data)
+  const chat = useMemo(() => {
+    let existing = chatCache.get(chatId)
+    if (!existing) {
+      existing = new Chat({
+        messages: [],
+        transport: transport(artifact.fibers.actions.bind(schema).generateText),
+        id: chatId,
+        onData: (data) => {
+          log('onData', data)
+        }
+      })
+      chatCache.set(chatId, existing)
     }
+    return existing
+  }, [artifact, chatId])
+
+  const ai = aiUseChat({
+    chat,
+    experimental_throttle: 50
   })
   const { setMessages: aiSetMessages, sendMessage } = ai
 
