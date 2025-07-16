@@ -9,7 +9,7 @@ import Search from 'lucide-react/dist/esm/icons/search'
 import Plus from 'lucide-react/dist/esm/icons/plus'
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2'
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2'
-import { useStickToBottom } from 'use-stick-to-bottom'
+import { Virtuoso } from 'react-virtuoso'
 
 // import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 import { useChatManagement, UIMessage } from './useChatHooks'
@@ -34,7 +34,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   messages
 }) => {
   // const messagesEndRef = React.useRef<HTMLDivElement>(null)
-  const { scrollRef, contentRef } = useStickToBottom()
+  // react-virtuoso handles sticking to bottom automatically
   const { newChat } = useChatManagement()
 
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId)
@@ -163,7 +163,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto">
         {pendingChatId && !chatExists ? (
           <div className="flex-1 flex items-center justify-center h-full">
             <div className="text-center">
@@ -182,13 +182,22 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
             </div>
           </div>
         ) : (
-          <div className="py-4 px-6">
-            <div className="space-y-4" ref={contentRef}>
-              {messages.map((item) => (
-                <ChatMessage key={item.id} message={item} />
-              ))}
-            </div>
-          </div>
+          <Virtuoso
+            className="flex-1"
+            style={{ height: '100%' }}
+            data={messages}
+            followOutput="smooth"
+            itemContent={(_, item) => <ChatMessage message={item} />}
+            components={{
+              List: React.forwardRef((props, ref) => (
+                <div
+                  {...props}
+                  ref={ref as React.Ref<HTMLDivElement>}
+                  className="space-y-4 py-4 px-6"
+                />
+              ))
+            }}
+          />
         )}
       </div>
     </div>
