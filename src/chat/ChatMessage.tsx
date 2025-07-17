@@ -97,6 +97,15 @@ const CodeBlock = memo(
   (prev, next) => prev.blockMatch.output === next.blockMatch.output
 )
 
+const withHighlight = [
+  {
+    component: CodeBlock,
+    findCompleteMatch: findCompleteCodeBlock(),
+    findPartialMatch: findPartialCodeBlock(),
+    lookBack: codeBlockLookBack()
+  }
+]
+
 const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
   const isUser = message.role === 'user'
 
@@ -134,14 +143,7 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
       component: MarkdownComponent,
       lookBack: markdownLookBack()
     },
-    blocks: [
-      {
-        component: CodeBlock,
-        findCompleteMatch: findCompleteCodeBlock(),
-        findPartialMatch: findPartialCodeBlock(),
-        lookBack: codeBlockLookBack()
-      }
-    ],
+    blocks: withHighlight,
     isStreamFinished: !isStreaming,
     throttle: throttleBasic({ readAheadChars: 0 })
   })
