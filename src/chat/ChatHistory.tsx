@@ -34,7 +34,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   messages
 }) => {
   // const messagesEndRef = React.useRef<HTMLDivElement>(null)
-  const { scrollRef, contentRef } = useStickToBottom()
+  const { scrollRef, contentRef } = useStickToBottom({ initial: 'instant' })
   const { newChat } = useChatManagement()
 
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId)
