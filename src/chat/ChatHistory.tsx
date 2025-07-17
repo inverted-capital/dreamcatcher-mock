@@ -10,6 +10,7 @@ import Plus from 'lucide-react/dist/esm/icons/plus'
 import Maximize2 from 'lucide-react/dist/esm/icons/maximize-2'
 import Minimize2 from 'lucide-react/dist/esm/icons/minimize-2'
 import { useStickToBottom } from 'use-stick-to-bottom'
+import { useVirtualizer } from '@tanstack/react-virtual'
 
 // import { ChatMessage as ChatMessageType, NavigationItem } from '@/shared/types'
 import { useChatManagement, UIMessage } from './useChatHooks'
@@ -36,6 +37,22 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
   // const messagesEndRef = React.useRef<HTMLDivElement>(null)
   const { scrollRef, contentRef } = useStickToBottom()
   const { newChat } = useChatManagement()
+
+  const parentRef = React.useRef<HTMLDivElement | null>(null)
+  const setScrollRef = React.useCallback(
+    (el: HTMLDivElement | null) => {
+      scrollRef(el)
+      parentRef.current = el
+    },
+    [scrollRef]
+  )
+
+  const rowVirtualizer = useVirtualizer({
+    count: messages.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 80,
+    overscan: 5
+  })
 
   const setCurrentChatId = useChatStore((state) => state.setCurrentChatId)
   const [pendingChatId, setPendingChatId] = React.useState<string | null>(null)
@@ -163,7 +180,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto" ref={scrollRef}>
+      <div className="flex-1 overflow-y-auto" ref={setScrollRef}>
         {pendingChatId && !chatExists ? (
           <div className="flex-1 flex items-center justify-center h-full">
             <div className="text-center">
@@ -183,10 +200,34 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({
           </div>
         ) : (
           <div className="py-4 px-6">
-            <div className="space-y-4" ref={contentRef}>
-              {messages.map((item) => (
-                <ChatMessage key={item.id} message={item} />
-              ))}
+            <div
+              ref={contentRef}
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+                position: 'relative'
+              }}
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                const item = messages[virtualRow.index]
+                const isLast = virtualRow.index === messages.length - 1
+                return (
+                  <div
+                    key={item.id}
+                    data-index={virtualRow.index}
+                    ref={rowVirtualizer.measureElement}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      transform: `translateY(${virtualRow.start}px)`,
+                      paddingBottom: isLast ? undefined : '1rem'
+                    }}
+                  >
+                    <ChatMessage message={item} />
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}

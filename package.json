@@ -23,6 +23,7 @@
     "@llm-ui/react": "^0.13.3",
     "@open-iframe-resizer/react": "^1.6.0",
     "@privy-io/react-auth": "2.18.1",
+    "@tanstack/react-virtual": "^3.13.10",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "debug": "^4.4.1",
