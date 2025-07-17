@@ -13,7 +13,6 @@ import { z } from 'zod'
 import equal from 'fast-deep-equal'
 export type { UIMessage }
 import { produce } from 'immer'
-import delay from 'delay'
 
 const log = Debug('artifact:useChatHooks')
 
@@ -83,11 +82,8 @@ export const useChat = (chatId: string) => {
   }, [messages, store, messagesDir, messagesPath, aiSetMessages])
 
   useEffect(() => {
-    let active = true
-    delay(10).then(() => {
-      // idea here is to allow the ui thread a break
-      if (!active) return
-
+    // idea here is to allow the ui thread a break
+    const id = setTimeout(() => {
       setMessages((current) => {
         if (equal(current, ai.messages)) {
           return current
@@ -102,9 +98,7 @@ export const useChat = (chatId: string) => {
         return next
       })
     })
-    return () => {
-      active = false
-    }
+    return () => clearTimeout(id)
   }, [ai])
 
   return useMemo(() => ({ sendMessage, messages }), [sendMessage, messages])
