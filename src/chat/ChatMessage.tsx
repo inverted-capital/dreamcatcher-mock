@@ -143,7 +143,7 @@ const ChatMessage: React.FC<ChatMessageProps> = memo(({ message }) => {
       }
     ],
     isStreamFinished: !isStreaming,
-    throttle: throttleBasic()
+    throttle: throttleBasic({ readAheadChars: 0 })
   })
 
   return (
